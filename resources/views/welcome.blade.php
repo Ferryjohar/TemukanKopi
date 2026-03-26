@@ -142,7 +142,7 @@
     </div>
 
     <div class="hero-img">
-        <img src="{{ asset('images/biji.png') }}" alt="Biji Kopi">
+        <img src="{{ asset('images/pemandangan.jpeg') }}" alt="Biji Kopi">
     </div>
 </section>
 
