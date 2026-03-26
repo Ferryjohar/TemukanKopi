@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Temukan Kopi</title>
+
     <style>
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         body {
@@ -29,7 +30,6 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
-        /* Bagian Kiri (Form) */
         .login-form-section {
             background-color: white;
             padding: 60px;
@@ -45,11 +45,9 @@
             font-size: 48px;
             margin: 0;
             color: #222;
-            line-height: 1.1;
         }
 
         .divider {
-            width: 100%;
             height: 1px;
             background-color: #ccc;
             margin: 25px 0;
@@ -64,9 +62,6 @@
             padding: 12px 20px;
             border: 1px solid #999;
             border-radius: 25px;
-            font-size: 16px;
-            outline: none;
-            color: #666;
         }
 
         .role-container {
@@ -76,12 +71,6 @@
             margin-bottom: 30px;
         }
 
-        .role-label {
-            font-size: 16px;
-            color: #444;
-            white-space: nowrap;
-        }
-
         .btn-login {
             background-color: #006341;
             color: white;
@@ -89,77 +78,87 @@
             padding: 14px;
             border-radius: 25px;
             font-weight: bold;
-            font-size: 14px;
             cursor: pointer;
             width: 180px;
-            transition: background 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .btn-login:hover {
             background-color: #004d32;
         }
 
-        /* Bagian Kanan (Gambar) */
+        .error {
+            color: red;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
         .login-image-section {
             flex: 1;
             padding: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .image-card {
             width: 100%;
             height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=1000'); /* Gambar placeholder kopi */
+            background-image: url('{{ asset("images/kopi.jpg") }}');
             background-size: cover;
-            background-position: center;
             border-radius: 25px;
         }
 
-        /* Responsif untuk HP */
         @media (max-width: 768px) {
             .login-container {
                 flex-direction: column;
-                width: 90%;
             }
             .login-image-section {
-                display: none; /* Sembunyikan gambar di layar kecil */
+                display: none;
             }
         }
     </style>
 </head>
+
 <body>
-    <div class="login-container">
-        <div class="login-form-section">
-            <h1>temukan<br>kopi.</h1>
-            <div class="divider"></div>
-            
-            <form action="proses_login.php" method="POST">
-                <div class="input-group">
-                    <input type="text" name="username" placeholder="Username" required>
-                </div>
-                <div class="input-group">
-                    <input type="password" name="password" placeholder="Password" required>
-                </div>
-                
-                <div class="role-container">
-                    <span class="role-label">Role :</span>
-                    <select name="role">
-                        <option value="superadmin">Super Admin</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
 
-                <button type="submit" class="btn-login">LOGIN</button>
-            </form>
-        </div>
+<div class="login-container">
 
-        <div class="login-image-section">
-            <div class="image-card"></div>
-        </div>
+    <div class="login-form-section">
+        <h1>temukan<br>kopi.</h1>
+        <div class="divider"></div>
+
+        {{-- ERROR LOGIN --}}
+        @if(session('error'))
+            <div class="error">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        <form action="{{ route('admin.login.proses') }}" method="POST">
+            @csrf
+
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <div class="role-container">
+                <span>Role :</span>
+                <select name="role">
+                    <option value="admin">Admin</option>
+                    <option value="superadmin">Super Admin</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-login">LOGIN</button>
+        </form>
     </div>
+
+    <div class="login-image-section">
+        <div class="image-card"></div>
+    </div>
+
+</div>
+
 </body>
 </html>

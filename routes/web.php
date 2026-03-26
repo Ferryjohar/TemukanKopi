@@ -1,14 +1,34 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return view('login');
-});
 use App\Http\Controllers\LoginController;
 
-Route::get('/login', function () {
-    return view('login'); // pastikan file Anda bernama login.blade.php
-})->name('login');
+// ================= USER =================
+Route::get('/', function () {
+    return view('welcome');
+});
 
-Route::post('/login-proses', [LoginController::class, 'prosesLogin'])->name('login.proses');
+// ================= ADMIN =================
+Route::prefix('admin')->group(function () {
+
+    // Login
+    Route::get('/login', function () {
+        return view('admin.login');
+    })->name('admin.login');
+
+    Route::post('/login-proses', [LoginController::class, 'prosesLogin'])
+        ->name('admin.login.proses');
+
+    // Dashboard (HARUS LOGIN)
+    Route::get('/dashboard', function () {
+
+        // CEK SESSION LOGIN
+        if (!session('login')) {
+            return redirect()->route('admin.login');
+        }
+
+        return view('admin.dashboard');
+
+    })->name('admin.dashboard');
+
+});
