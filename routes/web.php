@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route; // 🔥 INI WAJIB ADA
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\AdminController; // Tambahkan ini
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MenuController;
 
 // ================= USER =================
 Route::get('/', function () {
@@ -12,13 +13,18 @@ Route::get('/', function () {
 // ================= ADMIN =================
 Route::prefix('admin')->group(function () {
 
-    // Halaman Login & Proses
+    // LOGIN
     Route::get('/login', [LoginController::class, 'index'])->name('admin.login');
     Route::post('/login-proses', [LoginController::class, 'prosesLogin'])->name('admin.login.proses');
 
-    // Dashboard & Fitur Admin lainnya
+    // DASHBOARD SUPERADMIN
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
-    // Logout
+    // MENU (ADMIN)
+    Route::get('/menu', [MenuController::class, 'index'])->name('admin.menu');
+    Route::post('/menu/tambah', [MenuController::class, 'tambah'])->name('admin.menu.tambah');
+    Route::get('/menu/hapus/{id}', [MenuController::class, 'hapus'])->name('admin.menu.hapus');
+
+    // LOGOUT
     Route::get('/logout', [LoginController::class, 'logout'])->name('admin.logout');
 });
