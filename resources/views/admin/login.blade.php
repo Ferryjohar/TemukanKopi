@@ -151,6 +151,12 @@
             </div>
 
             <button type="submit" class="btn-login">LOGIN</button>
+
+            @if(session('error'))
+            <div style="color: red; margin-bottom: 10px;">
+                {{ session('error') }}
+            </div>
+            @endif
         </form>
     </div>
 
