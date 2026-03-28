@@ -20,6 +20,14 @@ Route::prefix('admin')->group(function () {
     // DASHBOARD SUPERADMIN
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
+    // CRUD ADMIN
+    Route::get('/tambah', [AdminController::class, 'create'])->name('admin.create');
+    Route::post('/simpan', [AdminController::class, 'store'])->name('admin.store');
+    Route::get('/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');
+    Route::post('/update/{id}', [AdminController::class, 'update'])->name('admin.update');
+    Route::get('/hapus/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
+});
+
     // MENU (ADMIN)
     Route::get('/menu', [MenuController::class, 'index'])->name('admin.menu');
     Route::post('/menu/tambah', [MenuController::class, 'tambah'])->name('admin.menu.tambah');
@@ -27,4 +35,3 @@ Route::prefix('admin')->group(function () {
 
     // LOGOUT
     Route::get('/logout', [LoginController::class, 'logout'])->name('admin.logout');
-});

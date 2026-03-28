@@ -27,6 +27,7 @@ body {
     color: white;
     padding: 40px 20px;
     position: fixed;
+    z-index: 100; /* Pastikan sidebar di bawah klik konten utama jika perlu */
 }
 
 .logo-text {
@@ -65,11 +66,13 @@ body {
     background-color: rgba(255,255,255,0.1);
 }
 
-/* Main */
+/* Main Content */
 .main-content {
-    margin-left: 280px;
+    margin-left: 280px; /* Harus sama dengan lebar sidebar */
     flex: 1;
     padding: 60px;
+    position: relative;
+    z-index: 10; /* Menaikkan lapisan konten utama agar bisa diklik */
 }
 
 .header-title h1 {
@@ -110,6 +113,14 @@ body {
     text-decoration: none;
     color: var(--text-dark);
     font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: 0.2s;
+    position: relative;
+    z-index: 20; /* Prioritas klik tinggi */
+}
+
+.btn-add:hover {
+    background-color: #eee;
 }
 
 /* Table */
@@ -117,16 +128,29 @@ body {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 15px;
+    position: relative;
+    z-index: 5;
 }
 
 .data-table th {
     padding: 15px;
     background-color: #e2e2e2;
+    text-align: left;
 }
 
 .data-table td {
     background-color: white;
     padding: 15px;
+    vertical-align: middle;
+}
+
+/* Memastikan Link Aksi Bisa Diklik */
+.action-link {
+    text-decoration: none;
+    font-weight: bold;
+    position: relative;
+    z-index: 50; /* Sangat tinggi agar tidak tertutup */
+    cursor: pointer;
 }
 
 .row-shadow {
@@ -136,28 +160,31 @@ body {
 /* Badge */
 .badge-active {
     background-color: #76e09e;
-    padding: 5px 10px;
+    padding: 5px 12px;
     border-radius: 20px;
+    font-size: 14px;
 }
 
 .badge-inactive {
     background-color: #ffb3b3;
-    padding: 5px 10px;
+    padding: 5px 12px;
     border-radius: 20px;
+    font-size: 14px;
 }
 
 /* Avatar */
 .avatar {
     width: 40px;
+    height: 40px;
     border-radius: 50%;
-    margin-right: 10px;
+    margin-right: 15px;
+    object-fit: cover;
 }
 </style>
 
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
     <div class="logo-text">temukan kopi.</div>
 
@@ -165,23 +192,18 @@ body {
         <li class="nav-item">
             <a href="{{ route('admin.dashboard') }}" class="nav-link active">Data Admin</a>
         </li>
-
         <li class="nav-item">
             <a href="#" class="nav-link">Transaksi</a>
         </li>
-
-        <!-- 🔥 FIX PENTING -->
         <li class="nav-item">
             <a href="{{ route('admin.menu') }}" class="nav-link">Product</a>
         </li>
-
         <li class="nav-item">
-            <a href="{{ route('admin.logout') }}" class="nav-link" style="color:red;">Logout</a>
+            <a href="{{ route('admin.logout') }}" class="nav-link" style="color:#ff4d4d;">Logout</a>
         </li>
     </ul>
 </div>
 
-<!-- MAIN -->
 <div class="main-content">
 
     <div class="header-title">
@@ -191,17 +213,19 @@ body {
     </div>
 
     @if(session('success'))
-        <div style="background:#d4edda;padding:10px;margin:10px 0;">
+        <div style="background:#d4edda; color: #155724; padding:15px; margin:20px 0; border-radius: 10px; border: 1px solid #c3e6cb;">
             {{ session('success') }}
         </div>
     @endif
 
     <div class="top-bar">
         <div class="search-wrapper">
-            <input type="text" placeholder="Cari admin...">
+            <form action="" method="GET">
+                <input type="text" name="search" placeholder="Cari admin..." value="{{ request('search') }}">
+            </form>
         </div>
 
-        <a href="#" class="btn-add">+ Tambah Admin</a>
+        <a href="{{ route('admin.create') }}" class="btn-add">+ Tambah Admin</a>
     </div>
 
     <table class="data-table">
@@ -219,8 +243,8 @@ body {
         <tbody>
             @foreach($admins as $admin)
             <tr class="row-shadow">
-                <td style="display:flex;align-items:center;">
-                    <img src="https://i.pravatar.cc/150" class="avatar">
+                <td style="display:flex; align-items:center;">
+                    <img src="https://i.pravatar.cc/150?u={{ $admin->id_user }}" class="avatar">
                     {{ $admin->nama }}
                 </td>
 
@@ -238,7 +262,16 @@ body {
                 </td>
 
                 <td>
-                    <a href="#">Edit</a>
+                    <div style="display: flex; gap: 15px;">
+                        <a href="{{ route('admin.edit', $admin->id_user) }}" 
+                           class="action-link" style="color: #007bff;">Edit</a>
+                        
+                        <a href="{{ route('admin.destroy', $admin->id_user) }}" 
+                           class="action-link" style="color: #dc3545;"
+                           onclick="return confirm('Apakah Anda yakin ingin menghapus admin {{ $admin->nama }}?')">
+                           Hapus
+                        </a>
+                    </div>
                 </td>
             </tr>
             @endforeach
