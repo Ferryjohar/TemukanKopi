@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AdminController; // Tambahkan ini
 
 // ================= USER =================
 Route::get('/', function () {
@@ -11,24 +12,13 @@ Route::get('/', function () {
 // ================= ADMIN =================
 Route::prefix('admin')->group(function () {
 
-    // Login
-    Route::get('/login', function () {
-        return view('admin.login');
-    })->name('admin.login');
+    // Halaman Login & Proses
+    Route::get('/login', [LoginController::class, 'index'])->name('admin.login');
+    Route::post('/login-proses', [LoginController::class, 'prosesLogin'])->name('admin.login.proses');
 
-    Route::post('/login-proses', [LoginController::class, 'prosesLogin'])
-        ->name('admin.login.proses');
+    // Dashboard & Fitur Admin lainnya
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
-    // Dashboard (HARUS LOGIN)
-    Route::get('/dashboard', function () {
-
-        // CEK SESSION LOGIN
-        if (!session('login')) {
-            return redirect()->route('admin.login');
-        }
-
-        return view('admin.dashboard');
-
-    })->name('admin.dashboard');
-
+    // Logout
+    Route::get('/logout', [LoginController::class, 'logout'])->name('admin.logout');
 });
