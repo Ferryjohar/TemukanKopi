@@ -50,15 +50,33 @@ class AdminController extends Controller
 
     // 5. Proses Update Data (Update)
     public function update(Request $request, $id) {
-        DB::table('ms_admin')->where('id_user', $id)->update([
-            'nama'         => $request->nama,
-            'username'     => $request->username,
-            'role'         => $request->role,
-            'status_admin' => $request->status_admin,
-            'updated_at'   => now(),
-        ]);
+    $data = [
+        'nama'         => $request->nama,
+        'username'     => $request->username,
+        'no_hp'        => $request->no_hp,
+        'role'         => $request->role,
+        'status_admin' => $request->status_admin,
+        'updated_at'   => now(),
+    ];
 
-        return redirect()->route('admin.dashboard')->with('success', 'Data admin berhasil diperbarui!');
+    if ($request->filled('password')) {
+        $data['password'] = $request->password;
+    }
+
+    // PROSES UPLOAD FOTO
+    if ($request->hasFile('foto_admin')) {
+        $file = $request->file('foto_admin');
+        $namaFile = time() . "_" . $file->getClientOriginalName();
+        
+        // Simpan ke folder public/storage/avatars
+        $file->move(public_path('storage/avatars'), $namaFile);
+        
+        $data['foto_admin'] = $namaFile;
+    }
+
+    DB::table('ms_admin')->where('id_user', $id)->update($data);
+
+    return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil diupdate!');
     }
 
     // 6. Proses Hapus Data (Destroy)

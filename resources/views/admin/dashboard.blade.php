@@ -19,7 +19,6 @@ body {
     display: flex;
 }
 
-/* Sidebar */
 .sidebar {
     width: 280px;
     background-color: var(--primary-green);
@@ -27,7 +26,7 @@ body {
     color: white;
     padding: 40px 20px;
     position: fixed;
-    z-index: 100; /* Pastikan sidebar di bawah klik konten utama jika perlu */
+    z-index: 100; 
 }
 
 .logo-text {
@@ -66,13 +65,12 @@ body {
     background-color: rgba(255,255,255,0.1);
 }
 
-/* Main Content */
 .main-content {
-    margin-left: 280px; /* Harus sama dengan lebar sidebar */
+    margin-left: 280px;
     flex: 1;
     padding: 60px;
     position: relative;
-    z-index: 10; /* Menaikkan lapisan konten utama agar bisa diklik */
+    z-index: 10; 
 }
 
 .header-title h1 {
@@ -86,7 +84,6 @@ body {
     margin-top: 0;
 }
 
-/* Top Bar */
 .top-bar {
     display: flex;
     justify-content: space-between;
@@ -105,7 +102,6 @@ body {
     border: 1px solid #ddd;
 }
 
-/* Button */
 .btn-add {
     background-color: white;
     padding: 12px 20px;
@@ -116,14 +112,13 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     transition: 0.2s;
     position: relative;
-    z-index: 20; /* Prioritas klik tinggi */
+    z-index: 20;
 }
 
 .btn-add:hover {
     background-color: #eee;
 }
 
-/* Table */
 .data-table {
     width: 100%;
     border-collapse: separate;
@@ -144,12 +139,11 @@ body {
     vertical-align: middle;
 }
 
-/* Memastikan Link Aksi Bisa Diklik */
 .action-link {
     text-decoration: none;
     font-weight: bold;
     position: relative;
-    z-index: 50; /* Sangat tinggi agar tidak tertutup */
+    z-index: 50;
     cursor: pointer;
 }
 
@@ -157,7 +151,6 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-/* Badge */
 .badge-active {
     background-color: #76e09e;
     padding: 5px 12px;
@@ -172,7 +165,6 @@ body {
     font-size: 14px;
 }
 
-/* Avatar */
 .avatar {
     width: 40px;
     height: 40px;
@@ -244,7 +236,7 @@ body {
             @foreach($admins as $admin)
             <tr class="row-shadow">
                 <td style="display:flex; align-items:center;">
-                    <img src="https://i.pravatar.cc/150?u={{ $admin->id_user }}" class="avatar">
+                    <img src="{{ $admin->foto_admin ? asset('storage/avatars/'.$admin->foto_admin) : asset('images/user.png') }}" class="avatar">
                     {{ $admin->nama }}
                 </td>
 
