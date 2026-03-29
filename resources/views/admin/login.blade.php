@@ -16,8 +16,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #006341 0%, #004d32 100%);
+            min-height: 100vh;/* Gradasi baru: Hijau gelap ke hijau yang lebih cerah di pojok */
+            background: 
+            radial-gradient(circle at top right, #008f5d 0%, transparent 40%),
+            radial-gradient(circle at bottom left, #008f5d 0%, transparent 40%),
+            #004d32; /* Warna dasar hijau tua */
+            background-attachment: fixed;
         }
 
         .login-container {
@@ -27,7 +31,7 @@
             overflow: hidden;
             width: 850px;
             max-width: 95%;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
         }
 
         .login-form-section {
@@ -67,13 +71,15 @@
         .role-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            margin-left: 10px;
+            gap: 30px;
             margin-bottom: 30px;
         }
 
         .btn-login {
             background-color: #006341;
             color: white;
+            margin-left: 70px;
             border: none;
             padding: 14px;
             border-radius: 25px;
@@ -100,7 +106,7 @@
         .image-card {
             width: 100%;
             height: 100%;
-            background-image: url('{{ asset("images/kopi.jpg") }}');
+            background-image: url('{{ asset("images/kopi.png") }}');
             background-size: cover;
             border-radius: 25px;
         }
@@ -143,7 +149,7 @@
             </div>
 
             <div class="role-container">
-                <span>Role :</span>
+                <span style="white-space: nowrap;">Role :</span>
                 <select name="role">
                     <option value="admin">Admin</option>
                     <option value="superadmin">Super Admin</option>
@@ -152,11 +158,6 @@
 
             <button type="submit" class="btn-login">LOGIN</button>
 
-            @if(session('error'))
-            <div style="color: red; margin-bottom: 10px;">
-                {{ session('error') }}
-            </div>
-            @endif
         </form>
     </div>
 
