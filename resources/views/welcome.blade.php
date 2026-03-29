@@ -1,168 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temukan Kopi</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temukan Kopi</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f7f7f7;
-        }
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f7f7f7;
+    overflow-x: hidden;
+}
 
-        /* ================= NAVBAR ================= */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px 100px;
-            background: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-        }
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 100px;
+    background: #f5f5f5;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
 
-        .navbar a {
-            text-decoration: none;
-            color: #333;
-            margin-left: 20px;
-            font-weight: 500;
-        }
+.navbar a {
+    text-decoration: none;
+    color: #333;
+    margin-left: 25px;
+}
 
-        .navbar a:hover {
-            color: #1f5e3b;
-        }
+.navbar a:hover {
+    color: #1f5e3b;
+}
 
-        /* ================= HERO ================= */
-        .hero {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 80px 100px;
-            background-color: #f5f5f5;
-            overflow: hidden;
-        }
+/* HERO */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 100px;
+}
 
-        .hero-text {
-            max-width: 500px;
-            opacity: 0;
-            transform: translateX(-100px);
-            animation: slideLeft 1.2s ease forwards;
-        }
+.hero-text h1 {
+    font-size: 60px;
+    color: #1f5e3b;
+}
 
-        .hero-text h1 {
-            font-size: 48px;
-            color: #1f5e3b;
-        }
+.hero-text p {
+    color: #7a8a7a;
+    margin: 20px 0;
+}
 
-        .hero-text p {
-            margin: 20px 0;
-        }
+.btn {
+    background: #1f5e3b;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: 0.3s;
+}
 
-        .btn {
-            background-color: #1f5e3b;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
-            text-decoration: none;
-        }
+.btn:hover {
+    transform: scale(1.05);
+}
 
-        .hero-img {
-            opacity: 0;
-            transform: translateX(100px);
-            animation: slideRight 1.2s ease forwards;
-            animation-delay: 0.5s;
-        }
+.hero-img img {
+    width: 400px;
+}
 
-        .hero-img img {
-            width: 350px;
-        }
+/* ABOUT */
+.about {
+    display: flex;
+    align-items: center;
+    padding: 180px 100px;
+    gap: 60px;
+    position: relative;
+}
 
-        /* ================= SECTION ================= */
-        .section {
-            padding: 80px 100px;
-            text-align: center;
-        }
+/* GAMBAR TURUN */
+.about-img {
+    transform: translateY(100px);
+}
 
-        .section h2 {
-            color: #1f5e3b;
-            margin-bottom: 20px;
-        }
+.about-img img {
+    width: 350px;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+}
 
-        /* ================= ANIMATION ================= */
-        @keyframes slideLeft {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
+/* TEXT */
+.about-text {
+    max-width: 500px;
+    position: relative;
+    z-index: 2;
+}
 
-        @keyframes slideRight {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
+.about-text h2 {
+    font-size: 48px;
+    color: #1f5e3b;
+}
 
-        /* ================= RESPONSIVE ================= */
-        @media (max-width: 768px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-            }
+/* BACKGROUND TEXT + PARALLAX */
+.about-bg {
+    position: absolute;
+    font-size: 180px;
+    font-weight: bold;
+    color: rgba(31, 94, 59, 0.08);
+    z-index: 0;
+    left: 60px;
+    top: -40px;
+    pointer-events: none;
+    transition: transform 0.2s linear;
+}
 
-            .navbar {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
+/* ANIMATION */
+.hidden-left {
+    opacity: 0;
+    transform: translateX(-120px);
+    transition: all 1.2s cubic-bezier(0.25,1,0.5,1);
+}
+
+.hidden-right {
+    opacity: 0;
+    transform: translateX(120px);
+    transition: all 1.2s cubic-bezier(0.25,1,0.5,1);
+}
+
+.hidden-up {
+    opacity: 0;
+    transform: translateY(80px);
+    transition: all 1.2s cubic-bezier(0.25,1,0.5,1);
+}
+
+.show {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .hero, .about {
+        flex-direction: column;
+        text-align: center;
+        padding: 80px 30px;
+    }
+
+    .about-img {
+        transform: translateY(0);
+    }
+
+    .about-bg {
+        font-size: 80px;
+        left: 20px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
 </head>
 
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <div><b>Temukan Kopi</b></div>
+    <div><b>temukan kopi.</b></div>
     <div>
         <a href="#home">Home</a>
-        <a href="#beranda">Beranda</a>
-        <a href="#tentang">Tentang Kami</a>
+        <a href="#tentang">About</a>
         <a href="#produk">Produk</a>
     </div>
 </div>
 
 <!-- HERO -->
 <section class="hero" id="home">
-    <div class="hero-text">
+    <div class="hero-text hidden-left">
         <h1>Temukan Kopi</h1>
-        <p>Kopi terbaik dari seluruh Indonesia dengan cita rasa premium.</p>
-        <a href="#produk" class="btn">Cek Produk</a>
+        <p>Dibuat dari biji kopi Indonesia pilihan untuk pengalaman terbaik</p>
+        <a href="#produk" class="btn">Selengkapnya</a>
     </div>
 
-    <div class="hero-img">
-        <img src="{{ asset('images/pemandangan.jpeg') }}" alt="Biji Kopi">
+    <div class="hero-img hidden-right">
+        <img src="images/kopi1.png">
     </div>
 </section>
 
-<!-- BERANDA -->
-<section class="section" id="beranda">
-    <h2>Beranda</h2>
-    <p>Kami menyediakan berbagai jenis kopi pilihan dari petani lokal Indonesia.</p>
-</section>
+<!-- ABOUT -->
+<section class="about" id="tentang">
 
-<!-- TENTANG -->
-<section class="section" id="tentang">
-    <h2>Tentang Kami</h2>
-    <p>Temukan Kopi adalah platform untuk menemukan kopi terbaik dari seluruh nusantara.</p>
+    <div class="about-bg hidden-up" id="parallaxText">About Me</div>
+
+    <div class="about-img hidden-left">
+        <img src="images/kopi1.png">
+    </div>
+
+    <div class="about-text hidden-right">
+        <h2>About Me</h2>
+        <p>
+            Temukan Kopi lahir dari keyakinan bahwa setiap biji kopi memiliki cerita dan cita rasa yang layak untuk dinikmati. Kami hadir sebagai platform yang menyediakan berbagai pilihan biji kopi berkualitas dari berbagai daerah di Indonesia yang mudah diakses, terpercaya, dan siap menemani setiap momen menikmati kopi Anda.
+
+Dengan pilihan biji kopi terbaik dan kualitas yang terjaga, Temukan Kopi menjadi tempat bagi para pecinta kopi, barista, hingga penikmat kopi rumahan untuk menemukan cita rasa kopi favorit mereka—tanpa ribet, penuh aroma, dan penuh kenikmatan.
+        </p>
+        <p>
+            Dari pecinta kopi hingga barista, semua bisa menemukan rasa favorit di sini.
+        </p>
+    </div>
+
 </section>
 
 <!-- PRODUK -->
-<section class="section" id="produk">
-    <h2>Produk</h2>
-    <p>Segera hadir produk kopi terbaik kami ☕</p>
+<section class="about" id="produk">
+    <div class="about-text hidden-up">
+        <h2>Produk</h2>
+        <p>Segera hadir produk kopi terbaik kami ☕</p>
+    </div>
 </section>
+
+<!-- JS -->
+<script>
+// ANIMASI MASUK + RESET
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+        } else {
+            entry.target.classList.remove("show");
+        }
+    });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.hidden-left, .hidden-right, .hidden-up')
+    .forEach(el => observer.observe(el));
+
+
+// PARALLAX BACKGROUND TEXT 🔥
+window.addEventListener("scroll", function() {
+    const text = document.getElementById("parallaxText");
+    let scrollY = window.scrollY;
+
+    text.style.transform = "translateY(" + (scrollY * 0.25) + "px)";
+});
+</script>
 
 </body>
 </html>
