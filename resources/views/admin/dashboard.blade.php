@@ -110,21 +110,12 @@ body {
     color: var(--text-dark);
     font-weight: bold;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: 0.2s;
-    position: relative;
-    z-index: 20;
-}
-
-.btn-add:hover {
-    background-color: #eee;
 }
 
 .data-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 15px;
-    position: relative;
-    z-index: 5;
 }
 
 .data-table th {
@@ -136,15 +127,6 @@ body {
 .data-table td {
     background-color: white;
     padding: 15px;
-    vertical-align: middle;
-}
-
-.action-link {
-    text-decoration: none;
-    font-weight: bold;
-    position: relative;
-    z-index: 50;
-    cursor: pointer;
 }
 
 .row-shadow {
@@ -155,14 +137,12 @@ body {
     background-color: #76e09e;
     padding: 5px 12px;
     border-radius: 20px;
-    font-size: 14px;
 }
 
 .badge-inactive {
     background-color: #ffb3b3;
     padding: 5px 12px;
     border-radius: 20px;
-    font-size: 14px;
 }
 
 .avatar {
@@ -170,7 +150,6 @@ body {
     height: 40px;
     border-radius: 50%;
     margin-right: 15px;
-    object-fit: cover;
 }
 </style>
 
@@ -181,44 +160,17 @@ body {
     <div class="logo-text">temukan kopi.</div>
 
     <ul class="nav-menu">
-        <li class="nav-item">
-            <a href="{{ route('admin.dashboard') }}" class="nav-link active">Data Admin</a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">Transaksi</a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('admin.menu') }}" class="nav-link">Product</a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('admin.logout') }}" class="nav-link" style="color:#ff4d4d;">Logout</a>
-        </li>
+        <li><a href="{{ route('admin.dashboard') }}" class="nav-link active">Data Admin</a></li>
+        <li><a href="#" class="nav-link">Transaksi</a></li>
+        <li><a href="{{ route('admin.menu') }}" class="nav-link">Product</a></li>
+        <li><a href="{{ route('admin.logout') }}" class="nav-link" style="color:red;">Logout</a></li>
     </ul>
 </div>
 
 <div class="main-content">
 
-    <div class="header-title">
-        <h1>Kelola Data Admin</h1>
-        <p>Total {{ $totalAdmin }} Admin</p>
-        <p>Login sebagai: <b>{{ session('nama_admin') }}</b></p>
-    </div>
-
-    @if(session('success'))
-        <div style="background:#d4edda; color: #155724; padding:15px; margin:20px 0; border-radius: 10px; border: 1px solid #c3e6cb;">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <div class="top-bar">
-        <div class="search-wrapper">
-            <form action="" method="GET">
-                <input type="text" name="search" placeholder="Cari admin..." value="{{ request('search') }}">
-            </form>
-        </div>
-
-        <a href="{{ route('admin.create') }}" class="btn-add">+ Tambah Admin</a>
-    </div>
+    <h1>Kelola Data Admin</h1>
+    <p>Total {{ $totalAdmin }} Admin</p>
 
     <table class="data-table">
         <thead>
@@ -227,7 +179,6 @@ body {
                 <th>Password</th>
                 <th>Role</th>
                 <th>Status</th>
-                <th>Update</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -235,35 +186,20 @@ body {
         <tbody>
             @foreach($admins as $admin)
             <tr class="row-shadow">
-                <td style="display:flex; align-items:center;">
-                    <img src="{{ $admin->foto_admin ? asset('storage/avatars/'.$admin->foto_admin) : asset('images/user.png') }}" class="avatar">
+                <td>
+                    <img src="{{ asset('images/user.png') }}" class="avatar">
                     {{ $admin->nama }}
                 </td>
-
-                <td>********</td>
-                <td>{{ ucfirst($admin->role) }}</td>
-
+                <td>******</td>
+                <td>{{ $admin->role }}</td>
                 <td>
                     <span class="{{ $admin->status_admin == 'aktif' ? 'badge-active' : 'badge-inactive' }}">
                         {{ $admin->status_admin }}
                     </span>
                 </td>
-
                 <td>
-                    {{ $admin->updated_at ? date('d-m-Y', strtotime($admin->updated_at)) : '-' }}
-                </td>
-
-                <td>
-                    <div style="display: flex; gap: 15px;">
-                        <a href="{{ route('admin.edit', $admin->id_user) }}" 
-                           class="action-link" style="color: #007bff;">Edit</a>
-                        
-                        <a href="{{ route('admin.destroy', $admin->id_user) }}" 
-                           class="action-link" style="color: #dc3545;"
-                           onclick="return confirm('Apakah Anda yakin ingin menghapus admin {{ $admin->nama }}?')">
-                           Hapus
-                        </a>
-                    </div>
+                    <a href="{{ route('admin.edit',$admin->id_user) }}">Edit</a> |
+                    <a href="{{ route('admin.destroy',$admin->id_user) }}">Hapus</a>
                 </td>
             </tr>
             @endforeach
@@ -271,6 +207,70 @@ body {
     </table>
 
 </div>
+
+<!-- SWEETALERT -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // LOGOUT
+    document.querySelectorAll('a[href="{{ route('admin.logout') }}"]').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Yakin logout?',
+                icon: 'warning',
+                width: '300px',
+                padding: '1.5em',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = this.href;
+                }
+            });
+        });
+    });
+
+    // HAPUS
+    document.querySelectorAll('a[href*="hapus"]').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Yakin hapus?',
+                text: 'Data akan dihapus permanen',
+                icon: 'warning',
+                width: '300px',
+                padding: '1.5em',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = this.href;
+                }
+            });
+        });
+    });
+
+});
+</script>
+
+@if(session('success'))
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Berhasil!',
+    text: "{{ session('success') }}",
+    width: '300px',
+    padding: '1.5em',
+    timer: 2000,
+    showConfirmButton: false
+});
+</script>
+@endif
 
 </body>
 </html>
