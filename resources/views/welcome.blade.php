@@ -486,7 +486,7 @@ Kami menghadirkan berbagai pilihan kopi terbaik dari berbagai daerah Indonesia.
 
 </section>
 
-<!-- TESTIMONI -->
+<!-- TESTIMONI ini -->
 
 <section>
 
