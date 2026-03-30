@@ -15,9 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
 ->withMiddleware(function (Middleware $middleware): void {
     $middleware->alias([
         // Pastikan path-nya lengkap seperti ini:
-        'admin.auth' => \App\Http\Middleware\CekLoginAdmin::class, 
+        'admin.auth' => \App\Http\Middleware\CekLoginAdmin::class,
+        'admin.guest' => \App\Http\Middleware\GuestAdmin::class, 
     ]);
-})
+    })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
