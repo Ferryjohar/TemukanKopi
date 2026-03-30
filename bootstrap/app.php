@@ -10,9 +10,14 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
-    })
+    // File: bootstrap/app.php
+
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->alias([
+        // Pastikan path-nya lengkap seperti ini:
+        'admin.auth' => \App\Http\Middleware\CekLoginAdmin::class, 
+    ]);
+})
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
