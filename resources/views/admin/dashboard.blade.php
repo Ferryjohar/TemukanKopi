@@ -259,8 +259,7 @@ body {
                            class="action-link" style="color: #007bff;">Edit</a>
                         
                         <a href="{{ route('admin.destroy', $admin->id_user) }}" 
-                           class="action-link" style="color: #dc3545;"
-                           onclick="return confirm('Apakah Anda yakin ingin menghapus admin {{ $admin->nama }}?')">
+                           class="action-link" style="color: #dc3545;">
                            Hapus
                         </a>
                     </div>
@@ -271,6 +270,71 @@ body {
     </table>
 
 </div>
+
+
+<!-- SWEETALERT -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // LOGOUT
+    document.querySelectorAll('a[href="{{ route('admin.logout') }}"]').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Yakin logout?',
+                icon: 'warning',
+                width: '300px',
+                padding: '1.5em',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = this.href;
+                }
+            });
+        });
+    });
+
+    // HAPUS
+    document.querySelectorAll('a[href*="hapus"]').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Yakin hapus?',
+                text: 'Data akan dihapus permanen',
+                icon: 'warning',
+                width: '300px',
+                padding: '1.5em',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = this.href;
+                }
+            });
+        });
+    });
+
+});
+</script>
+
+@if(session('success'))
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Berhasil!',
+    text: "{{ session('success') }}",
+    width: '300px',
+    padding: '1.5em',
+    timer: 2000,
+    showConfirmButton: false
+});
+</script>
+@endif
 
 </body>
 </html>
