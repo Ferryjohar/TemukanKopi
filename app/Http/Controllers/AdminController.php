@@ -79,7 +79,6 @@ class AdminController extends Controller
     return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil diupdate!');
     }
 
-    // 6. Proses Hapus Data (Destroy)
     public function destroy($id) {
         DB::table('ms_admin')->where('id_user', $id)->delete();
         
