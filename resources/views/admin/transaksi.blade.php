@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kelola Data Admin - Temukan Kopi</title>
+<title>Kelola Transaksi - Temukan Kopi</title>
 
 <style>
 :root {
@@ -19,6 +19,7 @@ body {
     display: flex;
 }
 
+/* Sidebar - Konsisten dengan Data Admin */
 .sidebar {
     width: 280px;
     background-color: var(--primary-green);
@@ -65,6 +66,7 @@ body {
     background-color: rgba(255,255,255,0.1);
 }
 
+/* Main Content */
 .main-content {
     margin-left: 280px;
     flex: 1;
@@ -100,25 +102,10 @@ body {
     padding: 12px;
     border-radius: 12px;
     border: 1px solid #ddd;
+    outline: none;
 }
 
-.btn-add {
-    background-color: white;
-    padding: 12px 20px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: var(--text-dark);
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: 0.2s;
-    position: relative;
-    z-index: 20;
-}
-
-.btn-add:hover {
-    background-color: #eee;
-}
-
+/* Table - Style Row Shadow Identik */
 .data-table {
     width: 100%;
     border-collapse: separate;
@@ -131,6 +118,7 @@ body {
     padding: 15px;
     background-color: #e2e2e2;
     text-align: left;
+    font-weight: 600;
 }
 
 .data-table td {
@@ -139,30 +127,8 @@ body {
     vertical-align: middle;
 }
 
-.action-link {
-    text-decoration: none;
-    font-weight: bold;
-    position: relative;
-    z-index: 50;
-    cursor: pointer;
-}
-
 .row-shadow {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-
-.badge-active {
-    background-color: #76e09e;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 14px;
-}
-
-.badge-inactive {
-    background-color: #ffb3b3;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 14px;
 }
 
 .avatar {
@@ -171,6 +137,20 @@ body {
     border-radius: 50%;
     margin-right: 15px;
     object-fit: cover;
+}
+
+.action-link {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Badge Status untuk Transaksi (Opsional jika ingin dipakai) */
+.badge-success {
+    background-color: #76e09e;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
 }
 </style>
 
@@ -182,10 +162,10 @@ body {
 
     <ul class="nav-menu">
         <li class="nav-item">
-            <a href="{{ route('admin.dashboard') }}" class="nav-link active">Data Admin</a>
+            <a href="{{ route('admin.dashboard') }}" class="nav-link">Data Admin</a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('admin.transaksi') }}" class="nav-link">Transaksi</a>
+            <a href="{{ route('admin.transaksi') }}" class="nav-link active">Transaksi</a>
         </li>
         <li class="nav-item">
             <a href="{{ route('admin.menu') }}" class="nav-link">Product</a>
@@ -199,8 +179,8 @@ body {
 <div class="main-content">
 
     <div class="header-title">
-        <h1>Kelola Data Admin</h1>
-        <p>Total {{ $totalAdmin }} Admin</p>
+        <h1>Kelola Transaksi</h1>
+        <p>Total {{ $totalTransaksi }} Transaksi</p>
         <p>Login sebagai: <b>{{ session('nama_admin') }}</b></p>
     </div>
 
@@ -212,55 +192,53 @@ body {
 
     <div class="top-bar">
         <div class="search-wrapper">
-            <form action="" method="GET">
-                <input type="text" name="search" placeholder="Cari admin..." value="{{ request('search') }}">
+            <form action="{{ route('admin.transaksi') }}" method="GET">
+                <input type="text" name="search" placeholder="Cari nama pelanggan..." value="{{ request('search') }}">
             </form>
         </div>
-
-        <a href="{{ route('admin.create') }}" class="btn-add">+ Tambah Admin</a>
+        
+        {{-- Tombol Cetak Laporan (Opsional agar Top Bar tidak kosong) --}}
+        <div style="width: 150px;"></div> 
     </div>
 
     <table class="data-table">
         <thead>
             <tr>
-                <th>Nama</th>
-                <th>Password</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Update</th>
+                <th>Pelanggan</th>
+                <th>No. WhatsApp</th>
+                <th>Alamat</th>
+                <th>Total Harga</th>
+                <th>Tanggal</th>
                 <th>Aksi</th>
             </tr>
         </thead>
 
         <tbody>
-            @foreach($admins as $admin)
+            @foreach($transaksi as $t)
             <tr class="row-shadow">
                 <td style="display:flex; align-items:center;">
-                    <img src="{{ $admin->foto_admin ? asset('storage/avatars/'.$admin->foto_admin) : asset('images/user.png') }}" class="avatar">
-                    {{ $admin->nama }}
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode($t->nama_customer) }}&background=004d32&color=fff" class="avatar">
+                    <b>{{ $t->nama_customer }}</b>
                 </td>
 
-                <td>********</td>
-                <td>{{ ucfirst($admin->role) }}</td>
-
-                <td>
-                    <span class="{{ $admin->status_admin == 'aktif' ? 'badge-active' : 'badge-inactive' }}">
-                        {{ $admin->status_admin }}
-                    </span>
-                </td>
-
-                <td>
-                    {{ $admin->updated_at ? date('d-m-Y', strtotime($admin->updated_at)) : '-' }}
-                </td>
+                <td>{{ $t->no_wa }}</td>
+                <td>{{ \Illuminate\Support\Str::limit($t->alamat, 30) }}</td>
+                <td><b>Rp {{ number_format($t->total_harga, 0, ',', '.') }}</b></td>
+                <td>{{ date('d-m-Y H:i', strtotime($t->tanggal_pesan)) }}</td>
 
                 <td>
                     <div style="display: flex; gap: 15px;">
-                        <a href="{{ route('admin.edit', $admin->id_user) }}" 
-                           class="action-link" style="color: #007bff;">Edit</a>
+                        {{-- Tombol Detail --}}
+                        <a href="{{ route('admin.transaksi.detail', $t->id_pesanan) }}" 
+                           class="action-link" style="color: #007bff;">Detail</a>
                         
-                        <a href="{{ route('admin.destroy', $admin->id_user) }}" 
+                        {{-- TOMBOL EDIT (Sebelumnya Cetak) --}}
+                        <a href="{{ route('admin.transaksi.edit', $t->id_pesanan) }}" class="action-link" style="color: #28a745;">Edit</a>
+
+                        {{-- Tombol Hapus --}}
+                        <a href="{{ route('admin.transaksi.destroy', $t->id_pesanan) }}" 
                            class="action-link" style="color: #dc3545;"
-                           onclick="return confirm('Apakah Anda yakin ingin menghapus admin {{ $admin->nama }}?')">
+                           onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi dari {{ $t->nama_customer }}?')">
                            Hapus
                         </a>
                     </div>
@@ -269,6 +247,12 @@ body {
             @endforeach
         </tbody>
     </table>
+
+    @if($transaksi->isEmpty())
+        <div style="text-align: center; padding: 50px; color: #888;">
+            <p>Belum ada data transaksi yang masuk.</p>
+        </div>
+    @endif
 
 </div>
 
