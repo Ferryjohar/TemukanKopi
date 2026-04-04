@@ -18,7 +18,7 @@
             display: flex;
         }
 
-        /* Sidebar - Konsisten dengan Dashboard */
+        /* Sidebar */
         .sidebar {
             width: 280px;
             background-color: var(--primary-green);
@@ -85,7 +85,6 @@
             margin-top: 0;
         }
 
-        /* Top Bar & Search - Konsisten dengan Dashboard */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -115,7 +114,6 @@
             color: #aaa;
         }
 
-        /* Tombol Tambah Produk */
         .btn-add {
             background-color: white;
             padding: 12px 25px;
@@ -155,7 +153,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* Foto Produk (Kotak Tumpul) */
         .prod-img {
             width: 45px;
             height: 45px;
@@ -195,17 +192,23 @@
 <div class="main-content">
     <div class="header-title">
         <h1>Product</h1>
-        <p>total 3 Produk</p>
-        <p>Login sebagai: <b>{{ session('nama_admin') ?? 'Roy' }}</b></p>
+        <p>Total {{ count($produk ?? []) }} Produk</p>
+        <p>Login sebagai: <b>{{ session('nama') ?? 'Roy' }}</b></p>
     </div>
+
+    @if(session('success'))
+        <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <div class="top-bar">
         <div class="search-wrapper">
-            <form action="" method="GET">
-                <input type="text" name="search" placeholder="cari berdasarkan nama / ..." value="{{ request('search') }}">
+            <form action="{{ route('admin.menu') }}" method="GET">
+                <input type="text" name="search" placeholder="cari berdasarkan nama..." value="{{ request('search') }}">
             </form>
         </div>
-        <a href="#" class="btn-add"><b>+</b> Tambahkan Produk</a>
+        <a href="{{ route('admin.menu.create') }}" class="btn-add"><b>+</b> Tambahkan Produk</a>
     </div>
 
     <table class="data-table">
@@ -220,56 +223,32 @@
             </tr>
         </thead>
         <tbody>
+            @forelse($produk as $item)
             <tr class="row-shadow">
                 <td style="display:flex; align-items:center;">
-                    <img src="https://placehold.co/100x100?text=Kopi" class="prod-img">
-                    Robusta
+                    <img src="{{ asset('storage/produk/' . $item->foto_produk) }}" class="prod-img" onerror="this.src='https://placehold.co/100x100?text=Kopi'">
+                    {{ $item->nama_produk }}
                 </td>
-                <td>Rp 50.000</td>
-                <td>20</td>
-                <td>Mentah</td>
-                <td style="color:#666; font-size:14px;">Robusta dari...</td>
+                <td>Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</td>
+                <td>{{ $item->stok_produk }}</td>
+                <td>{{ $item->id_kategori }}</td>
+                <td style="color:#666; font-size:14px;">{{ \Illuminate\Support\Str::limit($item->deskripsi_produk, 30) }}</td>
                 <td>
                     <div style="display: flex; gap: 15px;">
-                        <a href="#" class="action-link" style="color: #007bff;">Edit</a>
-                        <a href="#" class="action-link" style="color: #dc3545;">Hapus</a>
+                        <a href="{{ route('admin.menu.edit', $item->id_produk) }}" class="action-link" style="color: #007bff;">Edit</a>
+                        
+                        <a href="{{ route('admin.menu.hapus', $item->id_produk) }}" 
+                           class="action-link" 
+                           style="color: #dc3545;" 
+                           onclick="return confirm('Yakin ingin menghapus produk ini?')">Hapus</a>
                     </div>
                 </td>
             </tr>
-
-            <tr class="row-shadow">
-                <td style="display:flex; align-items:center;">
-                    <img src="https://placehold.co/100x100?text=Kopi" class="prod-img">
-                    Arabica
-                </td>
-                <td>Rp 409.900</td>
-                <td>20</td>
-                <td>Mentah</td>
-                <td style="color:#666; font-size:14px;">Kopi Arabica..</td>
-                <td>
-                    <div style="display: flex; gap: 15px;">
-                        <a href="#" class="action-link" style="color: #007bff;">Edit</a>
-                        <a href="#" class="action-link" style="color: #dc3545;">Hapus</a>
-                    </div>
-                </td>
+            @empty
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 20px; background: white;">Data produk masih kosong.</td>
             </tr>
-
-            <tr class="row-shadow">
-                <td style="display:flex; align-items:center;">
-                    <img src="https://placehold.co/100x100?text=Kopi" class="prod-img">
-                    Aratula
-                </td>
-                <td>Rp 355.000</td>
-                <td>20</td>
-                <td>Mentah</td>
-                <td style="color:#666; font-size:14px;">Aratula adalah..</td>
-                <td>
-                    <div style="display: flex; gap: 15px;">
-                        <a href="#" class="action-link" style="color: #007bff;">Edit</a>
-                        <a href="#" class="action-link" style="color: #dc3545;">Hapus</a>
-                    </div>
-                </td>
-            </tr>
+            @endforelse
         </tbody>
     </table>
 </div>

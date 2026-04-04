@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class AdminController extends Controller
 {
     // 1. Menampilkan Tabel (Read)
+    
     public function index() {
         if (!session('login')) return redirect()->route('admin.login');
         

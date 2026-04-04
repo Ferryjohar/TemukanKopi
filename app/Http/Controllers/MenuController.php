@@ -14,45 +14,103 @@ class MenuController extends Controller
             return redirect()->route('admin.login');
         }
 
-        // 2. Gunakan Join agar bisa menampilkan Nama Kategori & Nama Jenis Kopi
-        $products = DB::table('ms_produk')
+        // 2. Ambil data produk dengan Join
+        // Variabel dinamai $produk (tanpa 's') agar cocok dengan @forelse($produk as $item) di Blade
+        $produk = DB::table('ms_produk')
             ->join('ms_kategori', 'ms_produk.id_kategori', '=', 'ms_kategori.id_kategori')
             ->join('ms_jeniskopi', 'ms_produk.id_jeniskopi', '=', 'ms_jeniskopi.id_jeniskopi')
             ->select('ms_produk.*', 'ms_kategori.nama_kategori', 'ms_jeniskopi.nama_jenis')
             ->get();
         
-        $totalProduk = $products->count();
+        $totalProduk = $produk->count();
 
-        // Ambil data kategori & jenis kopi untuk isi dropdown di form tambah nantinya
-        $kategori = DB::table('ms_kategori')->get();
-        $jenisKopi = DB::table('ms_jeniskopi')->get();
-
-        return view('admin.menu', compact('products', 'totalProduk', 'kategori', 'jenisKopi'));
+        return view('admin.menu', compact('produk', 'totalProduk'));
     }
 
-    public function tambah(Request $request)
+    // Menampilkan Form Tambah Produk
+    public function create()
     {
-        // Pastikan id_jeniskopi juga ikut disimpan sesuai skema database kopi_db
+        if (!session('login')) return redirect()->route('admin.login');
+        
+        $kategori = DB::table('ms_kategori')->get();
+        $jenisKopi = DB::table('ms_jeniskopi')->get();
+        return view('admin.tambah_produk', compact('kategori', 'jenisKopi'));
+    }
+
+    public function store(Request $request)
+    {
+        $namaFile = 'default.png';
+        if ($request->hasFile('foto_produk')) {
+            $file = $request->file('foto_produk');
+            $namaFile = time() . "_" . $file->getClientOriginalName();
+            $file->move(public_path('storage/produk'), $namaFile);
+        }
+
+        // PERBAIKAN: Gunakan $request->id_jeniskopi jika ada, 
+        // jika kosong (null), beri nilai default 1 agar database tidak error 1364
         DB::table('ms_produk')->insert([
             'nama_produk'      => $request->nama_produk,
             'id_kategori'      => $request->id_kategori,
-            'id_jeniskopi'     => $request->id_jeniskopi, // Wajib ada
+            'id_jeniskopi'     => $request->id_jeniskopi ?? 1, 
             'harga_produk'     => $request->harga_produk,
             'stok_produk'      => $request->stok_produk,
             'deskripsi_produk' => $request->deskripsi_produk,
-            'foto_produk'      => $request->foto_produk ?? 'default.png', // Fallback jika belum upload
+            'foto_produk'      => $namaFile,
             'created_at'       => now(),
             'updated_at'       => now()
         ]);
 
-        return back()->with('success', 'Produk berhasil ditambahkan');
+        return redirect()->route('admin.menu')->with('success', 'Produk berhasil ditambahkan');
+    }
+
+    // Menampilkan Form Edit Produk
+    public function edit($id_produk)
+    {
+        if (!session('login')) return redirect()->route('admin.login');
+
+        $product = DB::table('ms_produk')->where('id_produk', $id_produk)->first();
+        $kategori = DB::table('ms_kategori')->get();
+        $jenisKopi = DB::table('ms_jeniskopi')->get();
+
+        if (!$product) {
+            return redirect()->route('admin.menu')->with('error', 'Produk tidak ditemukan');
+        }
+
+        return view('admin.edit_produk', compact('product', 'kategori', 'jenisKopi'));
+    }
+
+    public function update(Request $request, $id_produk)
+    {
+        $data = [
+            'nama_produk'      => $request->nama_produk,
+            'id_kategori'      => $request->id_kategori,
+            'harga_produk'     => $request->harga_produk,
+            'stok_produk'      => $request->stok_produk,
+            'deskripsi_produk' => $request->deskripsi_produk,
+            'updated_at'       => now()
+        ];
+
+        // PERBAIKAN: Hanya update id_jeniskopi jika user memilih/mengisi di form
+        // Ini mencegah error "Column cannot be null"
+        if ($request->filled('id_jeniskopi')) {
+            $data['id_jeniskopi'] = $request->id_jeniskopi;
+        }
+
+        if ($request->hasFile('foto_produk')) {
+            $file = $request->file('foto_produk');
+            $namaFile = time() . "_" . $file->getClientOriginalName();
+            $file->move(public_path('storage/produk'), $namaFile);
+            $data['foto_produk'] = $namaFile;
+        }
+
+        DB::table('ms_produk')->where('id_produk', $id_produk)->update($data);
+
+        return redirect()->route('admin.menu')->with('success', 'Produk berhasil diupdate');
     }
 
     public function hapus($id)
     {
-        // Menggunakan id_produk sesuai primary key di database
         DB::table('ms_produk')->where('id_produk', $id)->delete();
-
-        return back()->with('success', 'Produk berhasil dihapus');
+        return redirect()->route('admin.menu')->with('success', 'Produk berhasil dihapus');
     }
 }

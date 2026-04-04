@@ -28,8 +28,13 @@ Route::prefix('admin')->group(function () {
     // ---------- SUDAH LOGIN ----------
     Route::middleware('admin.auth')->group(function () {
 
-        // DASHBOARD
+        // DASHBOARD (KELOLA DATA ADMIN)
         Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+        Route::get('/tambah-admin', [AdminController::class, 'create'])->name('admin.create');
+        Route::post('/simpan-admin', [AdminController::class, 'store'])->name('admin.store');
+        Route::get('/edit-admin/{id}', [AdminController::class, 'edit'])->name('admin.edit');
+        Route::post('/update-admin/{id}', [AdminController::class, 'update'])->name('admin.update');
+        Route::get('/hapus-admin/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
 
         // TRANSAKSI
         Route::get('/transaksi', [TransaksiController::class, 'index'])->name('admin.transaksi');
@@ -38,21 +43,15 @@ Route::prefix('admin')->group(function () {
         Route::post('/transaksi/update/{id}', [TransaksiController::class, 'update'])->name('admin.transaksi.update');
         Route::get('/transaksi/hapus/{id}', [TransaksiController::class, 'destroy'])->name('admin.transaksi.destroy');
 
-        // MENU
+        // MENU (PRODUK) - SEMUA DIARAHKAN KE MenuController
         Route::get('/menu', [MenuController::class, 'index'])->name('admin.menu');
-        Route::post('/menu/tambah', [MenuController::class, 'tambah'])->name('admin.menu.tambah');
+        Route::get('/menu/tambah', [MenuController::class, 'create'])->name('admin.menu.create'); 
+        Route::post('/menu/simpan', [MenuController::class, 'store'])->name('admin.menu.store');
+        Route::get('/menu/edit/{id_produk}', [MenuController::class, 'edit'])->name('admin.menu.edit');
+        Route::post('/menu/update/{id_produk}', [MenuController::class, 'update'])->name('admin.menu.update');
         Route::get('/menu/hapus/{id}', [MenuController::class, 'hapus'])->name('admin.menu.hapus');
-
-        // ADMIN
-        Route::get('/tambah-admin', [AdminController::class, 'create'])->name('admin.create');
-        Route::post('/simpan-admin', [AdminController::class, 'store'])->name('admin.store');
-        Route::get('/edit-admin/{id}', [AdminController::class, 'edit'])->name('admin.edit');
-        Route::post('/update-admin/{id}', [AdminController::class, 'update'])->name('admin.update');
-        Route::get('/hapus-admin/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
 
         // LOGOUT
         Route::get('/logout', [LoginController::class, 'logout'])->name('admin.logout');
-
     });
-
 });
