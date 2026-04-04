@@ -27,9 +27,11 @@ class AdminController extends Controller
         DB::table('ms_admin')->insert([
             'nama'         => $request->nama,
             'username'     => $request->username,
-            'password'     => $request->password,
+            'password'     => $request->password, 
+            'no_hp'        => $request->no_hp,    
             'role'         => $request->role,
             'status_admin' => 'aktif',
+            'foto_admin'   => 'user.png',         // Berikan foto default saat pertama daftar
             'created_at'   => now(),
             'updated_at'   => now(),
         ]);
@@ -68,7 +70,6 @@ class AdminController extends Controller
         $file = $request->file('foto_admin');
         $namaFile = time() . "_" . $file->getClientOriginalName();
         
-        // Simpan ke folder public/storage/avatars
         $file->move(public_path('storage/avatars'), $namaFile);
         
         $data['foto_admin'] = $namaFile;
@@ -84,4 +85,16 @@ class AdminController extends Controller
         
         return redirect()->route('admin.dashboard')->with('success', 'Admin telah dihapus!');
     }
-}
+
+    // Tambahkan ini di bagian paling bawah sebelum penutup class
+    public function transaksi()
+    {
+        if (!session('login')) return redirect()->route('admin.login');
+        // Ambil data transaksi dari database kopi_db
+        $transaksi = DB::table('tr_pesanan')->get();
+        // HITUNG TOTALNYA DI SINI
+        $totalTransaksi = $transaksi->count();
+        // KIRIM KEDUA VARIABEL KE VIEW
+        return view('admin.transaksi', compact('transaksi', 'totalTransaksi'));
+        }
+} // Ini penutup class AdminController

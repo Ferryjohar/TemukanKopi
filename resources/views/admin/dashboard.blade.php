@@ -185,7 +185,7 @@ body {
             <a href="{{ route('admin.dashboard') }}" class="nav-link active">Data Admin</a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">Transaksi</a>
+            <a href="{{ route('admin.transaksi') }}" class="nav-link">Transaksi</a>
         </li>
         <li class="nav-item">
             <a href="{{ route('admin.menu') }}" class="nav-link">Product</a>

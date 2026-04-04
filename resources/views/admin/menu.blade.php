@@ -1,210 +1,277 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kelola Produk - Temukan Kopi</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Produk - Temukan Kopi</title>
+    <style>
+        :root {
+            --primary-green: #004d32;
+            --bg-light: #f5f3ed;
+            --text-dark: #1a1a1a;
+        }
 
-<style>
-:root {
-    --primary-green: #004d32;
-    --bg-light: #f5f3ed;
-    --text-dark: #1a1a1a;
-}
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-light);
+            display: flex;
+        }
 
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: var(--bg-light);
-    display: flex;
-}
+        /* Sidebar - Konsisten dengan Dashboard */
+        .sidebar {
+            width: 280px;
+            background-color: var(--primary-green);
+            min-height: 100vh;
+            color: white;
+            padding: 40px 20px;
+            position: fixed;
+            z-index: 100;
+        }
 
-/* SIDEBAR */
-.sidebar {
-    width: 280px;
-    background-color: var(--primary-green);
-    min-height: 100vh;
-    color: white;
-    padding: 40px 20px;
-    position: fixed;
-}
+        .logo-text {
+            font-family: 'Georgia', serif;
+            font-size: 28px;
+            margin-bottom: 40px;
+            padding-left: 20px;
+        }
 
-.logo-text {
-    font-family: 'Georgia', serif;
-    font-size: 28px;
-    margin-bottom: 40px;
-    padding-left: 20px;
-}
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+        }
 
-.nav-menu {
-    list-style: none;
-    padding: 0;
-}
+        .nav-item {
+            margin-bottom: 10px;
+        }
 
-.nav-link {
-    display: block;
-    padding: 12px 20px;
-    color: #ffffffb3;
-    text-decoration: none;
-    border-radius: 10px;
-    transition: 0.3s;
-    margin-bottom: 10px;
-}
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #ffffffb3;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
 
-.nav-link.active {
-    background-color: white;
-    color: var(--primary-green);
-    font-weight: bold;
-}
+        .nav-link.active {
+            background-color: white;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
 
-.nav-link:hover {
-    background-color: rgba(255,255,255,0.1);
-}
+        .nav-link:hover:not(.active) {
+            background-color: rgba(255,255,255,0.1);
+        }
 
-/* MAIN */
-.main-content {
-    margin-left: 280px;
-    flex: 1;
-    padding: 60px;
-}
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 60px;
+            position: relative;
+            z-index: 10;
+        }
 
-/* HEADER */
-.header-title h1 {
-    font-size: 32px;
-    margin-bottom: 5px;
-    color: var(--text-dark);
-}
+        .header-title h1 {
+            font-size: 32px;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
 
-.header-title p {
-    color: #666;
-}
+        .header-title p {
+            color: #666;
+            margin-top: 0;
+        }
 
-/* ALERT */
-.alert {
-    background: #d4edda;
-    color: #155724;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
+        /* Top Bar & Search - Konsisten dengan Dashboard */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+        }
 
-/* FORM */
-.form-box {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
+        .search-wrapper {
+            width: 350px;
+            position: relative;
+        }
 
-.form-box input {
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    margin-right: 10px;
-}
+        .search-wrapper input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            outline: none;
+        }
 
-.btn-submit {
-    background: var(--primary-green);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-}
+        .search-wrapper::before {
+            content: '🔍';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
 
-/* TABLE */
-.data-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 15px;
-}
+        /* Tombol Tambah Produk */
+        .btn-add {
+            background-color: white;
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        }
 
-.data-table th {
-    text-align: left;
-    padding: 15px;
-    background-color: #e2e2e2;
-}
+        .btn-add:hover {
+            background-color: #eee;
+        }
 
-.data-table td {
-    background-color: white;
-    padding: 15px;
-}
+        /* Table Style */
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 15px;
+        }
 
-.row-shadow {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
+        .data-table th {
+            padding: 15px;
+            background-color: #e2e2e2;
+            text-align: left;
+            font-weight: 600;
+        }
 
-/* BUTTON */
-.btn-delete {
-    background: #ff4d4d;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-}
-</style>
+        .data-table td {
+            background-color: white;
+            padding: 15px;
+            vertical-align: middle;
+        }
 
+        .row-shadow {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Foto Produk (Kotak Tumpul) */
+        .prod-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            margin-right: 15px;
+            object-fit: cover;
+            background-color: #eee;
+        }
+
+        .action-link {
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
     <div class="logo-text">temukan kopi.</div>
-
     <ul class="nav-menu">
-        <li><a href="{{ route('admin.menu') }}" class="nav-link active">Menu Produk</a></li>
-        <li><a href="{{ route('admin.logout') }}" class="nav-link" style="color:#ff4d4d;">Logout</a></li>
+        <li class="nav-item">
+            <a href="{{ route('admin.dashboard') }}" class="nav-link">Data Admin</a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.transaksi') }}" class="nav-link">Transaksi</a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.menu') }}" class="nav-link active">Product</a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.logout') }}" class="nav-link" style="color:#ff4d4d;">Logout</a>
+        </li>
     </ul>
 </div>
 
-<!-- MAIN -->
 <div class="main-content">
-
     <div class="header-title">
-        <h1>Kelola Produk Kopi</h1>
-        <p>Login sebagai: <b>{{ session('nama_admin') }}</b></p>
+        <h1>Product</h1>
+        <p>total 3 Produk</p>
+        <p>Login sebagai: <b>{{ session('nama_admin') ?? 'Roy' }}</b></p>
     </div>
 
-    @if(session('success'))
-        <div class="alert">
-            {{ session('success') }}
+    <div class="top-bar">
+        <div class="search-wrapper">
+            <form action="" method="GET">
+                <input type="text" name="search" placeholder="cari berdasarkan nama / ..." value="{{ request('search') }}">
+            </form>
         </div>
-    @endif
-
-    <!-- FORM TAMBAH -->
-    <div class="form-box">
-        <form method="POST" action="{{ route('admin.menu.tambah') }}">
-            @csrf
-            <input type="text" name="nama" placeholder="Nama Produk" required>
-            <input type="number" name="harga" placeholder="Harga" required>
-            <button type="submit" class="btn-submit">Tambah Produk</button>
-        </form>
+        <a href="#" class="btn-add"><b>+</b> Tambahkan Produk</a>
     </div>
 
-    <!-- TABLE -->
     <table class="data-table">
         <thead>
             <tr>
                 <th>Nama Produk</th>
                 <th>Harga</th>
+                <th>Stok</th>
+                <th>Kategori</th>
+                <th>Deskripsi</th>
                 <th>Aksi</th>
             </tr>
         </thead>
-
         <tbody>
-            @foreach($produk as $p)
             <tr class="row-shadow">
-                <td>{{ $p->nama_produk }}</td>
-                <td>Rp {{ number_format($p->harga,0,',','.') }}</td>
+                <td style="display:flex; align-items:center;">
+                    <img src="https://placehold.co/100x100?text=Kopi" class="prod-img">
+                    Robusta
+                </td>
+                <td>Rp 50.000</td>
+                <td>20</td>
+                <td>Mentah</td>
+                <td style="color:#666; font-size:14px;">Robusta dari...</td>
                 <td>
-                    <a href="{{ route('admin.menu.hapus', $p->id) }}" class="btn-delete">Hapus</a>
+                    <div style="display: flex; gap: 15px;">
+                        <a href="#" class="action-link" style="color: #007bff;">Edit</a>
+                        <a href="#" class="action-link" style="color: #dc3545;">Hapus</a>
+                    </div>
                 </td>
             </tr>
-            @endforeach
+
+            <tr class="row-shadow">
+                <td style="display:flex; align-items:center;">
+                    <img src="https://placehold.co/100x100?text=Kopi" class="prod-img">
+                    Arabica
+                </td>
+                <td>Rp 409.900</td>
+                <td>20</td>
+                <td>Mentah</td>
+                <td style="color:#666; font-size:14px;">Kopi Arabica..</td>
+                <td>
+                    <div style="display: flex; gap: 15px;">
+                        <a href="#" class="action-link" style="color: #007bff;">Edit</a>
+                        <a href="#" class="action-link" style="color: #dc3545;">Hapus</a>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="row-shadow">
+                <td style="display:flex; align-items:center;">
+                    <img src="https://placehold.co/100x100?text=Kopi" class="prod-img">
+                    Aratula
+                </td>
+                <td>Rp 355.000</td>
+                <td>20</td>
+                <td>Mentah</td>
+                <td style="color:#666; font-size:14px;">Aratula adalah..</td>
+                <td>
+                    <div style="display: flex; gap: 15px;">
+                        <a href="#" class="action-link" style="color: #007bff;">Edit</a>
+                        <a href="#" class="action-link" style="color: #dc3545;">Hapus</a>
+                    </div>
+                </td>
+            </tr>
         </tbody>
     </table>
-
 </div>
 
 </body>
