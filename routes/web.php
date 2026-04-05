@@ -11,6 +11,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/checkout', function () {
+    return view('checkout');
+});
+
 // redirect ke login admin
 Route::get('/login', function () {
     return redirect()->route('admin.login');

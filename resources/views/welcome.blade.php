@@ -213,8 +213,22 @@ body {
   box-shadow: 0 10px 28px rgba(31,94,59,.25);
 }
 
-/* hero image */
+//* hero image */
 .hero-img-wrap {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  opacity: 0;
+  animation: fadeLeft .85s .35s forwards;
+}
+
+.hero-img-wrap img {
+  width: 600px; /* ⬅️ DIUBAH dari 520px supaya lebih besar */
+  filter: drop-shadow(0 28px 52px rgba(31,94,59,.22));
+  animation: float 4.5s ease-in-out infinite;
+}
+
+/* .hero-img-wrap {
   position: relative;
   z-index: 2;
   flex-shrink: 0;
@@ -225,7 +239,7 @@ body {
   width: 400px;
   filter: drop-shadow(0 28px 52px rgba(31,94,59,.22));
   animation: float 4.5s ease-in-out infinite;
-}
+} */
 
 @keyframes float {
   0%,100% { transform: translateY(0px); }
@@ -429,6 +443,12 @@ section { padding: 110px 100px; position: relative; overflow: hidden; }
 .price { color: var(--hijau); font-weight: 600; font-size: 14px; }
 
 .produk-cta { text-align: center; }
+
+a.card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
 
 /* ════════════════════════════════════
    TESTIMONI
@@ -796,8 +816,8 @@ footer {
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes fadeLeft {
-  from { opacity: 0; transform: translateX(55px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translateX(-320px); }
+  to   { opacity: 1; transform: translateX(-320px); }
 }
 
 /* ════════════════════════════════════
@@ -848,11 +868,11 @@ footer {
 <div class="navbar" id="navbar">
   <div class="logo">temukan kopi.</div>
   <div class="nav-links">
-    <a href="#">Home</a>
-    <a href="#">About me</a>
-    <a href="#">Produk</a>
-    <a href="#">Kontak</a>
-    <a href="#">Galery</a>
+    <a href="#Home">Home</a>
+    <a href="#About">About me</a>
+    <a href="#Produk">Produk</a>
+    <a href="#Kontak">Kontak</a>
+    <a href="#Galery">Galery</a>
   </div>
 </div>
 
@@ -860,7 +880,7 @@ footer {
 <!-- ╔══════════════════════════════╗
      ║           HERO               ║
      ╚══════════════════════════════╝ -->
-<section class="hero">
+<section id="Home" class="hero">
   <div class="hero-left">
     <div class="hero-pill">☕ Premium Indonesian Coffee</div>
     <h1>Temukan<br><em>Kopi</em></h1>
@@ -893,7 +913,7 @@ footer {
 <!-- ╔══════════════════════════════╗
      ║           ABOUT              ║
      ╚══════════════════════════════╝ -->
-<section class="about-section">
+<section id="About" class="about-section"> 
   <div class="bg-title">About</div>
   <div class="about">
     <div class="about-img-wrap reveal from-left">
@@ -922,16 +942,10 @@ footer {
 <!-- ╔══════════════════════════════╗
      ║          PRODUK              ║
      ╚══════════════════════════════╝ -->
-<section class="produk-section">
-  <div class="bg-title">Produk</div>
-  <div class="produk-header reveal">
-    <span class="section-tag">Koleksi Kami</span>
-    <h2 class="section-title">Produk Kami</h2>
-    <p>Pilihan kopi berkualitas dari seluruh nusantara</p>
-  </div>
-
+<section id="Produk">
   <div class="produk-grid stagger">
-    <div class="card">
+ 
+    <a class="card" href="/checkout?nama=Arabica&harga=60000&satuan=250gr&img=images%2Fkopi.png&stok=23&badge=NEW">
       <div class="badge">NEW</div>
       <img src="images/kopi.png" alt="Arabica">
       <div class="card-body">
@@ -939,8 +953,9 @@ footer {
         <h4>Arabica</h4>
         <div class="price">Rp 60.000 / 250gr</div>
       </div>
-    </div>
-    <div class="card">
+    </a>
+ 
+    <a class="card" href="/checkout?nama=Robusta&harga=55000&satuan=250gr&img=images%2Fkopi.png&stok=18&badge=NEW">
       <div class="badge">NEW</div>
       <img src="images/kopi.png" alt="Robusta">
       <div class="card-body">
@@ -948,8 +963,9 @@ footer {
         <h4>Robusta</h4>
         <div class="price">Rp 55.000 / 250gr</div>
       </div>
-    </div>
-    <div class="card">
+    </a>
+ 
+    <a class="card" href="/checkout?nama=Liberica&harga=65000&satuan=250gr&img=images%2Fkopi.png&stok=15&badge=NEW">
       <div class="badge">NEW</div>
       <img src="images/kopi.png" alt="Liberica">
       <div class="card-body">
@@ -957,8 +973,9 @@ footer {
         <h4>Liberica</h4>
         <div class="price">Rp 65.000 / 250gr</div>
       </div>
-    </div>
-    <div class="card">
+    </a>
+ 
+    <a class="card" href="/checkout?nama=Toraja&harga=70000&satuan=250gr&img=images%2Fkopi.png&stok=20&badge=NEW">
       <div class="badge">NEW</div>
       <img src="images/kopi.png" alt="Toraja">
       <div class="card-body">
@@ -966,19 +983,21 @@ footer {
         <h4>Toraja</h4>
         <div class="price">Rp 70.000 / 250gr</div>
       </div>
-    </div>
+    </a>
+ 
   </div>
-
+ 
   <div class="produk-cta reveal">
     <a class="btn" href="#">CLICK MORE</a>
   </div>
 </section>
+ 
 
 
 <!-- ╔══════════════════════════════╗
      ║        TESTIMONI             ║
      ╚══════════════════════════════╝ -->
-<section class="testi-section">
+<section id="Testimoni" class="testi-section">
   <div class="bg-title">Testimoni</div>
   <div class="testi-header reveal">
     <span class="section-tag">Apa Kata Mereka</span>
@@ -1120,7 +1139,7 @@ footer {
 <!-- ╔══════════════════════════════╗
      ║          GALERI              ║
      ╚══════════════════════════════╝ -->
-<section class="galeri-section">
+<section id="Galery" class="galeri-section">
   <div class="bg-title">Kopi</div>
   <div class="galeri-header reveal">
     <span class="section-tag">Koleksi Foto</span>
@@ -1154,7 +1173,7 @@ footer {
 <!-- ╔══════════════════════════════╗
      ║          CONTACT             ║
      ╚══════════════════════════════╝ -->
-<section class="contact-section">
+<section id="Kontak" class="contact-section">
   <div class="contact-header reveal">
     <span class="section-tag">Hubungi Kami</span>
     <h2 class="section-title">Tim Kami Melayani Anda 24jam</h2>
