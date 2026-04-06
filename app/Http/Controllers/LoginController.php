@@ -15,46 +15,37 @@ class LoginController extends Controller
 
     public function prosesLogin(Request $request) 
     {
-        // 1. Ambil data admin berdasarkan username & role
         $user = DB::table('ms_admin')
             ->where('username', $request->username)
             ->where('role', $request->role)
             ->first();
 
-        // 2. Cek apakah user ada, password cocok, DAN statusnya 'aktif'
         if ($user && $user->password == $request->password) {
-            
-            // Cek Tambahan: Apakah status admin aktif?
+
             if ($user->status_admin !== 'aktif') {
-                return back()->with('error', 'Akun Anda sudah tidak aktif. Silakan hubungi Superadmin.');
+                return back()->with('error', 'Akun Anda tidak aktif.');
             }
 
-            // 3. Simpan data lengkap ke Session
+            // 🔥 FIX SESSION (INI PENTING BANGET)
             session([
                 'login'      => true,
-                'id_user'    => $user->id_user,    // 🔥 Tambahkan ini agar sistem tahu siapa yang login
+                'id_user'    => $user->id_user,
                 'nama_admin' => $user->nama,
-                'role_admin' => $user->role,
-                'foto_admin' => $user->foto_admin  // 🔥 Simpan foto agar bisa tampil di pojok dashboard
+                'role'       => $user->role, // ✅ HARUS "role" bukan role_admin
+                'foto_admin' => $user->foto_admin
             ]);
 
-            // 4. Redirect berdasarkan Role
-            if ($user->role == 'superadmin') {
-                return redirect()->route('admin.dashboard')->with('success', 'Selamat Datang, Superadmin!');
-            } else {
-                // Admin biasa langsung ke halaman Menu (Product)
-                return redirect()->route('admin.menu')->with('success', 'Selamat Datang, Admin Toko!');
-            }
+            // 🔥 SATU PINTU (BIAR GA KETUKER)
+            return redirect()->route('admin.home')
+                ->with('success', 'Login berhasil!');
         }
 
-        // 5. Jika gagal
         return back()->with('error', 'Username, Password, atau Role salah!');
     }
 
     public function logout()
     {
-        // Menghapus semua session dan kembali ke login
         Session::flush();
-        return redirect()->route('admin.login')->with('success', 'Anda telah berhasil logout.');
+        return redirect()->route('admin.login')->with('success', 'Logout berhasil.');
     }
 }

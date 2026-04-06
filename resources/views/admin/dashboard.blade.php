@@ -19,6 +19,7 @@ body {
     display: flex;
 }
 
+/* SIDEBAR SESUAI ACUAN */
 .sidebar {
     width: 280px;
     background-color: var(--primary-green);
@@ -65,6 +66,7 @@ body {
     background-color: rgba(255,255,255,0.1);
 }
 
+/* MAIN CONTENT SESUAI ACUAN */
 .main-content {
     margin-left: 280px;
     flex: 1;
@@ -119,6 +121,7 @@ body {
     background-color: #eee;
 }
 
+/* TABLE SESUAI ACUAN */
 .data-table {
     width: 100%;
     border-collapse: separate;
@@ -181,17 +184,41 @@ body {
     <div class="logo-text">temukan kopi.</div>
 
     <ul class="nav-menu">
+        {{-- Logika Role Dinamis --}}
+        @if(strtolower(session('role_admin')) === 'superadmin')
+            <li class="nav-item">
+                <a href="{{ route('admin.dashboard') }}" 
+                   class="nav-link {{ Route::is('admin.dashboard*') ? 'active' : '' }}">
+                    Data Admin
+                </a>
+            </li>
+        @else
+            <li class="nav-item">
+                <a href="{{ route('admin.dashboard_khusus') }}" 
+                   class="nav-link {{ Route::is('admin.dashboard_khusus*') ? 'active' : '' }}">
+                    Dashboard
+                </a>
+            </li>
+        @endif
+
         <li class="nav-item">
-            <a href="{{ route('admin.dashboard') }}" class="nav-link active">Data Admin</a>
+            <a href="{{ route('admin.transaksi') }}" 
+               class="nav-link {{ Route::is('admin.transaksi*') ? 'active' : '' }}">
+                Transaksi
+            </a>
         </li>
+
         <li class="nav-item">
-            <a href="{{ route('admin.transaksi') }}" class="nav-link">Transaksi</a>
+            <a href="{{ route('admin.menu') }}" 
+               class="nav-link {{ Route::is('admin.menu*') ? 'active' : '' }}">
+                Product
+            </a>
         </li>
+
         <li class="nav-item">
-            <a href="{{ route('admin.menu') }}" class="nav-link">Product</a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('admin.logout') }}" class="nav-link" style="color:#ff4d4d;">Logout</a>
+            <a href="{{ route('admin.logout') }}" class="nav-link btn-logout" style="color:#ff4d4d;">
+                Logout
+            </a>
         </li>
     </ul>
 </div>
@@ -259,7 +286,7 @@ body {
                            class="action-link" style="color: #007bff;">Edit</a>
                         
                         <a href="{{ route('admin.destroy', $admin->id_user) }}" 
-                           class="action-link" style="color: #dc3545;">
+                           class="action-link btn-delete" style="color: #dc3545;">
                            Hapus
                         </a>
                     </div>
@@ -271,15 +298,13 @@ body {
 
 </div>
 
-
-<!-- SWEETALERT -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // LOGOUT
-    document.querySelectorAll('a[href="{{ route('admin.logout') }}"]').forEach(function(el) {
+    // LOGOUT (Selector disesuaikan ke class btn-logout)
+    document.querySelectorAll('.btn-logout').forEach(function(el) {
         el.addEventListener('click', function(e) {
             e.preventDefault();
             Swal.fire({
@@ -298,8 +323,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // HAPUS
-    document.querySelectorAll('a[href*="hapus"]').forEach(function(el) {
+    // HAPUS (Selector disesuaikan ke class btn-delete)
+    document.querySelectorAll('.btn-delete').forEach(function(el) {
         el.addEventListener('click', function(e) {
             e.preventDefault();
             Swal.fire({

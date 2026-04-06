@@ -19,7 +19,7 @@ body {
     display: flex;
 }
 
-/* Sidebar - Konsisten dengan Data Admin */
+/* SIDEBAR SESUAI ACUAN */
 .sidebar {
     width: 280px;
     background-color: var(--primary-green);
@@ -66,7 +66,7 @@ body {
     background-color: rgba(255,255,255,0.1);
 }
 
-/* Main Content */
+/* MAIN CONTENT SESUAI ACUAN */
 .main-content {
     margin-left: 280px;
     flex: 1;
@@ -105,20 +105,18 @@ body {
     outline: none;
 }
 
-/* Table - Style Row Shadow Identik */
+/* TABLE SESUAI ACUAN */
 .data-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 15px;
-    position: relative;
-    z-index: 5;
 }
 
 .data-table th {
     padding: 15px;
     background-color: #e2e2e2;
     text-align: left;
-    font-weight: 600;
+    color: var(--text-dark);
 }
 
 .data-table td {
@@ -145,33 +143,43 @@ body {
     font-size: 14px;
 }
 
-/* Badge Status untuk Transaksi (Opsional jika ingin dipakai) */
-.badge-success {
-    background-color: #76e09e;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 13px;
+.address-text {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    color: #555;
 }
 </style>
-
 </head>
+
 <body>
 
 <div class="sidebar">
     <div class="logo-text">temukan kopi.</div>
 
     <ul class="nav-menu">
+        @if(strtolower(session('role_admin')) === 'superadmin')
+            <li class="nav-item">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Route::is('admin.dashboard*') ? 'active' : '' }}">Data Admin</a>
+            </li>
+        @else
+            <li class="nav-item">
+                <a href="{{ route('admin.dashboard_khusus') }}" class="nav-link {{ Route::is('admin.dashboard_khusus*') ? 'active' : '' }}">Dashboard</a>
+            </li>
+        @endif
+
         <li class="nav-item">
-            <a href="{{ route('admin.dashboard') }}" class="nav-link">Data Admin</a>
+            <a href="{{ route('admin.transaksi') }}" class="nav-link {{ Route::is('admin.transaksi*') ? 'active' : '' }}">Transaksi</a>
         </li>
+
         <li class="nav-item">
-            <a href="{{ route('admin.transaksi') }}" class="nav-link active">Transaksi</a>
+            <a href="{{ route('admin.menu') }}" class="nav-link {{ Route::is('admin.menu*') ? 'active' : '' }}">Product</a>
         </li>
+
         <li class="nav-item">
-            <a href="{{ route('admin.menu') }}" class="nav-link">Product</a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('admin.logout') }}" class="nav-link" style="color:#ff4d4d;">Logout</a>
+            <a href="{{ route('admin.logout') }}" class="nav-link logout-btn" style="color:#ff4d4d;">Logout</a>
         </li>
     </ul>
 </div>
@@ -180,7 +188,7 @@ body {
 
     <div class="header-title">
         <h1>Kelola Transaksi</h1>
-        <p>Total {{ $totalTransaksi }} Transaksi</p>
+        <p>Total {{ $totalTransaksi ?? $transaksi->count() }} Transaksi Terdaftar</p>
         <p>Login sebagai: <b>{{ session('nama_admin') }}</b></p>
     </div>
 
@@ -193,19 +201,16 @@ body {
     <div class="top-bar">
         <div class="search-wrapper">
             <form action="{{ route('admin.transaksi') }}" method="GET">
-                <input type="text" name="search" placeholder="Cari nama pelanggan..." value="{{ request('search') }}">
+                <input type="text" name="search" placeholder="Cari pelanggan..." value="{{ request('search') }}">
             </form>
         </div>
-        
-        {{-- Tombol Cetak Laporan (Opsional agar Top Bar tidak kosong) --}}
-        <div style="width: 150px;"></div> 
     </div>
 
     <table class="data-table">
         <thead>
             <tr>
                 <th>Pelanggan</th>
-                <th>No. WhatsApp</th>
+                <th>No WhatsApp</th>
                 <th>Alamat</th>
                 <th>Total Harga</th>
                 <th>Tanggal</th>
@@ -214,47 +219,110 @@ body {
         </thead>
 
         <tbody>
-            @foreach($transaksi as $t)
+            @forelse($transaksi as $t)
             <tr class="row-shadow">
                 <td style="display:flex; align-items:center;">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($t->nama_customer) }}&background=004d32&color=fff" class="avatar">
-                    <b>{{ $t->nama_customer }}</b>
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode($t->nama_customer) }}&background=004d32&color=fff&bold=true" class="avatar">
+                    <span style="font-weight: 600;">{{ $t->nama_customer }}</span>
+                </td>
+                
+                <td>{{ $t->no_wa }}</td>
+                
+                <td>
+                    <div class="address-text" title="{{ $t->alamat }}">
+                        {{ $t->alamat }}
+                    </div>
                 </td>
 
-                <td>{{ $t->no_wa }}</td>
-                <td>{{ \Illuminate\Support\Str::limit($t->alamat, 30) }}</td>
-                <td><b>Rp {{ number_format($t->total_harga, 0, ',', '.') }}</b></td>
-                <td>{{ date('d-m-Y H:i', strtotime($t->tanggal_pesan)) }}</td>
+                <td style="font-weight: bold; color: var(--primary-green);">
+                    Rp {{ number_format($t->total_harga, 0, ',', '.') }}
+                </td>
+
+                <td>{{ date('d-m-Y', strtotime($t->tanggal_pesan)) }}</td>
 
                 <td>
                     <div style="display: flex; gap: 15px;">
-                        {{-- Tombol Detail --}}
                         <a href="{{ route('admin.transaksi.detail', $t->id_pesanan) }}" 
                            class="action-link" style="color: #007bff;">Detail</a>
                         
-                        {{-- TOMBOL EDIT (Sebelumnya Cetak) --}}
-                        <a href="{{ route('admin.transaksi.edit', $t->id_pesanan) }}" class="action-link" style="color: #28a745;">Edit</a>
+                        <a href="{{ route('admin.transaksi.edit', $t->id_pesanan) }}" 
+                           class="action-link" style="color: #ffc107;">Edit</a>
 
-                        {{-- Tombol Hapus --}}
                         <a href="{{ route('admin.transaksi.destroy', $t->id_pesanan) }}" 
-                           class="action-link" style="color: #dc3545;"
-                           onclick="return confirm('Apakah Anda yakin ingin menghapus transaksi dari {{ $t->nama_customer }}?')">
-                           Hapus
-                        </a>
+                           class="action-link btn-delete" style="color: #dc3545;">Hapus</a>
                     </div>
                 </td>
             </tr>
-            @endforeach
+            @empty
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 40px; background: white; border-radius: 15px;">
+                    <p style="color: #999; margin: 0;">Belum ada data transaksi.</p>
+                </td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
-
-    @if($transaksi->isEmpty())
-        <div style="text-align: center; padding: 50px; color: #888;">
-            <p>Belum ada data transaksi yang masuk.</p>
-        </div>
-    @endif
-
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const swalOptions = {
+        width: '320px',
+        padding: '1.5em',
+        showCancelButton: true,
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Batal'
+    };
+
+    // LOGOUT
+    document.querySelectorAll('.logout-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                ...swalOptions,
+                title: 'Yakin logout?',
+                icon: 'warning'
+            }).then((result) => {
+                if (result.isConfirmed) window.location.href = this.href;
+            });
+        });
+    });
+
+    // HAPUS TRANSAKSI
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetUrl = this.href;
+            Swal.fire({
+                ...swalOptions,
+                title: 'Hapus transaksi?',
+                text: 'Data akan dihapus permanen',
+                icon: 'error',
+                confirmButtonColor: '#dc3545',
+                confirmButtonText: 'Hapus'
+            }).then((result) => {
+                if (result.isConfirmed) window.location.href = targetUrl;
+            });
+        });
+    });
+});
+</script>
+
+@if(session('success'))
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Berhasil!',
+    text: "{{ session('success') }}",
+    width: '300px',
+    padding: '1.5em',
+    timer: 2000,
+    showConfirmButton: false
+});
+</script>
+@endif
 
 </body>
 </html>
