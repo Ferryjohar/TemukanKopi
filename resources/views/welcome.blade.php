@@ -943,55 +943,44 @@ footer {
      ║          PRODUK              ║
      ╚══════════════════════════════╝ -->
 <section id="Produk">
-  <div class="produk-grid stagger">
- 
-    <a class="card" href="/checkout?nama=Arabica&harga=60000&satuan=250gr&img=images%2Fkopi.png&stok=23&badge=NEW">
-      <div class="badge">NEW</div>
-      <img src="images/kopi.png" alt="Arabica">
-      <div class="card-body">
-        <div class="card-stars">★★★★★</div>
-        <h4>Arabica</h4>
-        <div class="price">Rp 60.000 / 250gr</div>
-      </div>
-    </a>
- 
-    <a class="card" href="/checkout?nama=Robusta&harga=55000&satuan=250gr&img=images%2Fkopi.png&stok=18&badge=NEW">
-      <div class="badge">NEW</div>
-      <img src="images/kopi.png" alt="Robusta">
-      <div class="card-body">
-        <div class="card-stars">★★★★★</div>
-        <h4>Robusta</h4>
-        <div class="price">Rp 55.000 / 250gr</div>
-      </div>
-    </a>
- 
-    <a class="card" href="/checkout?nama=Liberica&harga=65000&satuan=250gr&img=images%2Fkopi.png&stok=15&badge=NEW">
-      <div class="badge">NEW</div>
-      <img src="images/kopi.png" alt="Liberica">
-      <div class="card-body">
-        <div class="card-stars">★★★★★</div>
-        <h4>Liberica</h4>
-        <div class="price">Rp 65.000 / 250gr</div>
-      </div>
-    </a>
- 
-    <a class="card" href="/checkout?nama=Toraja&harga=70000&satuan=250gr&img=images%2Fkopi.png&stok=20&badge=NEW">
-      <div class="badge">NEW</div>
-      <img src="images/kopi.png" alt="Toraja">
-      <div class="card-body">
-        <div class="card-stars">★★★★★</div>
-        <h4>Toraja</h4>
-        <div class="price">Rp 70.000 / 250gr</div>
-      </div>
-    </a>
- 
+  <div class="produk-header reveal" style="text-align: center; margin-bottom: 50px;">
+      <span class="section-tag">Koleksi Kami</span>
+      <h2 class="section-title">Menu Kopi Unggulan</h2>
   </div>
- 
+
+  <div class="produk-grid stagger">
+    @forelse($produk as $p)
+    <a class="card" href="{{ url('/checkout?id_produk='.$p->id_produk) }}">
+      {{-- Badge otomatis berdasarkan stok --}}
+      <div class="badge">{{ $p->stok_produk < 10 ? 'STOK TIPIS' : 'PREMIUM' }}</div>
+      
+      {{-- Gambar dari Folder Storage --}}
+      <img src="{{ asset('storage/produk/'.$p->foto_produk) }}" 
+           alt="{{ $p->nama_produk }}"
+           onerror="this.src='https://placehold.co/300x300?text=Kopi+Temukan'">
+      
+      <div class="card-body">
+        <div class="card-stars">★★★★★</div>
+        <h4 style="text-transform: capitalize;">{{ $p->nama_produk }}</h4>
+        <div class="price">
+            Rp {{ number_format($p->harga_produk, 0, ',', '.') }}
+        </div>
+        <p style="font-size: 11px; color: #888; margin-top: 5px;">
+            Kategori: {{ $p->nama_kategori }} | Jenis: {{ $p->nama_jenis }}
+        </p>
+      </div>
+    </a>
+    @empty
+    <div style="grid-column: span 4; text-align: center; padding: 50px; color: #888;">
+        <p>☕ Belum ada produk yang tersedia saat ini.</p>
+    </div>
+    @endforelse
+  </div>
+
   <div class="produk-cta reveal">
-    <a class="btn" href="#">CLICK MORE</a>
+    <a class="btn" href="#">LIHAT SEMUA MENU</a>
   </div>
 </section>
- 
 
 
 <!-- ╔══════════════════════════════╗
