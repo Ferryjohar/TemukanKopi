@@ -650,21 +650,20 @@ document.getElementById('btnBayar').addEventListener('click', () => {
         return;
     }
 
-    const waNumber = '6285850524186'; // Ganti dengan nomor WA Admin Toko
-    const pesan = encodeURIComponent(
-        `Halo Temukan Kopi! 🌿\n\n` +
-        `*PESANAN BARU DARI WEBSITE*\n` +
-        `--------------------------\n` +
-        `Nama     : ${nama}\n` +
-        `No. WA   : ${wa}\n` +
-        `Produk   : ${namaAktif}\n` +
-        `Jumlah   : ${qty} pcs\n` +
-        `Total    : ${total}\n` +
-        `Alamat   : ${alamat}\n` +
-        `Tanggal  : ${tgl}\n` +
-        `--------------------------\n` +
-        `Mohon segera dikonfirmasi, terima kasih! ☕`
-    );
+  const waNumber = '6285850524186';
+  const pesan = encodeURIComponent(
+    `Halo Temukan Kopi! 🌿\n\n` +
+    `*PESANAN BARU DARI WEBSITE*\n` +
+    `--------------------------\n` +
+    `Nama     : ${nama}\n` +
+    `No. WA   : ${wa}\n` +
+    `Produk   : ${namaAktif} x${qty}\n` +
+    `Total    : ${total}\n` +
+    `Alamat   : ${alamat}\n` +
+    `Tanggal  : ${tgl}\n` +
+    `--------------------------\n` +
+    `Mohon segera dikonfirmasi, terima kasih! ☕`
+);
 
     window.open(`https://wa.me/${waNumber}?text=${pesan}`, '_blank');
 });

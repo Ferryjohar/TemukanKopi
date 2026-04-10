@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Temukan Kopi</title>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -291,7 +292,7 @@ section { padding: 110px 100px; position: relative; overflow: hidden; }
   margin-bottom: 18px;
 }
 
-.bg-title {
+/* .bg-title1 {
   position: absolute;
   font-family: 'Playfair Display', serif;
   font-size: 140px;
@@ -302,6 +303,62 @@ section { padding: 110px 100px; position: relative; overflow: hidden; }
   user-select: none;
   white-space: nowrap;
   line-height: 1;
+} */
+
+
+/* background transparan */
+.bg-title {
+    overflow: hidden;
+    position: absolute;
+    top: 5px;
+    left: 40px;    /* ⬅️ geser ke kiri */
+    font-size: 140px;
+    font-weight: bold;
+
+    color: transparent; /* isi transparan */
+    -webkit-text-stroke: 1px #1f4d3a; /* outline */
+
+    opacity: 0.2;
+    z-index: 0;
+    white-space: nowrap;
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+}
+
+.content h2 {
+    font-size: 36px;
+    color: #1f4d3a;
+}
+
+.bg-title1 {
+    overflow: hidden;
+    position: absolute;
+    top: 5px;
+    right: 80px;
+    left: auto;
+    transform: none;
+    font-size: 140px;
+    font-weight: bold;
+
+    color: transparent; /* isi transparan */
+    -webkit-text-stroke: 1px #1f4d3a; /* outline */
+
+    opacity: 0.2;
+    z-index: 0;
+    white-space: nowrap;
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+}
+
+.content h2 {
+    font-size: 36px;
+    color: #1f4d3a;
 }
 
 /* ════════════════════════════════════
@@ -710,6 +767,7 @@ a.card {
 .contact-header { margin-bottom: 54px; }
 
 .contact-grid {
+  
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 22px;
@@ -752,6 +810,15 @@ a.card {
 }
 .map img { width: 100%; display: block; border-radius: var(--radius); }
 
+
+/* maps */
+
+.footer-col iframe{
+  width:100%;
+  height:300px;
+  border-radius:10px;
+}
+
 /* ════════════════════════════════════
    FOOTER
 ════════════════════════════════════ */
@@ -791,7 +858,8 @@ footer {
   letter-spacing: 2px; text-transform: uppercase;
   color: rgba(255,255,255,.45); margin-bottom: 22px;
 }
-.footer-col p, .footer-col a {
+.footer-col p, 
+.footer-col a {
   display: block;
   color: rgba(255,255,255,.7);
   font-size: 13px; line-height: 1.6;
@@ -800,6 +868,23 @@ footer {
   transition: color .3s;
 }
 .footer-col a:hover { color: var(--putih); }
+
+.footer-social-icons{
+  display:flex;
+  gap:15px;
+  margin-right: 12px;
+}
+/* .footer-social-icons a i{
+  font-size:30px;
+} */
+.footer-social-icons a i{
+  font-size: 35px;
+  transition: transform 0.3s;
+}
+
+.footer-social-icons a:hover i{
+  transform: scale(1.2);
+}
 
 .copy {
   text-align: center;
@@ -886,8 +971,8 @@ footer {
     <h1>Temukan<br><em>Kopi</em></h1>
     <p>Dibuat dari biji kopi Indonesia pilihan untuk pengalaman minum kopi terbaik setiap hari.</p>
     <div class="hero-btns">
-      <a class="btn" href="#">Selengkapnya</a>
-      <a class="btn btn-ghost" href="#">Lihat Produk</a>
+      <a class="btn" href="#About">Selengkapnya</a>
+      <a class="btn btn-ghost" href="#Produk">Lihat Produk</a>
     </div>
     <div class="hero-stats">
       <div class="stat">
@@ -914,7 +999,7 @@ footer {
      ║           ABOUT              ║
      ╚══════════════════════════════╝ -->
 <section id="About" class="about-section"> 
-  <div class="bg-title">About</div>
+  <div class="bg-title1">About</div>
   <div class="about">
     <div class="about-img-wrap reveal from-left">
       <img src="images/kopi1.png" alt="About Temukan Kopi">
@@ -1054,7 +1139,7 @@ footer {
      ║         MENGAPA              ║
      ╚══════════════════════════════╝ -->
 <section class="mengapa-section">
-  <div class="bg-title">Mengapa</div>
+  <div class="bg-title1">Mengapa</div>
   <div class="mengapa-header reveal">
     <span class="section-tag">Keunggulan Kami</span>
     <h2 class="section-title">Mengapa memilih kami?</h2>
@@ -1129,7 +1214,6 @@ footer {
      ║          GALERI              ║
      ╚══════════════════════════════╝ -->
 <section id="Galery" class="galeri-section">
-  <div class="bg-title">Kopi</div>
   <div class="galeri-header reveal">
     <span class="section-tag">Koleksi Foto</span>
     <h2 class="section-title">Galeri Kopi Kami</h2>
@@ -1189,9 +1273,17 @@ footer {
       <p>08:00 - 22:00</p>
     </div>
   </div>
-  <div class="map reveal">
-    <img src="images/map.png" alt="Lokasi Temukan Kopi">
-  </div>
+  <div class="footer-col">
+  <iframe 
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31635.94015942104!2d111.50745181683668!3d-7.630061412670274!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e79be537c813a33%3A0xafe2f173545a53ae!2sMadiun%2C%20Kota%20Madiun%2C%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1775747010906!5m2!1sid!2sid"
+    width="100%"
+    height="200"
+    style="border:0;"
+    allowfullscreen=""
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+</div>
 </section>
 
 
@@ -1203,12 +1295,18 @@ footer {
     <div class="footer-brand">
       <span class="logo">temukan kopi.</span>
       <p>Kopi berkualitas dari bumi Indonesia. Setiap tegukan membawa cerita dari tanah terbaik nusantara.</p>
-      <div class="footer-socials">
+      
+      <!-- <div class="footer-socials">
         <a class="soc-btn" title="Instagram">📸</a>
         <a class="soc-btn" title="Facebook">👥</a>
         <a class="soc-btn" title="TikTok">🎵</a>
         <a class="soc-btn" title="WhatsApp">💬</a>
-      </div>
+        <a href="https://github.com/Aqa051206" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://www.instagram.com/awa_ilhq/" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/in/awa-a-893600308/" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="https://wa.me/62882003668995/" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div> -->
+
     </div>
     <div class="footer-col">
       <h4>Contact Us</h4>
@@ -1218,11 +1316,17 @@ footer {
     </div>
     <div class="footer-col">
       <h4>Sosial Media</h4>
-      <a href="#">Instagram</a>
+      <div class="footer-social-icons">
+      <!-- <a href="#">Instagram</a>
       <a href="#">Facebook</a>
       <a href="#">TikTok</a>
-      <a href="#">WhatsApp</a>
+      <a href="#">WhatsApp</a> -->
+      <a href="https://www.facebook.com/awa.udin.984" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.instagram.com/awa_ilhq/" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://wa.me/62882003668995/" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
     </div>
+
   </div>
   <div class="copy">© Copyright 2025 Temukan Kopi. All rights reserved.</div>
 </footer>
