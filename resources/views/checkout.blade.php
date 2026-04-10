@@ -6,45 +6,60 @@
 <title>Temukan Kopi — Produk</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ══ ROOT ══ */
-:root {
-  --hijau:     #1f5e3b;
-  --hijau-tua: #143d27;
-  --hijau-mid: #2d7a52;
-  --krem:      #f2ede6;
-  --krem2:     #ede8e0;
-  --putih:     #ffffff;
-  --teks:      #1a1a1a;
-  --teks-mid:  #555;
-  --teks-soft: #999;
-  --radius:    12px;
-  --shadow:    0 4px 24px rgba(0,0,0,0.08);
-  --shadow-lg: 0 16px 48px rgba(0,0,0,0.14);
-}
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Poppins', sans-serif;
-  background: var(--krem);
-  color: var(--teks);
-  min-height: 100vh;
+/* ════════════════════════════════════
+   RESET & ROOT (Sama persis dengan Welcome)
+════════════════════════════════════ */
+*, *::before, *::after {
+  margin: 0; padding: 0; box-sizing: border-box;
 }
 
-/* ══ NAVBAR ══ */
+:root {
+  --hijau:      #1f5e3b;
+  --hijau-tua:  #143d27;
+  --hijau-mid:  #2f7a52;
+  --hijau-muda: #e1e7cf;
+  --krem:       #f5f5f0; /* Kunci sinkronisasi ada di sini */
+  --krem2:      #f0ece4;
+  --putih:      #ffffff;
+  --teks:       #222;
+  --teks-mid:   #555;
+  --teks-soft:  #888;
+  --shadow-lg:  0 24px 60px rgba(0,0,0,0.13);
+  --radius:     14px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--krem) !important; /* Gunakan !important agar tidak ditimpa */
+  color: var(--teks);
+  overflow-x: hidden;
+}
+
+/* ════════════════════════════════════
+   NAVBAR (Sama persis dengan Welcome)
+════════════════════════════════════ */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 80px;
-  background: rgba(242,237,230,0.96);
-  backdrop-filter: blur(12px);
-  position: sticky; top: 0; z-index: 100;
+  padding: 18px 100px;
+  background: rgba(245,245,240,0.96) !important; /* Warna krem transparan khas Welcome */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   border-bottom: 1px solid rgba(0,0,0,0.07);
 }
+
 .logo {
   font-family: 'Playfair Display', serif;
-  font-size: 20px; font-weight: 700;
-  color: var(--teks);
+  font-weight: 700;
+  font-size: 21px;
+  color: var(--hijau-tua);
+  letter-spacing: -.3px;
 }
 .nav-links { display: flex; gap: 0; }
 .nav-links a {
@@ -84,9 +99,9 @@ body {
   grid-template-columns: 240px 1fr auto;
   gap: 36px;
   background: var(--putih);
-  border-radius: 16px;
+  border-radius: var(--radius);
   padding: 28px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
   margin-bottom: 64px;
   align-items: start;
   animation: fadeUp .6s .1s both;
@@ -405,17 +420,25 @@ a.prod-card { text-decoration: none; color: inherit; display: block; }
 </style>
 </head>
 <body>
-
+@php
+    // Mencari produk berdasarkan ID dari URL, jika tidak ada ambil yang pertama
+    $id_target = request('id_produk');
+    $item = $produk->firstWhere('id_produk', $id_target) ?? $produk->first();
+@endphp
 <!-- NAVBAR -->
 <nav class="navbar">
   <div class="logo">temukan kopi.</div>
   <div class="nav-links">
-    <a href="temukan_kopi_v2.html">Home</a>
-    <a href="temukan_kopi_v2.html">About me</a>
-    <a href="#" class="active">Produk</a>
-    <a href="temukan_kopi_v2.html#contact">Kontak</a>
-    <a href="temukan_kopi_v2.html#galeri">Galery</a>
-  </div>
+    <a href="{{ route('welcome') }}">Home</a>
+    
+    <a href="{{ route('welcome') }}#about">About me</a>
+    
+    <a href="{{ route('welcome') }}#Produk" class="active">Produk</a>
+    
+    <a href="{{ route('welcome') }}#contact">Kontak</a>
+    
+    <a href="{{ route('welcome') }}#galeri">Galery</a>
+</div>
 </nav>
 
 <div class="page">
@@ -424,51 +447,75 @@ a.prod-card { text-decoration: none; color: inherit; display: block; }
   <h2 class="sec-title">Chekout</h2>
 
   <div class="checkout-card">
-    <!-- Gambar produk -->
+    @php
+        // Mengambil data produk berdasarkan ID dari URL
+        $id_target = request('id_produk');
+        $item = $produk->firstWhere('id_produk', $id_target) ?? $produk->first();
+    @endphp
+
     <div class="checkout-img-wrap">
-      <span class="badge-new">NEW</span>
-      <img src="images/produk.jpg" alt="Arabika">
+        <span class="badge-new">{{ $item->stok_produk < 10 ? 'LIMITED' : 'NEW' }}</span>
+        <img src="{{ asset('storage/produk/' . $item->foto_produk) }}" alt="{{ $item->nama_produk }}">
     </div>
 
-    <!-- Info produk -->
     <div class="checkout-info">
-      <div class="breadcrumb">COFFE <span>|</span> BUBUK KOPI</div>
-      <div class="product-name">ARABIKA</div>
-      <div class="product-price-main"><strong>Rp.60.000</strong> / gram</div>
+        <div class="breadcrumb">{{ $item->nama_kategori }} <span>|</span> {{ $item->nama_jenis }}</div>
+        <div class="product-name">{{ $item->nama_produk }}</div>
+        <div class="product-price-main"><strong>Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</strong> / pcs</div>
 
-      <div class="desc-label">Deskripsi Produk</div>
-      <p class="desc-text">
-        Temukan Kopi lahir dari keyakinan bahwa setiap biji kopi memiliki cerita
-        dan cita rasa yang layak untuk dinikmati. Kami hadir sebagai platform
-        yang menghadirkan kopi terbaik dari berbagai daerah Indonesia.
-      </p>
+        <div class="desc-label">Deskripsi Produk</div>
+        <p class="desc-text">
+            {{ $item->deskripsi_produk ?? 'Biji kopi pilihan terbaik dari petani lokal Indonesia, diproses dengan standar kualitas tinggi untuk menghasilkan cita rasa yang autentik.' }}
+        </p>
     </div>
 
-    <!-- Order box -->
     <div class="order-box">
-      <div class="order-box-title">Atur jumlah dan catatan</div>
-      <div class="qty-row">
-        <button class="qty-btn" id="minus">−</button>
-        <input class="qty-num" id="qty" type="number" value="1" min="1" max="23" readonly>
-        <button class="qty-btn" id="plus">+</button>
-        <span class="stok-info">Stok Total : <strong id="stokVal">23</strong></span>
-      </div>
-      <div class="subtotal-row">
-        <span>Subtotal</span>
-        <strong id="subtotalVal">Rp.60.000</strong>
-      </div>
-      <button class="btn-beli" id="btnBeli">Beli</button>
+        <div class="order-box-title">Atur jumlah dan catatan</div>
+        <div class="qty-row">
+            <button class="qty-btn" id="minus">−</button>
+            <input class="qty-num" id="qty" type="number" value="1" min="1" max="{{ $item->stok_produk }}" readonly>
+            <button class="qty-btn" id="plus">+</button>
+            <span class="stok-info">Stok : <strong id="stokVal">{{ $item->stok_produk }}</strong></span>
+        </div>
+        <div class="subtotal-row">
+            <span>Subtotal</span>
+            <strong id="subtotalVal">Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</strong>
+        </div>
+        <button class="btn-beli" id="btnBeli">Beli Sekarang</button>
     </div>
-  </div>
+</div>
 
   <!-- ══ PRODUCT GRID ══ -->
   <div class="product-header">
     <h2 class="sec-title">Product</h2>
   </div>
 
-  <div class="prod-grid" id="prodGrid">
-    <!-- diisi otomatis oleh JavaScript -->
-  </div><!-- /prod-grid -->
+  <div class="prod-grid">
+    @foreach($produk as $p)
+    <a class="prod-card {{ request('id_produk') == $p->id_produk ? 'active-card' : '' }}" 
+       href="{{ url('/checkout?id_produk='.$p->id_produk) }}">
+        
+        <div class="prod-img-wrap">
+            {{-- Badge otomatis --}}
+            <span class="prod-badge">{{ $p->stok_produk < 10 ? 'LIMIT' : 'NEW' }}</span>
+            
+            {{-- Gambar dari storage --}}
+            <img src="{{ asset('storage/produk/'.$p->foto_produk) }}" 
+                 alt="{{ $p->nama_produk }}"
+                 onerror="this.src='https://placehold.co/300x300?text=Kopi'">
+        </div>
+
+        <div class="prod-body">
+            <div class="prod-cat">{{ $p->nama_kategori }} <span>|</span> {{ $p->nama_jenis }}</div>
+            <div class="prod-name">{{ strtoupper($p->nama_produk) }}</div>
+            <div class="prod-pricing">
+                <span class="prod-price">Rp {{ number_format($p->harga_produk, 0, ',', '.') }}</span>
+                <span class="prod-price-unit">/ pcs</span>
+            </div>
+        </div>
+    </a>
+    @endforeach
+</div><!-- /prod-grid -->
 
 </div><!-- /page -->
 
@@ -513,187 +560,113 @@ a.prod-card { text-decoration: none; color: inherit; display: block; }
 
 <script>
 /* ════════════════════════════════
-   DATA PRODUK — tambah / edit di sini
+   STATE & DATA DARI LARAVEL
+   Variabel ini mengambil data langsung dari PHP ($item)
 ════════════════════════════════ */
-const PRODUK_DATA = [
-  { nama:'Arabica',  harga:60000, satuan:'250gr', stok:23, badge:'NEW', img:'images/kopi.png', diskon:null },
-  { nama:'Robusta',  harga:55000, satuan:'250gr', stok:18, badge:'NEW', img:'images/kopi.png', diskon:null },
-  { nama:'Liberica', harga:65000, satuan:'250gr', stok:15, badge:'NEW', img:'images/kopi.png', diskon:null },
-  { nama:'Toraja',   harga:70000, satuan:'250gr', stok:20, badge:'NEW', img:'images/kopi.png', diskon:null },
-  { nama:'Arabica',  harga:60000, satuan:'250gr', stok:23, badge:'NEW', img:'images/kopi.png', diskon:null },
-  { nama:'Robusta',  harga:55000, satuan:'250gr', stok:18, badge:'NEW', img:'images/kopi.png', diskon:null },
-  { nama:'Liberica', harga:65000, satuan:'250gr', stok:15, badge:'NEW', img:'images/kopi.png', diskon:30  },
-  { nama:'Toraja',   harga:70000, satuan:'250gr', stok:20, badge:'NEW', img:'images/kopi.png', diskon:null },
-];
-
-/* ════════════════════════════════
-   STATE
-════════════════════════════════ */
-let hargaSatuan = 60000;
-let namaAktif   = 'ARABIKA';
-let stokAktif   = 23;
+const hargaSatuan = {{ $item->harga_produk }};
+const namaAktif   = "{{ $item->nama_produk }}";
+const stokAktif   = {{ $item->stok_produk }};
 let qty = 1;
 
+// Element Selector
 const qtyEl      = document.getElementById('qty');
 const subtotalEl = document.getElementById('subtotalVal');
 const modalTotal = document.getElementById('modalTotal');
 
 /* ════════════════════════════════
-   BACA URL PARAMS (dari index.html)
+   HELPER FUNCTIONS
 ════════════════════════════════ */
-function getParam(key) {
-  return new URLSearchParams(window.location.search).get(key);
-}
-
 function fmt(n) {
-  return 'Rp.' + n.toLocaleString('id-ID');
+    return 'Rp ' + n.toLocaleString('id-ID');
 }
 
 function updateSubtotal() {
-  subtotalEl.textContent = fmt(hargaSatuan * qty);
-  modalTotal.textContent = fmt(hargaSatuan * qty);
+    const total = hargaSatuan * qty;
+    subtotalEl.textContent = fmt(total);
+    modalTotal.textContent = fmt(total);
 }
-
-function loadProductFromURL() {
-  const nama   = getParam('nama')  || 'ARABIKA';
-  const harga  = parseInt(getParam('harga') || '60000');
-  const satuan = getParam('satuan') || '250gr';
-  const img    = getParam('img')   || 'images/kopi.png';
-  const stok   = parseInt(getParam('stok') || '23');
-  const badge  = getParam('badge') || 'NEW';
-
-  namaAktif   = nama.toUpperCase();
-  hargaSatuan = harga;
-  stokAktif   = stok;
-  qty = 1;
-
-  /* update checkout card */
-  document.querySelector('.checkout-img-wrap img').src = img;
-  document.querySelector('.badge-new').textContent = badge;
-  document.querySelector('.product-name').textContent = namaAktif;
-  document.querySelector('.product-price-main').innerHTML =
-    `<strong>${fmt(harga)}</strong> / ${satuan}`;
-  document.getElementById('stokVal').textContent = stok;
-  document.getElementById('qty').max = stok;
-  qtyEl.value = 1;
-  updateSubtotal();
-}
-
-/* jalankan saat halaman load */
-loadProductFromURL();
-
-/* ════════════════════════════════
-   RENDER PRODUCT GRID DARI DATA
-════════════════════════════════ */
-function buildProductGrid() {
-  const grid = document.getElementById('prodGrid');
-  grid.innerHTML = '';
-
-  PRODUK_DATA.forEach((p, i) => {
-    const hargaDiskon = p.diskon ? Math.round(p.harga * (1 - p.diskon/100)) : p.harga;
-    const url = `checkout.html?nama=${encodeURIComponent(p.nama)}&harga=${hargaDiskon}&satuan=${encodeURIComponent(p.satuan)}&img=${encodeURIComponent(p.img)}&stok=${p.stok}&badge=${encodeURIComponent(p.badge)}`;
-
-    const pricingHTML = p.diskon
-      ? `<span class="prod-price-old">${fmt(p.harga)}</span>
-         <span class="prod-price">${fmt(hargaDiskon)}</span>
-         <span class="prod-price-unit">/ gram</span>
-         <span class="prod-discount">${p.diskon}%</span>`
-      : `<span class="prod-price">${fmt(p.harga)}</span>
-         <span class="prod-price-unit">/ gram</span>`;
-
-    /* tandai produk yang sedang aktif */
-    const isActive = p.nama.toUpperCase() === namaAktif &&
-                     (p.diskon ? Math.round(p.harga*(1-p.diskon/100)) : p.harga) === hargaSatuan;
-
-    grid.insertAdjacentHTML('beforeend', `
-      <a class="prod-card${isActive ? ' active-card' : ''}" href="${url}"
-         style="animation-delay:${i*0.07}s">
-        <div class="prod-img-wrap">
-          <span class="prod-badge">${p.badge}</span>
-          <img src="${p.img}" alt="${p.nama}">
-        </div>
-        <div class="prod-body">
-          <div class="prod-cat">COFFE <span>|</span> BUBUK KOPI</div>
-          <div class="prod-name">${p.nama.toUpperCase()}</div>
-          <div class="prod-pricing">${pricingHTML}</div>
-        </div>
-      </a>`);
-  });
-}
-
-buildProductGrid();
 
 /* ════════════════════════════════
    QTY CONTROL
 ════════════════════════════════ */
 document.getElementById('minus').addEventListener('click', () => {
-  if (qty > 1) { qty--; qtyEl.value = qty; updateSubtotal(); }
+    if (qty > 1) { 
+        qty--; 
+        qtyEl.value = qty; 
+        updateSubtotal(); 
+    }
 });
+
 document.getElementById('plus').addEventListener('click', () => {
-  if (qty < stokAktif) { qty++; qtyEl.value = qty; updateSubtotal(); }
+    if (qty < stokAktif) { 
+        qty++; 
+        qtyEl.value = qty; 
+        updateSubtotal(); 
+    }
 });
 
 /* ════════════════════════════════
    TANGGAL OTOMATIS
 ════════════════════════════════ */
 function formatDate(d) {
-  const dd   = String(d.getDate()).padStart(2,'0');
-  const mm   = String(d.getMonth()+1).padStart(2,'0');
-  const yyyy = d.getFullYear();
-  return `${dd}/${mm}/${yyyy}`;
+    const dd   = String(d.getDate()).padStart(2,'0');
+    const mm   = String(d.getMonth()+1).padStart(2,'0');
+    const yyyy = d.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
 }
 document.getElementById('tglInput').value = formatDate(new Date());
 
 /* ════════════════════════════════
-   MODAL
+   MODAL CONTROL
 ════════════════════════════════ */
-document.getElementById('btnBeli').addEventListener('click', openModal);
-
-function openModal() {
-  modalTotal.textContent = fmt(hargaSatuan * qty);
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
+document.getElementById('btnBeli').addEventListener('click', () => {
+    modalTotal.textContent = fmt(hargaSatuan * qty);
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+});
 
 document.getElementById('btnKembali').addEventListener('click', closeModal);
 document.getElementById('modalOverlay').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('modalOverlay')) closeModal();
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
 });
 
 function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
 }
 
 /* ════════════════════════════════
    BAYAR VIA WHATSAPP
 ════════════════════════════════ */
 document.getElementById('btnBayar').addEventListener('click', () => {
-  const nama   = document.getElementById('namaInput').value.trim();
-  const wa     = document.getElementById('waInput').value.trim();
-  const alamat = document.getElementById('alamatInput').value.trim();
-  const tgl    = document.getElementById('tglInput').value;
-  const total  = modalTotal.textContent;
+    const nama   = document.getElementById('namaInput').value.trim();
+    const wa     = document.getElementById('waInput').value.trim();
+    const alamat = document.getElementById('alamatInput').value.trim();
+    const tgl    = document.getElementById('tglInput').value;
+    const total  = modalTotal.textContent;
 
-  if (!nama || !wa || !alamat) {
-    alert('Harap isi semua data terlebih dahulu!');
-    return;
-  }
+    if (!nama || !wa || !alamat) {
+        alert('Harap isi semua data terlebih dahulu!');
+        return;
+    }
 
-  const waNumber = '6281234567890'; // ← ganti nomor WA toko kamu
-  const pesan = encodeURIComponent(
-    `Halo Temukan Kopi! 🌿\n\n` +
-    `*Pesanan Baru*\n` +
-    `Nama     : ${nama}\n` +
-    `No. WA   : ${wa}\n` +
-    `Produk   : ${namaAktif} x${qty}\n` +
-    `Total    : ${total}\n` +
-    `Alamat   : ${alamat}\n` +
-    `Tanggal  : ${tgl}\n\n` +
-    `Mohon dikonfirmasi, terima kasih! ☕`
-  );
+    const waNumber = '6285850524186'; // Ganti dengan nomor WA Admin Toko
+    const pesan = encodeURIComponent(
+        `Halo Temukan Kopi! 🌿\n\n` +
+        `*PESANAN BARU DARI WEBSITE*\n` +
+        `--------------------------\n` +
+        `Nama     : ${nama}\n` +
+        `No. WA   : ${wa}\n` +
+        `Produk   : ${namaAktif}\n` +
+        `Jumlah   : ${qty} pcs\n` +
+        `Total    : ${total}\n` +
+        `Alamat   : ${alamat}\n` +
+        `Tanggal  : ${tgl}\n` +
+        `--------------------------\n` +
+        `Mohon segera dikonfirmasi, terima kasih! ☕`
+    );
 
-  window.open(`https://wa.me/${waNumber}?text=${pesan}`, '_blank');
+    window.open(`https://wa.me/${waNumber}?text=${pesan}`, '_blank');
 });
 </script>
 

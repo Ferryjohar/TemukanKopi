@@ -5,15 +5,13 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\HomeController;
 
 // ================= USER =================
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('welcome');
 
-Route::get('/checkout', function () {
-    return view('checkout');
-});
+Route::get('/checkout', [HomeController::class, 'checkout'])->name('checkout');
+
 
 // redirect ke login admin
 Route::get('/login', function () {

@@ -255,7 +255,7 @@ body {
                 <td>{{ $item->stok_produk }}</td>
                 <td>
                     <span style="background: #eee; padding: 4px 10px; border-radius: 6px; font-size: 13px;">
-                        {{ $item->id_kategori }}
+                        {{ $item->nama_kategori }}
                     </span>
                 </td>
                 <td style="color:#666; font-size:14px;">
