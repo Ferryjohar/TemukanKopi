@@ -65,6 +65,15 @@ Route::prefix('admin')->group(function () {
         Route::get('/menu/edit/{id_produk}', [MenuController::class, 'edit'])->name('admin.menu.edit');
         Route::post('/menu/update/{id_produk}', [MenuController::class, 'update'])->name('admin.menu.update');
         Route::get('/menu/hapus/{id}', [MenuController::class, 'hapus'])->name('admin.menu.hapus');
+        
+        // ================= KATEGORI & JENIS =================
+        Route::get('/kategori', [MenuController::class, 'kategoriIndex'])->name('admin.kategori');
+        Route::post('/kategori/simpan', [MenuController::class, 'kategoriStore'])->name('admin.kategori.store');
+        Route::get('/kategori/hapus/{id}', [MenuController::class, 'kategoriDestroy'])->name('admin.kategori.destroy');
+
+        Route::get('/jeniskopi', [MenuController::class, 'jenisIndex'])->name('admin.jenis');
+        Route::post('/jeniskopi/simpan', [MenuController::class, 'jenisStore'])->name('admin.jenis.store');
+        Route::get('/jeniskopi/hapus/{id}', [MenuController::class, 'jenisDestroy'])->name('admin.jenis.destroy');
 
         // ================= LOGOUT =================
         Route::get('/logout', [LoginController::class, 'logout'])->name('admin.logout');
