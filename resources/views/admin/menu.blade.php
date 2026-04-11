@@ -282,6 +282,54 @@ body {
             @endforelse
         </tbody>
     </table>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 50px; border-top: 2px solid #eee; padding-top: 30px;">
+    
+    <div class="form-container">
+        <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 20px;">Manajemen Kategori</h3>
+        <form action="{{ route('admin.kategori.store') }}" method="POST" style="display: flex; gap: 10px; margin-bottom: 20px;">
+            @csrf
+            <input type="text" name="nama_kategori" placeholder="Tambah Kategori Baru..." required 
+                   style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+            <button type="submit" style="background: #1f5e3b; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">+ Tambah</button>
+        </form>
+
+        <table class="table" style="font-size: 13px;">
+            @foreach($kategori as $k)
+            <tr>
+                <td>{{ $k->nama_kategori }}</td>
+                <td style="text-align: right;">
+                    <a href="{{ route('admin.kategori.destroy', $k->id_kategori) }}" 
+                       style="color: #ff4d4d; text-decoration: none;"
+                       onclick="return confirm('Hapus kategori ini? Produk yang terkait mungkin tidak akan tampil.')">Hapus</a>
+                </td>
+            </tr>
+            @endforeach
+        </table>
+    </div>
+
+    <div class="form-container">
+        <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 20px;">Manajemen Jenis Kopi</h3>
+        <form action="{{ route('admin.jenis.store') }}" method="POST" style="display: flex; gap: 10px; margin-bottom: 20px;">
+            @csrf
+            <input type="text" name="nama_jenis" placeholder="Tambah Jenis Baru (ex: Excelsa)..." required 
+                   style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+            <button type="submit" style="background: #1f5e3b; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">+ Tambah</button>
+        </form>
+
+        <table class="table" style="font-size: 13px;">
+            @foreach($jenisKopi as $j)
+            <tr>
+                <td>{{ $j->nama_jenis }}</td>
+                <td style="text-align: right;">
+                    <a href="{{ route('admin.jenis.destroy', $j->id_jeniskopi) }}" 
+                       style="color: #ff4d4d; text-decoration: none;"
+                       onclick="return confirm('Hapus jenis kopi ini?')">Hapus</a>
+                </td>
+            </tr>
+            @endforeach
+        </table>
+    </div>
+</div>
 
 </div>
 

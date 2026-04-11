@@ -23,8 +23,11 @@ class MenuController extends Controller
             ->get();
         
         $totalProduk = $produk->count();
+        $kategori = DB::table('ms_kategori')->get();
+        $jenisKopi = DB::table('ms_jeniskopi')->get();
 
-        return view('admin.menu', compact('produk', 'totalProduk'));
+        // Kirim ketiganya ke view
+        return view('admin.menu', compact('produk','totalProduk',  'kategori', 'jenisKopi'));    
     }
 
     // Menampilkan Form Tambah Produk
@@ -40,11 +43,14 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         $namaFile = 'default.png';
-        if ($request->hasFile('foto_produk')) {
-            $file = $request->file('foto_produk');
-            $namaFile = time() . "_" . $file->getClientOriginalName();
-            $file->move(public_path('storage/produk'), $namaFile);
-        }
+
+    if ($request->hasFile('foto_produk')) {
+        $file = $request->file('foto_produk');
+        $namaFile = time() . "_" . $file->getClientOriginalName();
+        
+        // Simpan ke storage/app/public/produk
+        $file->storeAs('public/produk', $namaFile);
+    }
 
         // PERBAIKAN: Gunakan $request->id_jeniskopi jika ada, 
         // jika kosong (null), beri nilai default 1 agar database tidak error 1364
@@ -110,7 +116,49 @@ class MenuController extends Controller
 
     public function hapus($id)
     {
-        DB::table('ms_produk')->where('id_produk', $id)->delete();
-        return redirect()->route('admin.menu')->with('success', 'Produk berhasil dihapus');
+        // 1. Cari dulu data produknya untuk tahu nama file fotonya
+        $produk = DB::table('ms_produk')->where('id_produk', $id)->first();
+
+        if ($produk) {
+            // 2. Cek jika fotonya bukan 'default.png', maka hapus file fisiknya
+            if ($produk->foto_produk && $produk->foto_produk !== 'default.png') {
+                // Gunakan Storage::delete untuk menghapus file di storage/app/public/produk
+                \Illuminate\Support\Facades\Storage::delete('public/produk/' . $produk->foto_produk);
+            }
+
+            // 3. Baru hapus data dari database
+            DB::table('ms_produk')->where('id_produk', $id)->delete();
+        }
+
+        return redirect()->route('admin.menu')->with('success', 'Produk dan filenya berhasil dihapus');
     }
+
+    public function kategoriStore(Request $request) {
+    DB::table('ms_kategori')->insert([
+        'nama_kategori' => $request->nama_kategori
+    ]);
+    return back()->with('success', 'Kategori berhasil ditambah!');
+    }
+
+    // Hapus Kategori
+    public function kategoriDestroy($id) {
+        // Cek dulu apakah ada produk yang pakai kategori ini
+        $cek = DB::table('ms_produk')->where('id_kategori', $id)->count();
+        if($cek > 0) {
+            return back()->with('error', 'Gagal! Masih ada produk yang menggunakan kategori ini.');
+        }
+        
+        DB::table('ms_kategori')->where('id_kategori', $id)->delete();
+        return back()->with('success', 'Kategori berhasil dihapus!');
+    }
+
+    public function jenisStore(Request $request)
+    {
+        DB::table('ms_jeniskopi')->insert([
+            'nama_jenis' => $request->nama_jenis
+        ]);
+        return redirect()->back()->with('success', 'Jenis kopi baru berhasil ditambahkan!');
+    }
+
+
 }
