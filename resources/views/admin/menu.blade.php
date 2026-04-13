@@ -246,7 +246,14 @@ body {
             @forelse($produk as $item)
             <tr class="row-shadow">
                 <td style="display:flex; align-items:center;">
-                    <img src="{{ $item->foto_produk ? asset('storage/produk/' . $item->foto_produk) : 'https://placehold.co/100x100?text=Kopi' }}" class="prod-img">
+                    {{-- Cek apakah kolom foto_produk ada isinya --}}
+                    @if($item->foto_produk)
+                        <img src="{{ asset('storage/produk/' . $item->foto_produk) }}" class="prod-img">
+                    @else
+                        {{-- Jika kosong, ambil dari folder public/images/default.png --}}
+                        <img src="{{ asset('images/default.png') }}" class="prod-img">
+                    @endif
+                    
                     <span style="font-weight: 600;">{{ $item->nama_produk }}</span>
                 </td>
                 <td style="font-weight: bold; color: var(--primary-green);">

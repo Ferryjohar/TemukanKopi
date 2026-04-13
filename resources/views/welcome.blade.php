@@ -956,8 +956,8 @@ footer {
       
       {{-- Gambar dari Folder Storage --}}
       <img src="{{ asset('storage/produk/'.$p->foto_produk) }}" 
-           alt="{{ $p->nama_produk }}"
-           onerror="this.src='https://placehold.co/300x300?text=Kopi+Temukan'">
+        alt="{{ $p->nama_produk }}"
+        onerror="this.src='{{ asset('images/default.png') }}'">
       
       <div class="card-body">
         <div class="card-stars">★★★★★</div>
