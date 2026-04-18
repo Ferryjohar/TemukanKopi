@@ -251,13 +251,13 @@ body {
         <thead>
             <tr>
                 <th>Nama</th>
-                <th>Password</th>
                 <th>Role</th>
                 <th>Status</th>
                 <th>Update</th>
                 <th>Aksi</th>
             </tr>
         </thead>
+
 
         <tbody>
             @foreach($admins as $admin)
@@ -267,7 +267,6 @@ body {
                     {{ $admin->nama }}
                 </td>
 
-                <td>********</td>
                 <td>{{ ucfirst($admin->role) }}</td>
 
                 <td>

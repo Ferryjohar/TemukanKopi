@@ -61,19 +61,11 @@
             margin-bottom: 15px;
         }
 
-        input, select {
+        input {
             width: 100%;
             padding: 12px 20px;
             border: 1px solid #999;
             border-radius: 25px;
-        }
-
-        .role-container {
-            display: flex;
-            align-items: center;
-            margin-left: 10px;
-            gap: 30px;
-            margin-bottom: 30px;
         }
 
         .btn-login {
@@ -86,6 +78,7 @@
             font-weight: bold;
             cursor: pointer;
             width: 180px;
+            margin-top: 15px;
         }
 
         .btn-login:hover {
@@ -146,14 +139,6 @@
 
             <div class="input-group">
                 <input type="password" name="password" placeholder="Password" required>
-            </div>
-
-            <div class="role-container">
-                <span style="white-space: nowrap;">Role :</span>
-                <select name="role">
-                    <option value="admin">Admin</option>
-                    <option value="superadmin">Super Admin</option>
-                </select>
             </div>
 
             <button type="submit" class="btn-login">LOGIN</button>
