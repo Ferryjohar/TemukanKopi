@@ -116,21 +116,20 @@ class MenuController extends Controller
 
     public function hapus($id)
     {
-        // 1. Cari dulu data produknya untuk tahu nama file fotonya
-        $produk = DB::table('ms_produk')->where('id_produk', $id)->first();
+        // Mengubah status produk, bukan menghapusnya secara permanen
+        DB::table('ms_produk')
+            ->where('id_produk', $id)
+            ->update(['status_produk' => 'habis']);
 
-        if ($produk) {
-            // 2. Cek jika fotonya bukan 'default.png', maka hapus file fisiknya
-            if ($produk->foto_produk && $produk->foto_produk !== 'default.png') {
-                // Gunakan Storage::delete untuk menghapus file di storage/app/public/produk
-                \Illuminate\Support\Facades\Storage::delete('public/produk/' . $produk->foto_produk);
-            }
+        return redirect()->back()->with('success', 'Produk berhasil dinonaktifkan (Status: Habis).');
+    }
+    public function aktifkan($id)
+    {
+        DB::table('ms_produk')
+            ->where('id_produk', $id)
+            ->update(['status_produk' => 'tersedia']);
 
-            // 3. Baru hapus data dari database
-            DB::table('ms_produk')->where('id_produk', $id)->delete();
-        }
-
-        return redirect()->route('admin.menu')->with('success', 'Produk dan filenya berhasil dihapus');
+        return redirect()->back()->with('success', 'Produk sekarang tersedia kembali!');
     }
 
     public function kategoriStore(Request $request) {

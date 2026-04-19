@@ -1036,33 +1036,50 @@ footer {
   <div class="produk-grid stagger">
     @forelse($produk as $p)
     <a class="card" href="{{ url('/checkout?id_produk='.$p->id_produk) }}">
-      {{-- Badge otomatis berdasarkan stok --}}
-      <div class="badge">{{ $p->stok_produk < 10 ? 'STOK TIPIS' : 'PREMIUM' }}</div>
       
-      {{-- Gambar dari Folder Storage --}}
-      <img src="{{ asset('storage/produk/'.$p->foto_produk) }}" 
-           alt="{{ $p->nama_produk }}"
-           onerror="this.src='https://placehold.co/300x300?text=Kopi+Temukan'">
+      {{-- Badge otomatis: Jika produk baru atau premium --}}
+      {{-- Kita tidak lagi pakai stok_produk < 10 --}}
+      <div class="badge">PREMIUM</div>
+      
+      {{-- Gambar dengan Proteksi Fallback --}}
+      <div class="img-container" style="position: relative; overflow: hidden;">
+          <img src="{{ $p->foto_produk ? asset('storage/produk/'.$p->foto_produk) : asset('images/default.png') }}" 
+            alt="{{ $p->nama_produk }}"
+            onerror="this.src='{{ asset('images/default.png') }}'">
+      </div>
       
       <div class="card-body">
-        <div class="card-stars">★★★★★</div>
-        <h4 style="text-transform: capitalize;">{{ $p->nama_produk }}</h4>
-        <div class="price">
+        {{-- Wadah baru untuk Bintang & Status --}}
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div class="card-stars" style="margin-bottom: 0;">★★★★★</div>
+            <span style="font-size: 11px; font-weight: 700; color: #2ecc71; text-transform: uppercase; letter-spacing: 0.5px;">
+                ● Tersedia
+            </span>
+        </div>
+
+        <h4 style="text-transform: capitalize; color: #1a1a1a; margin-bottom: 8px;">{{ $p->nama_produk }}</h4>
+        
+        <div class="price" style="color: #1f5e3b; font-weight: 700; font-size: 1.1rem;">
             Rp {{ number_format($p->harga_produk, 0, ',', '.') }}
         </div>
-        <p style="font-size: 11px; color: #888; margin-top: 5px;">
-            Kategori: {{ $p->nama_kategori }} | Jenis: {{ $p->nama_jenis }}
-        </p>
+
+        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed #eee;">
+            <p style="font-size: 11px; color: #888; line-height: 1.5;">
+                Kategori: <b>{{ $p->nama_kategori }}</b><br>
+                Jenis: {{ $p->nama_jenis }}
+            </p>
+        </div>
       </div>
     </a>
     @empty
-    <div style="grid-column: span 4; text-align: center; padding: 50px; color: #888;">
-        <p>☕ Belum ada produk yang tersedia saat ini.</p>
+    <div style="grid-column: 1 / -1; text-align: center; padding: 100px 20px; color: #888; background: #fff; border-radius: 20px;">
+        <span style="font-size: 50px;">☕</span>
+        <p style="margin-top: 15px; font-style: italic;">Maaf, katalog produk sedang dalam pembaruan.</p>
     </div>
     @endforelse
   </div>
 
-  <div class="produk-cta reveal">
+  <div class="produk-cta reveal" style="margin-top: 60px;">
     <a class="btn" href="#">LIHAT SEMUA MENU</a>
   </div>
 </section>
