@@ -454,8 +454,12 @@ a.prod-card { text-decoration: none; color: inherit; display: block; }
     @endphp
 
     <div class="checkout-img-wrap">
-        <span class="badge-new">{{ $item->stok_produk < 10 ? 'LIMITED' : 'NEW' }}</span>
-        <img src="{{ asset('storage/produk/' . $item->foto_produk) }}" alt="{{ $item->nama_produk }}">
+    {{-- Kita ganti logika LIMITED menjadi badge status atau kategori --}}
+        <span class="badge-new">{{ $item->nama_kategori == 'Mentah' ? 'RAW BEANS' : 'PREMIUM' }}</span>
+        
+        <img src="{{ $item->foto_produk ? asset('storage/produk/' . $item->foto_produk) : asset('images/default.png') }}" 
+            alt="{{ $item->nama_produk }}"
+            onerror="this.src='{{ asset('images/default.png') }}'">
     </div>
 
     <div class="checkout-info">
@@ -470,19 +474,26 @@ a.prod-card { text-decoration: none; color: inherit; display: block; }
     </div>
 
     <div class="order-box">
-        <div class="order-box-title">Atur jumlah dan catatan</div>
-        <div class="qty-row">
-            <button class="qty-btn" id="minus">−</button>
-            <input class="qty-num" id="qty" type="number" value="1" min="1" max="{{ $item->stok_produk }}" readonly>
-            <button class="qty-btn" id="plus">+</button>
-            <span class="stok-info">Stok : <strong id="stokVal">{{ $item->stok_produk }}</strong></span>
-        </div>
-        <div class="subtotal-row">
-            <span>Subtotal</span>
-            <strong id="subtotalVal">Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</strong>
-        </div>
-        <button class="btn-beli" id="btnBeli">Beli Sekarang</button>
+    <div class="order-box-title">Atur jumlah dan catatan</div>
+    <div class="qty-row">
+        <button class="qty-btn" id="minus">−</button>
+        <input class="qty-num" id="qty" type="number" value="1" readonly>
+        <button class="qty-btn" id="plus">+</button>
+        <span class="stok-info">Status: <strong style="color: #2ecc71;">Tersedia</strong></span>
     </div>
+
+    <div style="margin-top: 20px;">
+        @if($item->status_produk == 'tersedia')
+            <button id="btnBeli" class="btn-checkout" style="display: block; width: 100%; background: #1f5e3b; color: white; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer;">
+                Beli Sekarang
+            </button>
+        @else
+            <button class="btn-checkout" disabled style="background: #ccc; cursor: not-allowed; width: 100%; padding: 15px; border-radius: 10px; border: none;">
+                Stok Habis
+            </button>
+        @endif
+    </div>
+</div>
 </div>
 
   <!-- ══ PRODUCT GRID ══ -->
@@ -496,13 +507,12 @@ a.prod-card { text-decoration: none; color: inherit; display: block; }
        href="{{ url('/checkout?id_produk='.$p->id_produk) }}">
         
         <div class="prod-img-wrap">
-            {{-- Badge otomatis --}}
-            <span class="prod-badge">{{ $p->stok_produk < 10 ? 'LIMIT' : 'NEW' }}</span>
+          <span class="prod-badge">PREMIUM</span>
             
             {{-- Gambar dari storage --}}
-            <img src="{{ asset('storage/produk/'.$p->foto_produk) }}" 
-                 alt="{{ $p->nama_produk }}"
-                 onerror="this.src='https://placehold.co/300x300?text=Kopi'">
+            <img src="{{ $p->foto_produk ? asset('storage/produk/'.$p->foto_produk) : asset('images/default.png') }}" 
+              alt="{{ $p->nama_produk }}"
+              onerror="this.src='{{ asset('images/default.png') }}'">
         </div>
 
         <div class="prod-body">
@@ -565,7 +575,8 @@ a.prod-card { text-decoration: none; color: inherit; display: block; }
 ════════════════════════════════ */
 const hargaSatuan = {{ $item->harga_produk }};
 const namaAktif   = "{{ $item->nama_produk }}";
-const stokAktif   = {{ $item->stok_produk }};
+// Kita ganti stokAktif menjadi angka besar (misal 999) agar tombol plus tidak terkunci
+const stokAktif   = 999;
 let qty = 1;
 
 // Element Selector

@@ -9,23 +9,26 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Mengambil data produk dan menggabungkan nama kategori serta jenis kopi
+        // Menambahkan filter status_produk agar yang tampil hanya yang 'tersedia'
         $produk = DB::table('ms_produk')
             ->join('ms_kategori', 'ms_produk.id_kategori', '=', 'ms_kategori.id_kategori')
             ->join('ms_jeniskopi', 'ms_produk.id_jeniskopi', '=', 'ms_jeniskopi.id_jeniskopi')
             ->select('ms_produk.*', 'ms_kategori.nama_kategori', 'ms_jeniskopi.nama_jenis')
+            ->where('ms_produk.status_produk', '=', 'tersedia') // Tambahan Filter
             ->get();
 
-        // Mengirim variabel $produk ke halaman welcome
         return view('welcome', compact('produk'));
     }
+
     public function checkout()
     {
-        $produk = collect(DB::table('ms_produk')
+        // Tambahkan filter yang sama di halaman checkout agar katalog di bawah tetap sinkron
+        $produk = DB::table('ms_produk')
             ->join('ms_kategori', 'ms_produk.id_kategori', '=', 'ms_kategori.id_kategori')
             ->join('ms_jeniskopi', 'ms_produk.id_jeniskopi', '=', 'ms_jeniskopi.id_jeniskopi')
             ->select('ms_produk.*', 'ms_kategori.nama_kategori', 'ms_jeniskopi.nama_jenis')
-            ->get());
+            ->where('ms_produk.status_produk', '=', 'tersedia') // Tambahan Filter
+            ->get();
 
         return view('checkout', compact('produk'));
     }

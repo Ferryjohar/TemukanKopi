@@ -244,13 +244,13 @@ body {
 
         <tbody>
             @forelse($produk as $item)
-            <tr class="row-shadow">
+            <tr class="row-shadow" style="{{ $item->status_produk == 'habis' ? 'opacity: 0.6; background: #f9f9f9;' : '' }}">
                 <td style="display:flex; align-items:center;">
-                    {{-- Cek apakah kolom foto_produk ada isinya --}}
                     @if($item->foto_produk)
-                        <img src="{{ asset('storage/produk/' . $item->foto_produk) }}" class="prod-img">
+                        <img src="{{ asset('storage/produk/' . $item->foto_produk) }}" 
+                             class="prod-img" 
+                             onerror="this.src='{{ asset('images/default.png') }}'">
                     @else
-                        {{-- Jika kosong, ambil dari folder public/images/default.png --}}
                         <img src="{{ asset('images/default.png') }}" class="prod-img">
                     @endif
                     
@@ -259,7 +259,19 @@ body {
                 <td style="font-weight: bold; color: var(--primary-green);">
                     Rp {{ number_format($item->harga_produk, 0, ',', '.') }}
                 </td>
-                <td>{{ $item->stok_produk }}</td>
+                
+                <td>
+                    @if($item->status_produk == 'tersedia')
+                        <span style="background: #d4edda; color: #155724; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold;">
+                            Tersedia
+                        </span>
+                    @else
+                        <span style="background: #f8d7da; color: #721c24; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold;">
+                            Habis
+                        </span>
+                    @endif
+                </td>
+
                 <td>
                     <span style="background: #eee; padding: 4px 10px; border-radius: 6px; font-size: 13px;">
                         {{ $item->nama_kategori }}
@@ -271,12 +283,19 @@ body {
                 <td>
                     <div style="display: flex; gap: 15px;">
                         <a href="{{ route('admin.menu.edit', $item->id_produk) }}" 
-                           class="action-link" style="color: #007bff;">Edit</a>
+                           class="action-link" style="color: #007bff; text-decoration: none; font-weight: 600;">Edit</a>
                         
-                        <a href="{{ route('admin.menu.hapus', $item->id_produk) }}" 
-                           class="action-link btn-delete" style="color: #dc3545;">
-                           Hapus
-                        </a>
+                        @if($item->status_produk == 'tersedia')
+                            <a href="{{ route('admin.menu.hapus', $item->id_produk) }}" 
+                               class="action-link btn-delete" style="color: #dc3545; text-decoration: none; font-weight: 600;">
+                               Set Habis
+                            </a>
+                        @else
+                            <a href="{{ route('admin.menu.aktifkan', $item->id_produk) }}" 
+                               class="action-link" style="color: #28a745; text-decoration: none; font-weight: 600;">
+                               Aktifkan
+                            </a>
+                        @endif
                     </div>
                 </td>
             </tr>
@@ -372,8 +391,8 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
             Swal.fire({
                 ...swalOptions,
-                title: 'Hapus produk?',
-                text: 'Produk ini akan dihapus permanen',
+                title: 'Nonaktifkan produk?',
+                text: 'Produk ini akan dinonaktifkan',
                 icon: 'error',
                 confirmButtonText: 'Hapus'
             }).then((result)=>{

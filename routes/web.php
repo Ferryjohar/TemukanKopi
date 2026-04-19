@@ -65,6 +65,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/menu/edit/{id_produk}', [MenuController::class, 'edit'])->name('admin.menu.edit');
         Route::post('/menu/update/{id_produk}', [MenuController::class, 'update'])->name('admin.menu.update');
         Route::get('/menu/hapus/{id}', [MenuController::class, 'hapus'])->name('admin.menu.hapus');
+        Route::get('/menu/aktifkan/{id}', [MenuController::class, 'aktifkan'])->name('admin.menu.aktifkan');
         
         // ================= KATEGORI & JENIS =================
         Route::get('/kategori', [MenuController::class, 'kategoriIndex'])->name('admin.kategori');
