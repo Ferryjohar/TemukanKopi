@@ -19,7 +19,6 @@ body {
     display: flex;
 }
 
-/* SIDEBAR SESUAI ACUAN */
 .sidebar {
     width: 280px;
     background-color: var(--primary-green);
@@ -27,7 +26,7 @@ body {
     color: white;
     padding: 40px 20px;
     position: fixed;
-    z-index: 100; 
+    z-index: 100;
 }
 
 .logo-text {
@@ -66,13 +65,12 @@ body {
     background-color: rgba(255,255,255,0.1);
 }
 
-/* MAIN CONTENT SESUAI ACUAN */
 .main-content {
     margin-left: 280px;
     flex: 1;
     padding: 60px;
     position: relative;
-    z-index: 10; 
+    z-index: 10;
 }
 
 .header-title h1 {
@@ -86,26 +84,122 @@ body {
     margin-top: 0;
 }
 
-.top-bar {
+/* FILTER BAR */
+.filter-bar {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    gap: 10px;
+    align-items: flex-end;
+    flex-wrap: wrap;
     margin: 30px 0;
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-.search-wrapper {
-    width: 350px;
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
-.search-wrapper input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 12px;
+.filter-group label {
+    font-size: 12px;
+    color: #666;
+    font-weight: 600;
+}
+
+/* Search wrapper dengan tombol menempel */
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fafafa;
+    transition: border 0.2s;
+}
+
+.search-input-wrapper:focus-within {
+    border-color: var(--primary-green);
+    background: white;
+}
+
+.search-input-wrapper input[type="text"] {
+    border: none;
+    outline: none;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: 'Segoe UI', sans-serif;
+    background: transparent;
+    width: 200px;
+}
+
+.btn-search {
+    padding: 10px 18px;
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 600;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+
+.btn-search:hover {
+    opacity: 0.85;
+}
+
+.filter-group input[type="date"] {
+    padding: 10px 14px;
+    border-radius: 10px;
     border: 1px solid #ddd;
     outline: none;
+    font-size: 14px;
+    font-family: 'Segoe UI', sans-serif;
+    background: #fafafa;
+    transition: border 0.2s;
+    cursor: pointer;
 }
 
-/* TABLE SESUAI ACUAN */
+.filter-group input[type="date"]:focus {
+    border-color: var(--primary-green);
+    background: white;
+}
+
+.btn-reset {
+    padding: 10px 22px;
+    background: #e2e2e2;
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Segoe UI', sans-serif;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.btn-reset:hover {
+    background: #d0d0d0;
+}
+
+/* INFO FILTER AKTIF */
+.filter-active-info {
+    background: #d4edda;
+    color: #155724;
+    padding: 10px 16px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid #c3e6cb;
+    font-size: 14px;
+}
+
+/* TABLE */
 .data-table {
     width: 100%;
     border-collapse: separate;
@@ -198,13 +292,57 @@ body {
         </div>
     @endif
 
-    <div class="top-bar">
-        <div class="search-wrapper">
-            <form action="{{ route('admin.transaksi') }}" method="GET">
-                <input type="text" name="search" placeholder="Cari pelanggan..." value="{{ request('search') }}">
-            </form>
+    {{-- INFO FILTER AKTIF --}}
+    @if(request('search') || request('dari_tanggal') || request('sampai_tanggal'))
+        <div class="filter-active-info">
+            Menampilkan hasil filter:
+            @if(request('search'))
+                <b>"{{ request('search') }}"</b>
+            @endif
+            @if(request('dari_tanggal') && request('sampai_tanggal'))
+                &nbsp;| Tanggal: <b>{{ date('d-m-Y', strtotime(request('dari_tanggal'))) }}</b> s/d <b>{{ date('d-m-Y', strtotime(request('sampai_tanggal'))) }}</b>
+            @elseif(request('dari_tanggal'))
+                &nbsp;| Dari: <b>{{ date('d-m-Y', strtotime(request('dari_tanggal'))) }}</b>
+            @elseif(request('sampai_tanggal'))
+                &nbsp;| Sampai: <b>{{ date('d-m-Y', strtotime(request('sampai_tanggal'))) }}</b>
+            @endif
+            &mdash; <b>{{ $transaksi->count() }}</b> transaksi ditemukan.
         </div>
-    </div>
+    @endif
+
+    {{-- FILTER BAR --}}
+    <form action="{{ route('admin.transaksi') }}" method="GET" id="filterForm">
+        <div class="filter-bar">
+
+            {{-- SEARCH + TOMBOL CARI --}}
+            <div class="filter-group">
+                <label>Cari Pelanggan</label>
+                <div class="search-input-wrapper">
+                    <input type="text" name="search" id="inputSearch"
+                           placeholder="Cari nama pelanggan..."
+                           value="{{ request('search') }}">
+                    <button type="submit" class="btn-search">Cari</button>
+                </div>
+            </div>
+
+            {{-- DARI TANGGAL --}}
+            <div class="filter-group">
+                <label>Dari Tanggal</label>
+                <input type="date" name="dari_tanggal" id="dariTanggal"
+                       value="{{ request('dari_tanggal') }}">
+            </div>
+
+            {{-- SAMPAI TANGGAL --}}
+            <div class="filter-group">
+                <label>Sampai Tanggal</label>
+                <input type="date" name="sampai_tanggal" id="sampaiTanggal"
+                       value="{{ request('sampai_tanggal') }}">
+            </div>
+
+            <a href="{{ route('admin.transaksi') }}" class="btn-reset">Reset</a>
+
+        </div>
+    </form>
 
     <table class="data-table">
         <thead>
@@ -225,9 +363,9 @@ body {
                     <img src="https://ui-avatars.com/api/?name={{ urlencode($t->nama_customer) }}&background=004d32&color=fff&bold=true" class="avatar">
                     <span style="font-weight: 600;">{{ $t->nama_customer }}</span>
                 </td>
-                
+
                 <td>{{ $t->no_wa }}</td>
-                
+
                 <td>
                     <div class="address-text" title="{{ $t->alamat }}">
                         {{ $t->alamat }}
@@ -242,13 +380,13 @@ body {
 
                 <td>
                     <div style="display: flex; gap: 15px;">
-                        <a href="{{ route('admin.transaksi.detail', $t->id_pesanan) }}" 
+                        <a href="{{ route('admin.transaksi.detail', $t->id_pesanan) }}"
                            class="action-link" style="color: #007bff;">Detail</a>
-                        
-                        <a href="{{ route('admin.transaksi.edit', $t->id_pesanan) }}" 
+
+                        <a href="{{ route('admin.transaksi.edit', $t->id_pesanan) }}"
                            class="action-link" style="color: #ffc107;">Edit</a>
 
-                        <a href="{{ route('admin.transaksi.destroy', $t->id_pesanan) }}" 
+                        <a href="{{ route('admin.transaksi.destroy', $t->id_pesanan) }}"
                            class="action-link btn-delete" style="color: #dc3545;">Hapus</a>
                     </div>
                 </td>
@@ -256,7 +394,13 @@ body {
             @empty
             <tr>
                 <td colspan="6" style="text-align: center; padding: 40px; background: white; border-radius: 15px;">
-                    <p style="color: #999; margin: 0;">Belum ada data transaksi.</p>
+                    <p style="color: #999; margin: 0;">
+                        @if(request('search') || request('dari_tanggal') || request('sampai_tanggal'))
+                            Tidak ada transaksi yang sesuai dengan filter.
+                        @else
+                            Belum ada data transaksi.
+                        @endif
+                    </p>
                 </td>
             </tr>
             @endforelse
@@ -268,6 +412,21 @@ body {
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+
+    const filterForm    = document.getElementById('filterForm');
+    const dariTanggal   = document.getElementById('dariTanggal');
+    const sampaiTanggal = document.getElementById('sampaiTanggal');
+
+    // Auto submit langsung saat pilih tanggal
+    dariTanggal.addEventListener('change', function () {
+        filterForm.submit();
+    });
+
+    sampaiTanggal.addEventListener('change', function () {
+        filterForm.submit();
+    });
+
+    // SweetAlert options
     const swalOptions = {
         width: '320px',
         padding: '1.5em',
@@ -280,12 +439,13 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.logout-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
+            const href = this.href;
             Swal.fire({
                 ...swalOptions,
                 title: 'Yakin logout?',
                 icon: 'warning'
             }).then((result) => {
-                if (result.isConfirmed) window.location.href = this.href;
+                if (result.isConfirmed) window.location.href = href;
             });
         });
     });
