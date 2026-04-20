@@ -193,15 +193,12 @@ body {
 
 .modal-close:hover { color: #333; }
 
-/* FORM FIELDS */
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-bottom: 16px;
 }
-
-.form-row.full { grid-template-columns: 1fr; }
 
 .form-group {
     display: flex;
@@ -236,7 +233,6 @@ body {
     background: white;
 }
 
-/* Avatar upload */
 .avatar-section {
     display: flex;
     flex-direction: column;
@@ -403,9 +399,9 @@ body {
             <tr class="row-shadow">
                 <td style="display:flex; align-items:center;">
                     @php
-                        $fotoPath = 'avatars/' . $admin->foto_admin;
+                        $fotoPath    = 'avatars/' . $admin->foto_admin;
                         $fileTersedia = !blank($admin->foto_admin) && Storage::disk('public')->exists($fotoPath);
-                        $fotoUrl = $fileTersedia ? asset('storage/' . $fotoPath) : asset('images/user.png');
+                        $fotoUrl     = $fileTersedia ? asset('storage/' . $fotoPath) : asset('images/user.png');
                     @endphp
                     <img src="{{ $fotoUrl }}" class="avatar" alt="Foto Admin">
                     {{ $admin->nama }}
@@ -419,7 +415,6 @@ body {
                 <td>{{ $admin->updated_at ? date('d-m-Y', strtotime($admin->updated_at)) : '-' }}</td>
                 <td>
                     <div style="display:flex; gap:15px;">
-                        {{-- Tombol Edit: kirim semua data ke modal --}}
                         <button class="action-link"
                             style="color:#007bff; background:none; border:none; padding:0;"
                             onclick="bukaModalEdit(
@@ -498,16 +493,20 @@ body {
         <button class="modal-close" onclick="tutupModal('modalEdit')">&times;</button>
         <h2>Edit Profil Admin</h2>
 
+        {{-- 
+            Action di-set dinamis lewat JS pakai route admin.update
+            Route: POST /admin/update-admin/{id}
+        --}}
         <form id="formEdit" action="" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('POST') {{-- Sesuaikan dengan method di route update kamu --}}
 
             <div class="edit-body">
                 {{-- Kolom kiri: foto --}}
                 <div class="avatar-section">
                     <img src="" id="previewFotoEdit" class="avatar-upload" alt="Foto Admin">
                     <label class="upload-btn-label" for="inputFotoEdit">Ganti Foto</label>
-                    <input type="file" name="foto_admin" id="inputFotoEdit" accept="image/*" style="display:none;"
+                    <input type="file" name="foto_admin" id="inputFotoEdit" accept="image/*"
+                           style="display:none;"
                            onchange="previewFoto(this, 'previewFotoEdit')">
                     <p class="foto-hint">Format: JPG, PNG<br>Maks 2MB</p>
                 </div>
@@ -569,16 +568,18 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-// ===== MODAL =====
+    // Base URL route admin.update — sesuai web.php: POST /admin/update-admin/{id}
+    const urlUpdateAdmin = "{{ url('admin/update-admin') }}";
+
 function bukaModalTambah() {
     document.getElementById('modalTambah').classList.add('show');
 }
 
 function bukaModalEdit(id, nama, username, noHp, role, status, fotoUrl) {
-    // Set action form ke route update sesuai id
-    document.getElementById('formEdit').action = '{{ url("admin/update") }}/' + id;
+    // Set action form pakai URL yang benar sesuai route web.php
+    document.getElementById('formEdit').action = urlUpdateAdmin + '/' + id;
 
-    // Isi semua field
+    // Isi semua field dengan data admin yang diklik
     document.getElementById('editNama').value     = nama;
     document.getElementById('editUsername').value = username;
     document.getElementById('editNoHp').value     = noHp;
