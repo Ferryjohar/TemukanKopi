@@ -295,7 +295,7 @@ body {
     {{-- INFO FILTER AKTIF --}}
     @if(request('search') || request('dari_tanggal') || request('sampai_tanggal'))
         <div class="filter-active-info">
-            Menampilkan hasil filter:
+            Menampilkan hasil:
             @if(request('search'))
                 <b>"{{ request('search') }}"</b>
             @endif
