@@ -263,7 +263,16 @@ body {
             @foreach($admins as $admin)
             <tr class="row-shadow">
                 <td style="display:flex; align-items:center;">
-                    <img src="{{ $admin->foto_admin ? asset('storage/avatars/'.$admin->foto_admin) : asset('images/user.png') }}" class="avatar">
+                    @php
+                        // Cek apakah kolom di DB tidak kosong DAN file benar-benar ada di folder storage
+                        $fotoPath = 'avatars/' . $admin->foto_admin;
+                        $fileTersedia = !blank($admin->foto_admin) && Storage::disk('public')->exists($fotoPath);
+                    @endphp
+
+                    <img src="{{ $fileTersedia ? asset('storage/' . $fotoPath) : asset('images/user.png') }}" 
+                        class="avatar" 
+                        alt="Foto Admin">
+                    
                     {{ $admin->nama }}
                 </td>
 
