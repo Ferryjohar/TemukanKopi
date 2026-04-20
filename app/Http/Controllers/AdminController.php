@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -16,7 +17,6 @@ class AdminController extends Controller
     public function index() {
         if (!session('login')) return redirect()->route('admin.login');
 
-        // 🔥 kalau bukan superadmin, lempar ke dashboard admin
         if (!$this->isSuperAdmin()) {
             return redirect()->route('admin.dashboard_khusus');
         }
@@ -31,7 +31,6 @@ class AdminController extends Controller
     public function dashboardKhusus() {
         if (!session('login')) return redirect()->route('admin.login');
 
-        // 🔥 kalau superadmin masuk sini, balikin ke data admin
         if ($this->isSuperAdmin()) {
             return redirect()->route('admin.dashboard');
         }
@@ -49,10 +48,11 @@ class AdminController extends Controller
     }
 
     public function store(Request $request) {
+
         DB::table('ms_admin')->insert([
             'nama'         => $request->nama,
             'username'     => $request->username,
-            'password'     => $request->password,
+            'password'     => Hash::make($request->password), // ✅ HASH
             'no_hp'        => $request->no_hp,
             'role'         => $request->role,
             'status_admin' => 'aktif',
@@ -85,10 +85,12 @@ class AdminController extends Controller
             'updated_at'   => now(),
         ];
 
+        // ✅ HASH kalau password diisi
         if ($request->filled('password')) {
-            $data['password'] = $request->password;
+            $data['password'] = Hash::make($request->password);
         }
 
+        // upload foto
         if ($request->hasFile('foto_admin')) {
             $file = $request->file('foto_admin');
             $namaFile = time() . "_" . $file->getClientOriginalName();
