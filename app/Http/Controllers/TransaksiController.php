@@ -4,6 +4,87 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class TransaksiController extends Controller
 {
+    // ================= SIMPAN PESANAN DARI CHECKOUT =================
+    public function simpan(Request $request)
+    {
+        try {
+            // Validasi field wajib
+            if (!$request->filled('nama') || !$request->filled('wa') || !$request->filled('alamat')) {
+                return response()->json(['success' => false, 'message' => 'Data tidak lengkap.'], 422);
+            }
+
+            // Parse total_harga: hilangkan "Rp ", titik pemisah ribuan, spasi
+            $totalRaw    = $request->input('total_harga', '0');
+            $totalBersih = (int) preg_replace('/[^0-9]/', '', $totalRaw);
+
+            // Cek kolom yang tersedia di tr_pesanan
+            $kolomPesanan = \Illuminate\Support\Facades\Schema::getColumnListing('tr_pesanan');
+
+            $dataPesanan = [
+                'nama_customer' => $request->nama,
+                'no_wa'         => $request->wa,
+                'alamat'        => $request->alamat,
+                'total_harga'   => $totalBersih,
+                'tanggal_pesan' => $request->tanggal
+                                    ? date('Y-m-d', strtotime($request->tanggal))
+                                    : now()->toDateString(),
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ];
+
+            // Tambahkan catatan hanya jika kolomnya ada
+            if (in_array('catatan', $kolomPesanan)) {
+                $dataPesanan['catatan'] = $request->catatan ?? null;
+            }
+
+            // Simpan header pesanan
+            $idPesanan = DB::table('tr_pesanan')->insertGetId($dataPesanan);
+
+            // Simpan detail produk
+            $items = json_decode($request->input('items', '[]'), true);
+            if (is_array($items) && count($items) > 0) {
+                $kolomDetail = \Illuminate\Support\Facades\Schema::getColumnListing('tr_detailpesanan');
+                $punyaHarga    = in_array('harga', $kolomDetail);
+                $punyaSubtotal = in_array('subtotal', $kolomDetail);
+
+                foreach ($items as $item) {
+                    // Terima key 'id_produk' ATAU 'id' (kompatibel dua-duanya)
+                    $idProduk = (int) ($item['id_produk'] ?? $item['id'] ?? 0);
+                    $qty      = (int) ($item['qty']  ?? 1);
+                    $harga    = (int) ($item['harga'] ?? 0);
+
+                    if (!$idProduk) continue;
+
+                    $dataDetail = [
+                        'id_pesanan' => $idPesanan,
+                        'id_produk'  => $idProduk,
+                        'qty'        => $qty,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+
+                    if ($punyaHarga)    $dataDetail['harga']    = $harga;
+                    if ($punyaSubtotal) $dataDetail['subtotal'] = $harga * $qty;
+
+                    DB::table('tr_detailpesanan')->insert($dataDetail);
+                }
+            }
+
+            return response()->json([
+                'success'    => true,
+                'id_pesanan' => $idPesanan,
+                'message'    => 'Pesanan berhasil disimpan.',
+            ]);
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Gagal simpan pesanan: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function index(Request $request)
     {
         if (!session('login')) {
