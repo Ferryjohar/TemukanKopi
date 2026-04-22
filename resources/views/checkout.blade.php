@@ -1199,13 +1199,13 @@ function closeModal() {
 }
 
 /* ══════════════════════════════════
-   BAYAR VIA WHATSAPP
+   BAYAR VIA WHATSAPP + SIMPAN KE DB
 ══════════════════════════════════ */
-document.getElementById('btnBayar').addEventListener('click', () => {
+document.getElementById('btnBayar').addEventListener('click', async () => {
   const nama   = document.getElementById('namaInput').value.trim();
   const wa     = document.getElementById('waInput').value.trim();
   const alamat = document.getElementById('alamatInput').value.trim();
-  const cttn = document.getElementById('cttnInput').value.trim();
+  const cttn   = document.getElementById('cttnInput').value.trim();
   const tgl    = document.getElementById('tglInput').value;
   const total  = document.getElementById('modalTotal').textContent;
   const listEl = document.getElementById('modalOrderList');
@@ -1224,6 +1224,75 @@ document.getElementById('btnBayar').addEventListener('click', () => {
     detailProduk += `  - ${name} ${parts}\n`;
   });
 
+  // Tentukan sumber item: keranjang (multi) atau produk aktif (single)
+  let itemsToSave = [];
+  if (keranjang && keranjang.length > 0) {
+    itemsToSave = keranjang.map(i => ({
+      id_produk: i.id,
+      qty:       i.qty,
+      harga:     i.harga,
+    }));
+  } else {
+    const qtyVal = parseInt(document.getElementById('qty')?.value || '1');
+    itemsToSave = [{
+      id_produk: produkAktif.id,
+      qty:       qtyVal,
+      harga:     produkAktif.harga,
+    }];
+  }
+
+  // ── Simpan ke database ──
+  const btnBayar = document.getElementById('btnBayar');
+  const originalText = btnBayar.innerHTML;
+  btnBayar.disabled = true;
+  btnBayar.innerHTML = '<span>Menyimpan pesanan...</span>';
+
+  let dbBerhasil = false;
+  let pesanError = '';
+
+  try {
+    const formData = new FormData();
+    formData.append('nama',        nama);
+    formData.append('wa',          wa);
+    formData.append('alamat',      alamat);
+    formData.append('catatan',     cttn);
+    formData.append('tanggal',     tgl);
+    formData.append('total_harga', total);
+    formData.append('items',       JSON.stringify(itemsToSave));
+    formData.append('_token',      '{{ csrf_token() }}');
+
+    const resp = await fetch('{{ route("transaksi.simpan") }}', {
+      method: 'POST',
+      body:   formData,
+    });
+
+    // Coba parse JSON — meski status error tetap coba baca pesannya
+    let result = {};
+    try { result = await resp.json(); } catch(_) {}
+
+    if (resp.ok && result.success) {
+      dbBerhasil = true;
+      // Kosongkan keranjang setelah berhasil simpan
+      keranjang = [];
+      simpanKeranjang();
+      renderKeranjang();
+    } else {
+      pesanError = result.message || `Server error (${resp.status})`;
+    }
+  } catch (err) {
+    pesanError = err.message || 'Tidak dapat terhubung ke server.';
+  }
+
+  btnBayar.disabled = false;
+  btnBayar.innerHTML = originalText;
+
+  // Kalau DB gagal → info user tapi TETAP lanjut ke WA
+  if (!dbBerhasil) {
+    console.warn('Gagal simpan ke DB:', pesanError);
+    // Pesanan tetap diteruskan ke WA, data tidak hilang
+  }
+
+  // ── Buka WhatsApp ──
   const waNumber = '6285850524186';
   const pesan = encodeURIComponent(
     `Halo Temukan Kopi! 🌿\n\n` +
@@ -1241,6 +1310,7 @@ document.getElementById('btnBayar').addEventListener('click', () => {
   );
 
   window.open(`https://wa.me/${waNumber}?text=${pesan}`, '_blank');
+  closeModal();
 });
 
 /* ══════════════════════════════════
