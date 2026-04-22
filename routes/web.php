@@ -11,6 +11,7 @@ use App\Http\Controllers\HomeController;
 Route::get('/', [HomeController::class, 'index'])->name('welcome');
 
 Route::get('/checkout', [HomeController::class, 'checkout'])->name('checkout');
+Route::post('/transaksi/simpan', [TransaksiController::class, 'simpan'])->name('transaksi.simpan');
 
 
 // redirect ke login admin
