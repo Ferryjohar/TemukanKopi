@@ -44,22 +44,19 @@ class MenuController extends Controller
     {
         $namaFile = 'default.png';
 
-    if ($request->hasFile('foto_produk')) {
-        $file = $request->file('foto_produk');
-        $namaFile = time() . "_" . $file->getClientOriginalName();
-        
-        // Simpan ke storage/app/public/produk
-        $file->storeAs('public/produk', $namaFile);
-    }
+        if ($request->hasFile('foto_produk')) {
+            $file = $request->file('foto_produk');
+            $namaFile = time() . "_" . $file->getClientOriginalName();
+            $file->move(public_path('storage/produk'), $namaFile);
+        }
 
-        // PERBAIKAN: Gunakan $request->id_jeniskopi jika ada, 
-        // jika kosong (null), beri nilai default 1 agar database tidak error 1364
+        // Menghapus 'stok_produk' dari array insert
         DB::table('ms_produk')->insert([
             'nama_produk'      => $request->nama_produk,
             'id_kategori'      => $request->id_kategori,
             'id_jeniskopi'     => $request->id_jeniskopi ?? 1, 
-            'harga_produk'     => $request->harga_produk,
-            'stok_produk'      => $request->stok_produk,
+            'harga_produk'     => $request->harga_produk, // Pastikan sesuai input di modal
+            'status_produk'    => 'tersedia', // Default status saat tambah produk
             'deskripsi_produk' => $request->deskripsi_produk,
             'foto_produk'      => $namaFile,
             'created_at'       => now(),
@@ -91,13 +88,11 @@ class MenuController extends Controller
             'nama_produk'      => $request->nama_produk,
             'id_kategori'      => $request->id_kategori,
             'harga_produk'     => $request->harga_produk,
-            'stok_produk'      => $request->stok_produk,
+            'status_produk'    => $request->status_produk,
             'deskripsi_produk' => $request->deskripsi_produk,
             'updated_at'       => now()
         ];
 
-        // PERBAIKAN: Hanya update id_jeniskopi jika user memilih/mengisi di form
-        // Ini mencegah error "Column cannot be null"
         if ($request->filled('id_jeniskopi')) {
             $data['id_jeniskopi'] = $request->id_jeniskopi;
         }
