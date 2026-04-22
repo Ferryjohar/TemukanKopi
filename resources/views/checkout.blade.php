@@ -902,6 +902,10 @@ body {
       <textarea id="alamatInput" placeholder="Jalan, RT/RW, Kec./&#10;Kota, Kodepos"></textarea>
     </div>
     <div class="form-group">
+      <label>Catatan Tambahan:</label>
+      <textarea id="cttnInput" placeholder="Tambahkan Catatan tertentu"></textarea>
+    </div>
+    <div class="form-group">
       <label>Tanggal Pesan:</label>
       <input type="text" id="tglInput" readonly>
     </div>
@@ -1201,6 +1205,7 @@ document.getElementById('btnBayar').addEventListener('click', () => {
   const nama   = document.getElementById('namaInput').value.trim();
   const wa     = document.getElementById('waInput').value.trim();
   const alamat = document.getElementById('alamatInput').value.trim();
+  const cttn = document.getElementById('cttnInput').value.trim();
   const tgl    = document.getElementById('tglInput').value;
   const total  = document.getElementById('modalTotal').textContent;
   const listEl = document.getElementById('modalOrderList');
@@ -1229,6 +1234,7 @@ document.getElementById('btnBayar').addEventListener('click', () => {
     `Produk   :\n${detailProduk}` +
     `Total    : ${total}\n` +
     `Alamat   : ${alamat}\n` +
+    `Catatan  : ${cttn}\n` +
     `Tanggal  : ${tgl}\n` +
     `--------------------------\n` +
     `Mohon segera dikonfirmasi, terima kasih! ☕`
