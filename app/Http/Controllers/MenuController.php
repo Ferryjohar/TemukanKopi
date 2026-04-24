@@ -109,14 +109,9 @@ class MenuController extends Controller
         return redirect()->route('admin.menu')->with('success', 'Produk berhasil diupdate');
     }
 
-    public function hapus($id)
-    {
-        // Mengubah status produk, bukan menghapusnya secara permanen
-        DB::table('ms_produk')
-            ->where('id_produk', $id)
-            ->update(['status_produk' => 'habis']);
-
-        return redirect()->back()->with('success', 'Produk berhasil dinonaktifkan (Status: Habis).');
+    public function destroy($id) {
+        DB::table('ms_produk')->where('id_produk', $id)->delete();
+        return back()->with('success', 'Produk berhasil dihapus selamanya');
     }
     public function aktifkan($id)
     {
