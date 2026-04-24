@@ -333,7 +333,7 @@ body {
         @else
             <li class="nav-item">
                 <a href="{{ route('admin.dashboard_khusus') }}"
-                   class="nav-link {{ Route::is('admin.dashboard_khusus*') ? 'active' : '' }}">
+                   class="nav-link active {{ Route::is('admin.dashboard_khusus*') ? 'active' : '' }}">
                     Dashboard
                 </a>
             </li>
