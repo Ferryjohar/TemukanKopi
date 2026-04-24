@@ -1052,7 +1052,7 @@ footer {
         {{-- Wadah baru untuk Bintang & Status --}}
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <div class="card-stars" style="margin-bottom: 0;">★★★★★</div>
-            <span style="font-size: 11px; font-weight: 700; color: #2ecc71; text-transform: uppercase; letter-spacing: 0.5px;">
+            <span style="font-size: 11px; font-weight: 700; color: #1f5e3b; text-transform: uppercase; letter-spacing: 0.5px;">
                 ● Tersedia
             </span>
         </div>

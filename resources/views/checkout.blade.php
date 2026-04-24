@@ -375,7 +375,7 @@ body {
 }
 .badge-new {
   position: absolute; top: 10px; left: 10px;
-  background: #20c997; color: #fff;
+  background: #1f5e3b; color: #fff;
   font-size: 10px; font-weight: 700;
   letter-spacing: 1px; text-transform: uppercase;
   padding: 4px 10px; border-radius: 50px;
@@ -523,7 +523,7 @@ body {
 
 .prod-badge {
   position: absolute; top: 10px; left: 10px;
-  background: #20c997; color: #fff;
+  background: #1f5e3b; color: #fff;
   font-size: 9.5px; font-weight: 700;
   letter-spacing: 1px; text-transform: uppercase;
   padding: 3px 10px; border-radius: 50px;
@@ -815,7 +815,7 @@ body {
         <button class="qty-btn" id="minus">−</button>
         <input class="qty-num" id="qty" type="number" value="1" readonly>
         <button class="qty-btn" id="plus">+</button>
-        <span class="stok-info">Status: <strong style="color: #2ecc71;">Tersedia</strong></span>
+        <span class="stok-info">Stock: <strong style="color: #1f5e3b;">Tersedia</strong></span>
       </div>
 
       <div class="subtotal-row">
