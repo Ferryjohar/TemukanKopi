@@ -122,6 +122,4 @@ class AdminController extends Controller
 
         return view('admin.transaksi', compact('transaksi', 'totalTransaksi'));
     }
-
-    
 }

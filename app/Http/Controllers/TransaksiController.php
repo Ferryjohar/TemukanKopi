@@ -17,56 +17,37 @@ class TransaksiController extends Controller
             $totalRaw    = $request->input('total_harga', '0');
             $totalBersih = (int) preg_replace('/[^0-9]/', '', $totalRaw);
 
-            // Cek kolom yang tersedia di tr_pesanan
-            $kolomPesanan = \Illuminate\Support\Facades\Schema::getColumnListing('tr_pesanan');
-
-            $dataPesanan = [
+            // Simpan header pesanan — sesuai struktur tr_pesanan di DB
+            $idPesanan = DB::table('tr_pesanan')->insertGetId([
                 'nama_customer' => $request->nama,
                 'no_wa'         => $request->wa,
                 'alamat'        => $request->alamat,
+                'catatan'       => $request->catatan ?? null,
                 'total_harga'   => $totalBersih,
-                'tanggal_pesan' => $request->tanggal
-                                    ? date('Y-m-d', strtotime($request->tanggal))
-                                    : now()->toDateString(),
+                'tanggal_pesan' => now(),   // kolom bertipe datetime
                 'created_at'    => now(),
                 'updated_at'    => now(),
-            ];
+            ]);
 
-            // Tambahkan catatan hanya jika kolomnya ada
-            if (in_array('catatan', $kolomPesanan)) {
-                $dataPesanan['catatan'] = $request->catatan ?? null;
-            }
-
-            // Simpan header pesanan
-            $idPesanan = DB::table('tr_pesanan')->insertGetId($dataPesanan);
-
-            // Simpan detail produk
+            // Simpan detail produk — kolom qty di DB bernama "jumlah"
             $items = json_decode($request->input('items', '[]'), true);
             if (is_array($items) && count($items) > 0) {
-                $kolomDetail = \Illuminate\Support\Facades\Schema::getColumnListing('tr_detailpesanan');
-                $punyaHarga    = in_array('harga', $kolomDetail);
-                $punyaSubtotal = in_array('subtotal', $kolomDetail);
-
                 foreach ($items as $item) {
-                    // Terima key 'id_produk' ATAU 'id' (kompatibel dua-duanya)
                     $idProduk = (int) ($item['id_produk'] ?? $item['id'] ?? 0);
-                    $qty      = (int) ($item['qty']  ?? 1);
+                    $jumlah   = (int) ($item['qty']   ?? 1);
                     $harga    = (int) ($item['harga'] ?? 0);
 
                     if (!$idProduk) continue;
 
-                    $dataDetail = [
+                    DB::table('tr_detailpesanan')->insert([
                         'id_pesanan' => $idPesanan,
                         'id_produk'  => $idProduk,
-                        'qty'        => $qty,
+                        'jumlah'     => $jumlah,          // ← nama kolom yang benar
+                        'harga'      => $harga,
+                        'subtotal'   => $harga * $jumlah,
                         'created_at' => now(),
                         'updated_at' => now(),
-                    ];
-
-                    if ($punyaHarga)    $dataDetail['harga']    = $harga;
-                    if ($punyaSubtotal) $dataDetail['subtotal'] = $harga * $qty;
-
-                    DB::table('tr_detailpesanan')->insert($dataDetail);
+                    ]);
                 }
             }
 
