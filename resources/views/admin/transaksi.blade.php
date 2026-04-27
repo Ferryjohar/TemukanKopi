@@ -326,19 +326,18 @@ body {
             </div>
 
             {{-- DARI TANGGAL --}}
-            <div class="filter-group">
-                <label>Dari Tanggal</label>
-                <input type="date" name="dari_tanggal" id="dariTanggal"
-                       value="{{ request('dari_tanggal') }}">
-            </div>
+<div class="filter-group">
+    <label>Dari Tanggal</label>
+    <input type="date" name="dari_tanggal" id="dariTanggal"
+           value="{{ request('dari_tanggal', date('Y-m-d')) }}">
+</div>
 
-            {{-- SAMPAI TANGGAL --}}
-            <div class="filter-group">
-                <label>Sampai Tanggal</label>
-                <input type="date" name="sampai_tanggal" id="sampaiTanggal"
-                       value="{{ request('sampai_tanggal') }}">
-            </div>
-
+{{-- SAMPAI TANGGAL --}}
+<div class="filter-group">
+    <label>Sampai Tanggal</label>
+    <input type="date" name="sampai_tanggal" id="sampaiTanggal"
+           value="{{ request('sampai_tanggal', date('Y-m-d')) }}">
+</div>
             <a href="{{ route('admin.transaksi') }}" class="btn-reset">Reset</a>
 
         </div>
@@ -376,7 +375,7 @@ body {
                     Rp {{ number_format($t->total_harga, 0, ',', '.') }}
                 </td>
 
-                <td>{{ date('d-m-Y', strtotime($t->tanggal_pesan)) }}</td>
+                <td>{{ date('m-d-Y', strtotime($t->tanggal_pesan)) }}</td>
 
                 <td>
                     <div style="display: flex; gap: 15px;">

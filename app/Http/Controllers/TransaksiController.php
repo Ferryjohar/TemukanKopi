@@ -24,7 +24,7 @@ class TransaksiController extends Controller
                 'alamat'        => $request->alamat,
                 'catatan'       => $request->catatan ?? null,
                 'total_harga'   => $totalBersih,
-                'tanggal_pesan' => now(),   // kolom bertipe datetime
+                'tanggal_pesan' => now(),
                 'created_at'    => now(),
                 'updated_at'    => now(),
             ]);
@@ -42,7 +42,7 @@ class TransaksiController extends Controller
                     DB::table('tr_detailpesanan')->insert([
                         'id_pesanan' => $idPesanan,
                         'id_produk'  => $idProduk,
-                        'jumlah'     => $jumlah,          // ← nama kolom yang benar
+                        'jumlah'     => $jumlah,
                         'harga'      => $harga,
                         'subtotal'   => $harga * $jumlah,
                         'created_at' => now(),
@@ -72,6 +72,10 @@ class TransaksiController extends Controller
             return redirect()->route('admin.login');
         }
 
+        // Default dari_tanggal & sampai_tanggal = hari ini jika tidak diisi
+        $dariTanggal   = $request->input('dari_tanggal', date('Y-m-d'));
+        $sampaiTanggal = $request->input('sampai_tanggal', date('Y-m-d'));
+
         $query = DB::table('tr_pesanan');
 
         // Filter search nama customer
@@ -79,18 +83,12 @@ class TransaksiController extends Controller
             $query->where('nama_customer', 'like', '%' . $request->search . '%');
         }
 
-        // Filter dari tanggal
-        if ($request->filled('dari_tanggal')) {
-            $query->whereDate('tanggal_pesan', '>=', $request->dari_tanggal);
-        }
+        // Filter tanggal — selalu aktif, default hari ini
+        $query->whereDate('tanggal_pesan', '>=', $dariTanggal);
+        $query->whereDate('tanggal_pesan', '<=', $sampaiTanggal);
 
-        // Filter sampai tanggal
-        if ($request->filled('sampai_tanggal')) {
-            $query->whereDate('tanggal_pesan', '<=', $request->sampai_tanggal);
-        }
-
-        $transaksi = $query->orderBy('tanggal_pesan', 'desc')->get();
-        $totalTransaksi = $transaksi->count();
+        $transaksi      = $query->orderBy('tanggal_pesan', 'desc')->get();
+        $totalTransaksi = DB::table('tr_pesanan')->count(); // total semua transaksi, bukan hasil filter
 
         return view('admin.transaksi', compact('transaksi', 'totalTransaksi'));
     }
