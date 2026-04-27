@@ -8,16 +8,13 @@ class TransaksiController extends Controller
     public function simpan(Request $request)
     {
         try {
-            // Validasi field wajib
             if (!$request->filled('nama') || !$request->filled('wa') || !$request->filled('alamat')) {
                 return response()->json(['success' => false, 'message' => 'Data tidak lengkap.'], 422);
             }
 
-            // Parse total_harga: hilangkan "Rp ", titik pemisah ribuan, spasi
             $totalRaw    = $request->input('total_harga', '0');
             $totalBersih = (int) preg_replace('/[^0-9]/', '', $totalRaw);
 
-            // Simpan header pesanan — sesuai struktur tr_pesanan di DB
             $idPesanan = DB::table('tr_pesanan')->insertGetId([
                 'nama_customer' => $request->nama,
                 'no_wa'         => $request->wa,
@@ -29,7 +26,6 @@ class TransaksiController extends Controller
                 'updated_at'    => now(),
             ]);
 
-            // Simpan detail produk — kolom qty di DB bernama "jumlah"
             $items = json_decode($request->input('items', '[]'), true);
             if (is_array($items) && count($items) > 0) {
                 foreach ($items as $item) {
@@ -66,15 +62,12 @@ class TransaksiController extends Controller
         }
     }
 
+    // ================= INDEX TRANSAKSI =================
     public function index(Request $request)
     {
         if (!session('login')) {
             return redirect()->route('admin.login');
         }
-
-        // Default dari_tanggal & sampai_tanggal = hari ini jika tidak diisi
-        $dariTanggal   = $request->input('dari_tanggal', date('Y-m-d'));
-        $sampaiTanggal = $request->input('sampai_tanggal', date('Y-m-d'));
 
         $query = DB::table('tr_pesanan');
 
@@ -83,12 +76,17 @@ class TransaksiController extends Controller
             $query->where('nama_customer', 'like', '%' . $request->search . '%');
         }
 
-        // Filter tanggal — selalu aktif, default hari ini
-        $query->whereDate('tanggal_pesan', '>=', $dariTanggal);
-        $query->whereDate('tanggal_pesan', '<=', $sampaiTanggal);
+        // Jika BUKAN mode "lihat semua", filter berdasarkan tanggal (default hari ini)
+        if ($request->input('semua') != '1') {
+            $dariTanggal   = $request->input('dari_tanggal', date('Y-m-d'));
+            $sampaiTanggal = $request->input('sampai_tanggal', date('Y-m-d'));
+            $query->whereDate('tanggal_pesan', '>=', $dariTanggal);
+            $query->whereDate('tanggal_pesan', '<=', $sampaiTanggal);
+        }
+        // Jika semua == '1', tidak ada filter tanggal → tampilkan semua
 
         $transaksi      = $query->orderBy('tanggal_pesan', 'desc')->get();
-        $totalTransaksi = DB::table('tr_pesanan')->count(); // total semua transaksi, bukan hasil filter
+        $totalTransaksi = DB::table('tr_pesanan')->count(); // total semua, bukan hasil filter
 
         return view('admin.transaksi', compact('transaksi', 'totalTransaksi'));
     }

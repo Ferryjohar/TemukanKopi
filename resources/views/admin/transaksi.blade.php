@@ -109,7 +109,6 @@ body {
     font-weight: 600;
 }
 
-/* Search wrapper dengan tombol menempel */
 .search-input-wrapper {
     display: flex;
     align-items: center;
@@ -169,6 +168,13 @@ body {
     background: white;
 }
 
+.filter-group input[type="date"]:disabled {
+    background: #f0f0f0;
+    color: #aaa;
+    cursor: not-allowed;
+    border-color: #e0e0e0;
+}
+
 .btn-reset {
     padding: 10px 22px;
     background: #e2e2e2;
@@ -186,6 +192,34 @@ body {
 
 .btn-reset:hover {
     background: #d0d0d0;
+}
+
+/* CHECKBOX LIHAT SEMUA */
+.checkbox-semua {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #f0f7f4;
+    border: 1px solid #b2d8c8;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--primary-green);
+    font-weight: 600;
+    transition: background 0.2s;
+    user-select: none;
+}
+
+.checkbox-semua:hover {
+    background: #d9efe7;
+}
+
+.checkbox-semua input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-green);
+    cursor: pointer;
 }
 
 /* INFO FILTER AKTIF */
@@ -282,7 +316,7 @@ body {
 
     <div class="header-title">
         <h1>Kelola Transaksi</h1>
-        <p>Total {{ $totalTransaksi ?? $transaksi->count() }} Transaksi Terdaftar</p>
+        <p>Total {{ $totalTransaksi }} Transaksi Terdaftar</p>
         <p>Login sebagai: <b>{{ session('nama_admin') }}</b></p>
     </div>
 
@@ -293,28 +327,34 @@ body {
     @endif
 
     {{-- INFO FILTER AKTIF --}}
-    @if(request('search') || request('dari_tanggal') || request('sampai_tanggal'))
-        <div class="filter-active-info">
-            Menampilkan hasil:
+    <div class="filter-active-info">
+        @if(request('semua') == '1')
+            Menampilkan <b>semua</b> transaksi
             @if(request('search'))
-                <b>"{{ request('search') }}"</b>
+                dengan kata kunci <b>"{{ request('search') }}"</b>
             @endif
-            @if(request('dari_tanggal') && request('sampai_tanggal'))
-                &nbsp;| Tanggal: <b>{{ date('d-m-Y', strtotime(request('dari_tanggal'))) }}</b> s/d <b>{{ date('d-m-Y', strtotime(request('sampai_tanggal'))) }}</b>
-            @elseif(request('dari_tanggal'))
-                &nbsp;| Dari: <b>{{ date('d-m-Y', strtotime(request('dari_tanggal'))) }}</b>
-            @elseif(request('sampai_tanggal'))
-                &nbsp;| Sampai: <b>{{ date('d-m-Y', strtotime(request('sampai_tanggal'))) }}</b>
+        @else
+            Menampilkan transaksi
+            @if(request('search'))
+                dengan kata kunci <b>"{{ request('search') }}"</b>
             @endif
-            &mdash; <b>{{ $transaksi->count() }}</b> transaksi ditemukan.
-        </div>
-    @endif
+            | Tanggal:
+            <b>{{ date('d-m-Y', strtotime(request('dari_tanggal', date('Y-m-d')))) }}</b>
+            s/d
+            <b>{{ date('d-m-Y', strtotime(request('sampai_tanggal', date('Y-m-d')))) }}</b>
+        @endif
+        &mdash; <b>{{ $transaksi->count() }}</b> transaksi ditemukan.
+    </div>
 
     {{-- FILTER BAR --}}
     <form action="{{ route('admin.transaksi') }}" method="GET" id="filterForm">
+
+        {{-- Hidden field semua — diisi oleh JS --}}
+        <input type="hidden" name="semua" id="hiddenSemua" value="{{ request('semua', '0') }}">
+
         <div class="filter-bar">
 
-            {{-- SEARCH + TOMBOL CARI --}}
+            {{-- SEARCH --}}
             <div class="filter-group">
                 <label>Cari Pelanggan</label>
                 <div class="search-input-wrapper">
@@ -325,19 +365,29 @@ body {
                 </div>
             </div>
 
-            {{-- DARI TANGGAL --}}
-<div class="filter-group">
-    <label>Dari Tanggal</label>
-    <input type="date" name="dari_tanggal" id="dariTanggal"
-           value="{{ request('dari_tanggal', date('Y-m-d')) }}">
-</div>
+            {{-- DARI TANGGAL — disabled jika mode semua aktif --}}
+            <div class="filter-group">
+                <label>Dari Tanggal</label>
+                <input type="date" name="dari_tanggal" id="dariTanggal"
+                       value="{{ request('dari_tanggal', date('Y-m-d')) }}"
+                       {{ request('semua') == '1' ? 'disabled' : '' }}>
+            </div>
 
-{{-- SAMPAI TANGGAL --}}
-<div class="filter-group">
-    <label>Sampai Tanggal</label>
-    <input type="date" name="sampai_tanggal" id="sampaiTanggal"
-           value="{{ request('sampai_tanggal', date('Y-m-d')) }}">
-</div>
+            {{-- SAMPAI TANGGAL — disabled jika mode semua aktif --}}
+            <div class="filter-group">
+                <label>Sampai Tanggal</label>
+                <input type="date" name="sampai_tanggal" id="sampaiTanggal"
+                       value="{{ request('sampai_tanggal', date('Y-m-d')) }}"
+                       {{ request('semua') == '1' ? 'disabled' : '' }}>
+            </div>
+
+            {{-- CHECKBOX LIHAT SEMUA --}}
+            <label class="checkbox-semua">
+                <input type="checkbox" id="checkSemua"
+                       {{ request('semua') == '1' ? 'checked' : '' }}>
+                Lihat Semua
+            </label>
+
             <a href="{{ route('admin.transaksi') }}" class="btn-reset">Reset</a>
 
         </div>
@@ -394,11 +444,7 @@ body {
             <tr>
                 <td colspan="6" style="text-align: center; padding: 40px; background: white; border-radius: 15px;">
                     <p style="color: #999; margin: 0;">
-                        @if(request('search') || request('dari_tanggal') || request('sampai_tanggal'))
-                            Tidak ada transaksi yang sesuai dengan filter.
-                        @else
-                            Belum ada data transaksi.
-                        @endif
+                        Tidak ada transaksi pada rentang tanggal ini.
                     </p>
                 </td>
             </tr>
@@ -415,13 +461,29 @@ document.addEventListener("DOMContentLoaded", function () {
     const filterForm    = document.getElementById('filterForm');
     const dariTanggal   = document.getElementById('dariTanggal');
     const sampaiTanggal = document.getElementById('sampaiTanggal');
+    const checkSemua    = document.getElementById('checkSemua');
+    const hiddenSemua   = document.getElementById('hiddenSemua');
 
-    // Auto submit langsung saat pilih tanggal
+    // Auto submit saat pilih tanggal (hanya jika bukan mode semua)
     dariTanggal.addEventListener('change', function () {
-        filterForm.submit();
+        if (!checkSemua.checked) filterForm.submit();
     });
 
     sampaiTanggal.addEventListener('change', function () {
+        if (!checkSemua.checked) filterForm.submit();
+    });
+
+    // Toggle checkbox Lihat Semua
+    checkSemua.addEventListener('change', function () {
+        if (this.checked) {
+            hiddenSemua.value      = '1';
+            dariTanggal.disabled   = true;
+            sampaiTanggal.disabled = true;
+        } else {
+            hiddenSemua.value      = '0';
+            dariTanggal.disabled   = false;
+            sampaiTanggal.disabled = false;
+        }
         filterForm.submit();
     });
 
