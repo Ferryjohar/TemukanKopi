@@ -75,268 +75,9 @@ body {
 }
 .nav-links a:hover { color: var(--teks); }
 
-/* ══ KERANJANG ICON ══ */
-.cart-btn {
-  margin-left: 28px;
-  position: relative;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--teks-mid);
-  transition: color .3s;
-}
-.cart-btn:hover { color: var(--teks); }
 
-.cart-btn svg {
-  width: 22px; height: 22px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
 
-.cart-badge {
-  position: absolute;
-  top: 0; right: 0;
-  background: var(--hijau);
-  color: #fff;
-  font-size: 10px; font-weight: 700;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  transform: translate(30%, -30%);
-  opacity: 0;
-  transition: opacity .2s, transform .2s;
-  pointer-events: none;
-}
-.cart-badge.visible {
-  opacity: 1;
-  transform: translate(30%, -30%) scale(1);
-}
 
-/* ══ SIDEBAR KERANJANG ══ */
-.cart-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.35);
-  z-index: 800;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .3s;
-}
-.cart-overlay.open {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.cart-sidebar {
-  position: fixed;
-  top: 0; right: 0;
-  width: 380px;
-  height: 100vh;
-  background: var(--putih);
-  z-index: 900;
-  display: flex;
-  flex-direction: column;
-  transform: translateX(100%);
-  transition: transform .35s cubic-bezier(.23,.88,.34,1.05);
-  box-shadow: -8px 0 40px rgba(0,0,0,0.12);
-}
-.cart-sidebar.open {
-  transform: translateX(0);
-}
-
-.cart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 22px 24px 18px;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-}
-
-.cart-header-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px; font-weight: 900;
-  color: var(--teks);
-  letter-spacing: -.3px;
-}
-
-.cart-close {
-  background: none; border: none;
-  cursor: pointer;
-  color: var(--teks-soft);
-  padding: 4px;
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  transition: color .2s, background .2s;
-}
-.cart-close:hover {
-  color: var(--teks);
-  background: var(--krem);
-}
-.cart-close svg {
-  width: 20px; height: 20px;
-  stroke: currentColor; fill: none;
-  stroke-width: 1.8; stroke-linecap: round;
-}
-
-.cart-items {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px 24px;
-}
-
-/* scrollbar tipis */
-.cart-items::-webkit-scrollbar { width: 4px; }
-.cart-items::-webkit-scrollbar-track { background: transparent; }
-.cart-items::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
-
-.cart-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  gap: 12px;
-  color: var(--teks-soft);
-}
-.cart-empty svg {
-  width: 56px; height: 56px;
-  stroke: var(--teks-soft); fill: none;
-  stroke-width: 1.4; stroke-linecap: round;
-  opacity: .5;
-}
-.cart-empty p { font-size: 14px; }
-
-.cart-item {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  animation: fadeUp .3s both;
-}
-.cart-item:last-child { border-bottom: none; }
-
-.cart-item-img {
-  width: 64px; height: 64px;
-  border-radius: 8px;
-  object-fit: cover;
-  flex-shrink: 0;
-  background: var(--krem);
-}
-
-.cart-item-info { flex: 1; min-width: 0; }
-.cart-item-name {
-  font-size: 13px; font-weight: 600;
-  text-transform: uppercase; letter-spacing: .3px;
-  color: var(--teks);
-  margin-bottom: 3px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.cart-item-cat {
-  font-size: 11px; color: var(--teks-soft);
-  margin-bottom: 8px;
-}
-.cart-item-controls {
-  display: flex; align-items: center; gap: 0;
-}
-.ci-btn {
-  width: 26px; height: 26px;
-  border: 1px solid #ddd;
-  background: var(--krem);
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px; font-weight: 600;
-  color: var(--teks);
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-}
-.ci-btn:hover { background: var(--hijau); color: #fff; border-color: var(--hijau); }
-.ci-qty {
-  width: 32px; height: 26px;
-  text-align: center; font-size: 13px; font-weight: 600;
-  border: 1px solid #ddd; border-left: none; border-right: none;
-  background: var(--putih); color: var(--teks);
-  outline: none;
-}
-
-.cart-item-price {
-  text-align: right;
-  flex-shrink: 0;
-}
-.cart-item-subtotal {
-  font-size: 13px; font-weight: 700; color: var(--teks);
-  margin-bottom: 6px;
-}
-.cart-item-remove {
-  background: none; border: none;
-  cursor: pointer;
-  color: var(--teks-soft);
-  font-size: 11px; font-weight: 500;
-  padding: 0;
-  transition: color .2s;
-}
-.cart-item-remove:hover { color: #e74c3c; }
-
-/* ══ CART FOOTER ══ */
-.cart-footer {
-  padding: 18px 24px 24px;
-  border-top: 1px solid rgba(0,0,0,0.08);
-  background: var(--putih);
-}
-
-.cart-summary-row {
-  display: flex; justify-content: space-between;
-  font-size: 13px; color: var(--teks-mid);
-  margin-bottom: 6px;
-}
-.cart-total-row {
-  display: flex; justify-content: space-between; align-items: center;
-  margin: 14px 0;
-  padding-top: 12px;
-  border-top: 1px solid rgba(0,0,0,0.08);
-}
-.cart-total-label { font-size: 14px; font-weight: 600; color: var(--teks); }
-.cart-total-val { font-size: 20px; font-weight: 800; color: var(--hijau); }
-
-.btn-checkout-cart {
-  width: 100%;
-  background: var(--hijau);
-  color: #fff; border: none;
-  border-radius: 10px; padding: 14px;
-  font-size: 14px; font-weight: 600;
-  cursor: pointer;
-  transition: all .3s;
-  letter-spacing: .3px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.btn-checkout-cart:hover {
-  background: var(--hijau-tua);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(31,94,59,.3);
-}
-.btn-checkout-cart:disabled {
-  background: #ccc; cursor: not-allowed;
-  transform: none; box-shadow: none;
-}
-
-.btn-clear-cart {
-  width: 100%;
-  background: transparent;
-  color: var(--teks-soft);
-  border: none;
-  padding: 10px;
-  font-size: 13px; font-weight: 500;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: color .2s;
-}
-.btn-clear-cart:hover { color: #e74c3c; }
 
 /* ══ PAGE WRAP ══ */
 .page { padding: 52px 80px 80px; max-width: 1200px; margin: 0 auto; }
@@ -349,74 +90,66 @@ body {
   letter-spacing: -.5px;
 }
 
-/* ══ CHECKOUT CARD ══ */
-.checkout-card {
-  display: grid;
-  grid-template-columns: 240px 1fr auto;
-  gap: 36px;
+/* ══ CHECKOUT LIST WRAPPER ══ */
+.checkout-wrapper {
   background: var(--putih);
   border-radius: var(--radius);
-  padding: 28px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
   margin-bottom: 64px;
-  align-items: start;
+  overflow: hidden;
   animation: fadeUp .6s .1s both;
 }
 
-.checkout-img-wrap {
-  position: relative;
+/* ══ CHECKOUT ROW (per produk) ══ */
+.checkout-row {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 20px;
+  align-items: center;
+  padding: 20px 28px;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  transition: background .2s;
+  animation: fadeUp .4s both;
+}
+.checkout-row:last-child { border-bottom: none; }
+.checkout-row:hover { background: rgba(0,0,0,0.01); }
+
+.checkout-row-img {
+  width: 90px; height: 90px;
   border-radius: 10px;
-  overflow: hidden;
-}
-.checkout-img-wrap img {
-  width: 100%; aspect-ratio: 4/5;
-  object-fit: cover; display: block;
-  border-radius: 10px;
-}
-.badge-new {
-  position: absolute; top: 10px; left: 10px;
-  background: #20c997; color: #fff;
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 1px; text-transform: uppercase;
-  padding: 4px 10px; border-radius: 50px;
-}
-
-.checkout-info { padding-top: 4px; }
-.breadcrumb {
-  font-size: 11px; font-weight: 600;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--teks-soft); margin-bottom: 10px;
-}
-.breadcrumb span { margin: 0 6px; }
-
-.product-name {
-  font-size: 28px; font-weight: 700;
-  letter-spacing: .5px; text-transform: uppercase;
-  color: var(--teks); margin-bottom: 6px;
-}
-.product-price-main {
-  font-size: 15px; color: var(--teks-mid); margin-bottom: 22px;
-}
-.product-price-main strong { font-weight: 600; color: var(--teks); }
-
-.desc-label { font-size: 13px; font-weight: 600; color: var(--teks); margin-bottom: 10px; }
-.desc-text { font-size: 13.5px; color: var(--teks-mid); line-height: 1.85; max-width: 440px; }
-
-/* order box */
-.order-box {
+  object-fit: cover;
+  flex-shrink: 0;
   background: var(--krem);
-  border: 1px solid rgba(0,0,0,.09);
-  border-radius: 12px;
-  padding: 24px 28px;
-  min-width: 230px;
 }
-.order-box-title { font-size: 13px; font-weight: 600; color: var(--teks); margin-bottom: 18px; }
-.qty-row {
-  display: flex; align-items: center; gap: 0;
-  margin-bottom: 14px;
+
+.checkout-row-info { flex: 1; min-width: 0; }
+.checkout-row-cat {
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--teks-soft); margin-bottom: 4px;
+}
+.checkout-row-cat span { margin: 0 5px; opacity: .5; }
+.checkout-row-name {
+  font-size: 16px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .4px;
+  color: var(--teks); margin-bottom: 4px;
+}
+.checkout-row-price {
+  font-size: 13px; color: var(--teks-mid);
+}
+.checkout-row-price strong { color: var(--teks); font-weight: 600; }
+
+/* ── Qty & subtotal kanan ── */
+.checkout-row-right {
+  display: flex; flex-direction: column;
+  align-items: flex-end; gap: 10px;
+  min-width: 160px;
+}
+.checkout-qty-row {
+  display: flex; align-items: center;
 }
 .qty-btn {
-  width: 32px; height: 32px;
+  width: 30px; height: 30px;
   border: 1px solid #ccc; background: var(--putih);
   font-size: 16px; font-weight: 600; cursor: pointer;
   border-radius: 6px; transition: all .2s;
@@ -425,29 +158,44 @@ body {
 }
 .qty-btn:hover { background: var(--hijau); color: #fff; border-color: var(--hijau); }
 .qty-num {
-  width: 44px; height: 32px;
+  width: 40px; height: 30px;
   border: 1px solid #ccc; border-left: none; border-right: none;
-  text-align: center; font-size: 14px; font-weight: 600;
+  text-align: center; font-size: 13px; font-weight: 600;
   background: var(--putih); color: var(--teks); outline: none;
 }
-.stok-info { font-size: 12px; color: var(--teks-soft); margin-left: 12px; }
-
-.subtotal-row {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 13px; color: var(--teks-mid); margin-bottom: 16px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(0,0,0,.08);
+.checkout-subtotal-label {
+  font-size: 11px; color: var(--teks-soft);
 }
-.subtotal-row strong { color: var(--teks); font-weight: 700; font-size: 14px; }
+.checkout-subtotal-val {
+  font-size: 15px; font-weight: 700; color: var(--teks);
+}
+.checkout-row-remove {
+  background: none; border: none; cursor: pointer;
+  color: var(--teks-soft); font-size: 11px; font-weight: 500;
+  transition: color .2s; padding: 0;
+}
+.checkout-row-remove:hover { color: #e74c3c; }
 
-/* ── Tombol di order box ── */
+/* ══ CHECKOUT FOOTER BAR ══ */
+.checkout-footer-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 28px;
+  background: var(--krem);
+  border-top: 1px solid rgba(0,0,0,0.09);
+}
+.checkout-total-wrap {}
+.checkout-total-label { font-size: 12px; color: var(--teks-soft); margin-bottom: 2px; }
+.checkout-total-val { font-size: 22px; font-weight: 800; color: var(--hijau); }
+
+.checkout-footer-actions { display: flex; align-items: center; gap: 12px; }
+
 .btn-beli {
-  width: 100%;
   background: var(--hijau); color: #fff;
-  border: none; border-radius: 8px; padding: 12px;
+  border: none; border-radius: 8px; padding: 12px 22px;
   font-size: 13px; font-weight: 600; cursor: pointer;
   transition: all .3s; letter-spacing: .3px;
-  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 7px;
+  white-space: nowrap;
 }
 .btn-beli:hover {
   background: var(--hijau-tua);
@@ -455,28 +203,12 @@ body {
   transform: translateY(-2px);
 }
 
-.btn-keranjang {
-  width: 100%;
-  background: transparent;
-  color: var(--hijau);
-  border: 1.5px solid var(--hijau);
-  border-radius: 8px; padding: 11px;
-  font-size: 13px; font-weight: 600; cursor: pointer;
-  transition: all .3s;
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-}
-.btn-keranjang svg {
-  width: 16px; height: 16px;
-  stroke: currentColor; fill: none;
-  stroke-width: 2; stroke-linecap: round;
-}
-.btn-keranjang:hover {
-  background: rgba(31,94,59,.07);
-}
-.btn-keranjang.added {
-  background: var(--hijau-muda);
-  border-color: var(--hijau);
-  color: var(--hijau-tua);
+/* Toast konfirmasi ditambahkan (muncul di pojok) */
+.checkout-empty-hint {
+  padding: 48px 28px;
+  text-align: center;
+  color: var(--teks-soft);
+  font-size: 14px;
 }
 
 /* ══ PRODUCT SECTION ══ */
@@ -708,10 +440,10 @@ body {
 /* ══ RESPONSIVE ══ */
 @media (max-width: 1024px) {
   .navbar, .page { padding-left: 32px; padding-right: 32px; }
-  .checkout-card { grid-template-columns: 200px 1fr; }
-  .order-box { grid-column: 1/-1; }
+  .checkout-row { grid-template-columns: 70px 1fr auto; padding: 16px 20px; }
   .prod-grid { grid-template-columns: repeat(2,1fr); }
   .cart-sidebar { width: 100%; max-width: 380px; }
+  .checkout-footer-bar { flex-direction: column; gap: 14px; align-items: flex-start; }
 }
 </style>
 </head>
@@ -731,109 +463,68 @@ body {
     <a href="{{ route('welcome') }}#contact">Kontak</a>
     <a href="{{ route('welcome') }}#galeri">Galery</a>
 
-    <!-- TOMBOL KERANJANG -->
-    <button class="cart-btn" id="cartToggle" title="Keranjang Belanja">
-      <svg viewBox="0 0 24 24">
-        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <path d="M16 10a4 4 0 0 1-8 0"/>
-      </svg>
-      <span class="cart-badge" id="cartBadge">0</span>
-    </button>
+
   </div>
 </nav>
 
-<!-- ══ SIDEBAR KERANJANG ══ -->
-<div class="cart-overlay" id="cartOverlay"></div>
-<aside class="cart-sidebar" id="cartSidebar">
-  <div class="cart-header">
-    <div class="cart-header-title">Keranjang Belanja</div>
-    <button class="cart-close" id="cartClose">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
 
-  <div class="cart-items" id="cartItems">
-    <div class="cart-empty" id="cartEmpty">
-      <svg viewBox="0 0 24 24">
-        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <path d="M16 10a4 4 0 0 1-8 0"/>
-      </svg>
-      <p>Keranjang masih kosong</p>
-    </div>
-  </div>
-
-  <div class="cart-footer" id="cartFooter" style="display:none;">
-    <div class="cart-summary-row">
-      <span>Jumlah item</span>
-      <span id="cartItemCount">0 pcs</span>
-    </div>
-    <div class="cart-total-row">
-      <span class="cart-total-label">Total Harga</span>
-      <span class="cart-total-val" id="cartTotalVal">Rp 0</span>
-    </div>
-    <button class="btn-checkout-cart" id="btnCheckoutCart">
-      <svg width="16" height="16" viewBox="0 0 24 24" style="stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.18-1.18a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-      </svg>
-      Pesan via WhatsApp
-    </button>
-    <button class="btn-clear-cart" id="btnClearCart">Kosongkan keranjang</button>
-  </div>
-</aside>
 
 <!-- ══ PAGE ══ -->
 <div class="page">
 
   <h2 class="sec-title">Checkout</h2>
 
-  <div class="checkout-card">
-    @php
-        $id_target = request('id_produk');
-        $item = $produk->firstWhere('id_produk', $id_target) ?? $produk->first();
-    @endphp
+  {{-- ══ CHECKOUT LIST MULTI-PRODUK ══ --}}
+  <div class="checkout-wrapper" id="checkoutWrapper">
 
-    <div class="checkout-img-wrap">
-      <span class="badge-new">{{ $item->nama_kategori == 'Mentah' ? 'RAW BEANS' : 'PREMIUM' }}</span>
-      <img src="{{ $item->foto_produk ? asset('storage/produk/' . $item->foto_produk) : asset('images/default.png') }}"
-           alt="{{ $item->nama_produk }}"
-           onerror="this.src='{{ asset('images/default.png') }}'">
+    {{-- List produk yang dipilih (diisi via JS) --}}
+    <div id="checkoutList">
+      {{-- Produk pertama dari URL param --}}
+      @php
+          $id_target = request('id_produk');
+          $item = $produk->firstWhere('id_produk', $id_target) ?? $produk->first();
+      @endphp
+      <div class="checkout-row"
+           data-id="{{ $item->id_produk }}"
+           data-harga="{{ $item->harga_produk }}">
+        <img class="checkout-row-img"
+             src="{{ $item->foto_produk ? asset('storage/produk/' . $item->foto_produk) : asset('images/default.png') }}"
+             alt="{{ $item->nama_produk }}"
+             onerror="this.src='{{ asset('images/default.png') }}'">
+        <div class="checkout-row-info">
+          <div class="checkout-row-cat">{{ $item->nama_kategori }} <span>|</span> {{ $item->nama_jenis }}</div>
+          <div class="checkout-row-name">{{ $item->nama_produk }}</div>
+          <div class="checkout-row-price"><strong>Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</strong> / pcs</div>
+        </div>
+        <div class="checkout-row-right">
+          <div class="checkout-qty-row">
+            <button class="qty-btn" onclick="changeQtyRow(this, -1)">−</button>
+            <input class="qty-num" type="number" value="1" readonly>
+            <button class="qty-btn" onclick="changeQtyRow(this, 1)">+</button>
+          </div>
+          <div>
+            <div class="checkout-subtotal-label">Subtotal</div>
+            <div class="checkout-subtotal-val">Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</div>
+          </div>
+          <button class="checkout-row-remove" onclick="hapusCheckoutRow(this)">Hapus</button>
+        </div>
+      </div>
     </div>
 
-    <div class="checkout-info">
-      <div class="breadcrumb">{{ $item->nama_kategori }} <span>|</span> {{ $item->nama_jenis }}</div>
-      <div class="product-name">{{ $item->nama_produk }}</div>
-      <div class="product-price-main"><strong>Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</strong> / pcs</div>
-      <div class="desc-label">Deskripsi Produk</div>
-      <p class="desc-text">{{ $item->deskripsi_produk ?? 'Biji kopi pilihan terbaik dari petani lokal Indonesia, diproses dengan standar kualitas tinggi untuk menghasilkan cita rasa yang autentik.' }}</p>
-    </div>
-
-    <div class="order-box">
-      <div class="order-box-title">Atur jumlah dan catatan</div>
-      <div class="qty-row">
-        <button class="qty-btn" id="minus">−</button>
-        <input class="qty-num" id="qty" type="number" value="1" readonly>
-        <button class="qty-btn" id="plus">+</button>
-        <span class="stok-info">Status: <strong style="color: #2ecc71;">Tersedia</strong></span>
+    {{-- Footer total + tombol pesan --}}
+    <div class="checkout-footer-bar">
+      <div class="checkout-total-wrap">
+        <div class="checkout-total-label">Total Keseluruhan</div>
+        <div class="checkout-total-val" id="checkoutGrandTotal">Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</div>
       </div>
-
-      <div class="subtotal-row">
-        <span>Subtotal</span>
-        <strong id="subtotalVal">Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</strong>
+      <div class="checkout-footer-actions">
+        <button class="btn-beli" id="btnBeli">
+          <svg width="16" height="16" viewBox="0 0 24 24" style="stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.18-1.18a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          Pesan Sekarang via WA
+        </button>
       </div>
-
-      @if($item->status_produk == 'tersedia')
-        <button id="btnBeli" class="btn-beli">Beli Sekarang</button>
-        <button id="btnKeranjang" class="btn-keranjang">
-          <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          Tambah ke Keranjang
-        </button>
-      @else
-        <button disabled style="background:#ccc;cursor:not-allowed;width:100%;padding:14px;border-radius:8px;border:none;font-size:13px;font-weight:600;">
-          Stok Habis
-        </button>
-      @endif
     </div>
   </div>
 
@@ -852,7 +543,7 @@ body {
              alt="{{ $p->nama_produk }}"
              onerror="this.src='{{ asset('images/default.png') }}'">
 
-        <!-- Tombol tambah ke keranjang -->
+        <!-- Tombol tambah ke checkout -->
         <button class="card-add-btn"
                 data-id="{{ $p->id_produk }}"
                 data-nama="{{ $p->nama_produk }}"
@@ -860,8 +551,8 @@ body {
                 data-kategori="{{ $p->nama_kategori }}"
                 data-jenis="{{ $p->nama_jenis }}"
                 data-foto="{{ $p->foto_produk ? asset('storage/produk/'.$p->foto_produk) : asset('images/default.png') }}"
-                title="Tambah ke keranjang"
-                onclick="event.preventDefault(); addToCart(this)">
+                title="Tambahkan ke checkout"
+                onclick="event.preventDefault(); addToCheckout(this)">
           <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
       </div>
@@ -932,120 +623,80 @@ body {
 /* ══════════════════════════════════
    STATE PRODUK AKTIF (dari Laravel)
 ══════════════════════════════════ */
-const produkAktif = {
-  id: "{{ $item->id_produk }}",
-  nama: "{{ $item->nama_produk }}",
-  harga: {{ $item->harga_produk }},
+const produkAktifAwal = {
+  id:       "{{ $item->id_produk }}",
+  nama:     "{{ $item->nama_produk }}",
+  harga:    {{ $item->harga_produk }},
   kategori: "{{ $item->nama_kategori }}",
-  jenis: "{{ $item->nama_jenis }}",
-  foto: "{{ $item->foto_produk ? asset('storage/produk/' . $item->foto_produk) : asset('images/default.png') }}"
+  jenis:    "{{ $item->nama_jenis }}",
+  foto:     "{{ $item->foto_produk ? asset('storage/produk/' . $item->foto_produk) : asset('images/default.png') }}"
 };
 
 /* ══════════════════════════════════
-   KERANJANG STATE
+   CHECKOUT LIST STATE
+   Daftar produk yang muncul di bagian Checkout atas
 ══════════════════════════════════ */
-let keranjang = JSON.parse(localStorage.getItem('keranjangKopi') || '[]');
-
-function simpanKeranjang() {
-  localStorage.setItem('keranjangKopi', JSON.stringify(keranjang));
-}
+// Inisialisasi dengan produk pertama dari URL
+let checkoutList = [
+  { ...produkAktifAwal, qty: 1 }
+];
 
 function fmt(n) {
   return 'Rp ' + n.toLocaleString('id-ID');
 }
 
-function hitungTotal() {
-  return keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+/* ── Hitung total checkout ── */
+function hitungCheckoutTotal() {
+  return checkoutList.reduce((sum, i) => sum + i.harga * i.qty, 0);
 }
 
-function hitungTotalQty() {
-  return keranjang.reduce((sum, item) => sum + item.qty, 0);
-}
+/* ── Render ulang checkout list ── */
+function renderCheckoutList() {
+  const container = document.getElementById('checkoutList');
+  const totalEl   = document.getElementById('checkoutGrandTotal');
 
-/* ══════════════════════════════════
-   RENDER KERANJANG
-══════════════════════════════════ */
-function renderKeranjang() {
-  const container = document.getElementById('cartItems');
-  const empty     = document.getElementById('cartEmpty');
-  const footer    = document.getElementById('cartFooter');
-  const badge     = document.getElementById('cartBadge');
-  const totalEl   = document.getElementById('cartTotalVal');
-  const countEl   = document.getElementById('cartItemCount');
+  container.innerHTML = '';
 
-  // Badge
-  const totalQty = hitungTotalQty();
-  badge.textContent = totalQty;
-  badge.classList.toggle('visible', totalQty > 0);
-
-  if (keranjang.length === 0) {
-    empty.style.display = 'flex';
-    footer.style.display = 'none';
-    // hapus semua item kecuali empty
-    Array.from(container.children).forEach(c => { if (c !== empty) c.remove(); });
-    updateCardButtons();
-    return;
+  if (checkoutList.length === 0) {
+    container.innerHTML = `<div class="checkout-empty-hint">
+      Belum ada produk dipilih. Klik tombol <strong>+</strong> pada produk di bawah untuk menambahkan.
+    </div>`;
+  } else {
+    checkoutList.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'checkout-row';
+      div.dataset.idx = idx;
+      div.innerHTML = `
+        <img class="checkout-row-img" src="${item.foto}" alt="${item.nama}"
+             onerror="this.src='{{ asset('images/default.png') }}'">
+        <div class="checkout-row-info">
+          <div class="checkout-row-cat">${item.kategori} <span>|</span> ${item.jenis}</div>
+          <div class="checkout-row-name">${item.nama}</div>
+          <div class="checkout-row-price"><strong>${fmt(item.harga)}</strong> / pcs</div>
+        </div>
+        <div class="checkout-row-right">
+          <div class="checkout-qty-row">
+            <button class="qty-btn" onclick="changeQtyIdx(${idx}, -1)">−</button>
+            <input class="qty-num" type="number" value="${item.qty}" readonly>
+            <button class="qty-btn" onclick="changeQtyIdx(${idx}, 1)">+</button>
+          </div>
+          <div>
+            <div class="checkout-subtotal-label">Subtotal</div>
+            <div class="checkout-subtotal-val">${fmt(item.harga * item.qty)}</div>
+          </div>
+          <button class="checkout-row-remove" onclick="hapusCheckoutIdx(${idx})">Hapus</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
   }
 
-  empty.style.display = 'none';
-  footer.style.display = 'block';
-  totalEl.textContent = fmt(hitungTotal());
-  countEl.textContent = totalQty + ' pcs';
-
-  // Clear lalu rebuild item
-  Array.from(container.children).forEach(c => { if (c !== empty) c.remove(); });
-
-  keranjang.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'cart-item';
-    div.dataset.idx = idx;
-    div.innerHTML = `
-      <img class="cart-item-img" src="${item.foto}" alt="${item.nama}" onerror="this.src='{{ asset('images/default.png') }}'">
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.nama}</div>
-        <div class="cart-item-cat">${item.kategori} | ${item.jenis}</div>
-        <div class="cart-item-controls">
-          <button class="ci-btn" onclick="ubahQtyKeranjang(${idx}, -1)">−</button>
-          <input class="ci-qty" type="number" value="${item.qty}" readonly>
-          <button class="ci-btn" onclick="ubahQtyKeranjang(${idx}, 1)">+</button>
-        </div>
-      </div>
-      <div class="cart-item-price">
-        <div class="cart-item-subtotal">${fmt(item.harga * item.qty)}</div>
-        <button class="cart-item-remove" onclick="hapusItem(${idx})">Hapus</button>
-      </div>
-    `;
-    container.appendChild(div);
-  });
-
+  totalEl.textContent = fmt(hitungCheckoutTotal());
   updateCardButtons();
 }
 
-function updateCardButtons() {
-  const idsInCart = keranjang.map(i => String(i.id));
-  document.querySelectorAll('.card-add-btn').forEach(btn => {
-    const inCart = idsInCart.includes(String(btn.dataset.id));
-    btn.classList.toggle('in-cart', inCart);
-    btn.innerHTML = inCart
-      ? `<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><polyline points="20 6 9 17 4 12"/></svg>`
-      : `<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--hijau);fill:none;stroke-width:2.2;stroke-linecap:round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
-  });
-
-  // Tombol keranjang di order box
-  const btnK = document.getElementById('btnKeranjang');
-  if (btnK) {
-    const ada = idsInCart.includes(String(produkAktif.id));
-    btnK.classList.toggle('added', ada);
-    btnK.innerHTML = ada
-      ? `<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--hijau-tua);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><polyline points="20 6 9 17 4 12"/></svg> Ada di Keranjang`
-      : `<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Tambah ke Keranjang`;
-  }
-}
-
-/* ══════════════════════════════════
-   AKSI KERANJANG
-══════════════════════════════════ */
-function addToCart(el) {
+/* ── Tambah / naikkan qty produk ke checkout list ── */
+function addToCheckout(el) {
   const id      = el.dataset.id;
   const nama    = el.dataset.nama;
   const harga   = parseInt(el.dataset.harga);
@@ -1053,140 +704,90 @@ function addToCart(el) {
   const jenis   = el.dataset.jenis;
   const foto    = el.dataset.foto;
 
-  const idx = keranjang.findIndex(i => String(i.id) === String(id));
+  const idx = checkoutList.findIndex(i => String(i.id) === String(id));
   if (idx >= 0) {
-    keranjang[idx].qty++;
+    checkoutList[idx].qty++;
+    showToast(`${nama} qty ditambahkan (${checkoutList[idx].qty})`);
   } else {
-    keranjang.push({ id, nama, harga, kategori, jenis, foto, qty: 1 });
+    checkoutList.push({ id, nama, harga, kategori, jenis, foto, qty: 1 });
+    showToast(`${nama} ditambahkan ke checkout!`);
   }
-  simpanKeranjang();
-  renderKeranjang();
-  showToast('Ditambahkan ke keranjang!');
+  renderCheckoutList();
+  // Scroll ke checkout list
+  document.getElementById('checkoutWrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function addProdukAktifToCart() {
-  const qty = parseInt(document.getElementById('qty').value) || 1;
-  const idx = keranjang.findIndex(i => String(i.id) === String(produkAktif.id));
-  if (idx >= 0) {
-    keranjang[idx].qty += qty;
-  } else {
-    keranjang.push({ ...produkAktif, qty });
+/* ── Ubah qty di baris checkout ── */
+function changeQtyIdx(idx, delta) {
+  checkoutList[idx].qty += delta;
+  if (checkoutList[idx].qty <= 0) {
+    const nama = checkoutList[idx].nama;
+    checkoutList.splice(idx, 1);
+    showToast(`${nama} dihapus`);
   }
-  simpanKeranjang();
-  renderKeranjang();
-  showToast(`${produkAktif.nama} x${qty} ditambahkan!`);
+  renderCheckoutList();
 }
 
-function ubahQtyKeranjang(idx, delta) {
-  keranjang[idx].qty += delta;
-  if (keranjang[idx].qty <= 0) keranjang.splice(idx, 1);
-  simpanKeranjang();
-  renderKeranjang();
+/* ── Hapus baris checkout ── */
+function hapusCheckoutIdx(idx) {
+  const nama = checkoutList[idx].nama;
+  checkoutList.splice(idx, 1);
+  renderCheckoutList();
+  showToast(`${nama} dihapus`);
 }
 
-function hapusItem(idx) {
-  const nama = keranjang[idx].nama;
-  keranjang.splice(idx, 1);
-  simpanKeranjang();
-  renderKeranjang();
-  showToast(`${nama} dihapus dari keranjang`);
+/* Fungsi lama dari template (dipertahankan untuk referensi tombol lama) */
+function changeQtyRow(btn, delta) {
+  const row  = btn.closest('.checkout-row');
+  const idx  = Array.from(document.getElementById('checkoutList').children).indexOf(row);
+  changeQtyIdx(idx, delta);
+}
+function hapusCheckoutRow(btn) {
+  const row = btn.closest('.checkout-row');
+  const idx = Array.from(document.getElementById('checkoutList').children).indexOf(row);
+  hapusCheckoutIdx(idx);
 }
 
-/* ══════════════════════════════════
-   QTY CONTROL (produk aktif)
-══════════════════════════════════ */
-let qty = 1;
-const stokAktif = 999;
-const qtyEl = document.getElementById('qty');
-const subtotalEl = document.getElementById('subtotalVal');
-
-function updateSubtotal() {
-  subtotalEl.textContent = fmt(produkAktif.harga * qty);
-}
-
-document.getElementById('minus').addEventListener('click', () => {
-  if (qty > 1) { qty--; qtyEl.value = qty; updateSubtotal(); }
-});
-document.getElementById('plus').addEventListener('click', () => {
-  if (qty < stokAktif) { qty++; qtyEl.value = qty; updateSubtotal(); }
-});
-
-/* ══════════════════════════════════
-   SIDEBAR TOGGLE
-══════════════════════════════════ */
-function openCart() {
-  document.getElementById('cartSidebar').classList.add('open');
-  document.getElementById('cartOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeCart() {
-  document.getElementById('cartSidebar').classList.remove('open');
-  document.getElementById('cartOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-document.getElementById('cartToggle').addEventListener('click', openCart);
-document.getElementById('cartClose').addEventListener('click', closeCart);
-document.getElementById('cartOverlay').addEventListener('click', closeCart);
-document.getElementById('btnClearCart').addEventListener('click', () => {
-  if (confirm('Kosongkan semua keranjang?')) {
-    keranjang = [];
-    simpanKeranjang();
-    renderKeranjang();
-  }
-});
-
-/* ══════════════════════════════════
-   TOMBOL TAMBAH KERANJANG (order box)
-══════════════════════════════════ */
-const btnK = document.getElementById('btnKeranjang');
-if (btnK) {
-  btnK.addEventListener('click', addProdukAktifToCart);
+/* ── Update tampilan tombol + di card produk ── */
+function updateCardButtons() {
+  const idsInCheckout = checkoutList.map(i => String(i.id));
+  document.querySelectorAll('.card-add-btn').forEach(btn => {
+    const ada = idsInCheckout.includes(String(btn.dataset.id));
+    btn.classList.toggle('in-cart', ada);
+    btn.innerHTML = ada
+      ? `<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><polyline points="20 6 9 17 4 12"/></svg>`
+      : `<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--hijau);fill:none;stroke-width:2.2;stroke-linecap:round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+  });
 }
 
 /* ══════════════════════════════════
-   MODAL — buka dari order box
+   TOMBOL PESAN SEKARANG
 ══════════════════════════════════ */
 function formatDate(d) {
   return String(d.getDate()).padStart(2,'0') + '/' +
          String(d.getMonth()+1).padStart(2,'0') + '/' +
          d.getFullYear();
 }
+
 document.getElementById('tglInput').value = formatDate(new Date());
 
-// Beli sekarang → modal dengan produk aktif saja
 document.getElementById('btnBeli').addEventListener('click', () => {
-  const total = produkAktif.harga * qty;
-  // Isi ringkasan modal
-  const list = document.getElementById('modalOrderList');
-  list.innerHTML = `
-    <div class="modal-order-item">
-      <span><span class="item-name">${produkAktif.nama}</span> x${qty}</span>
-      <span>${fmt(total)}</span>
-    </div>
-  `;
-  document.getElementById('modalSubtitle').textContent = '1 produk dipilih';
-  document.getElementById('modalTotal').textContent = fmt(total);
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-});
-
-// Checkout dari keranjang → modal dengan semua item keranjang
-document.getElementById('btnCheckoutCart').addEventListener('click', () => {
-  if (keranjang.length === 0) return;
-  const total = hitungTotal();
+  if (checkoutList.length === 0) {
+    showToast('Belum ada produk dipilih!');
+    return;
+  }
+  const total = hitungCheckoutTotal();
   const list  = document.getElementById('modalOrderList');
-  list.innerHTML = keranjang.map(i => `
+  list.innerHTML = checkoutList.map(i => `
     <div class="modal-order-item">
       <span><span class="item-name">${i.nama}</span> x${i.qty}</span>
       <span>${fmt(i.harga * i.qty)}</span>
     </div>
   `).join('');
-  document.getElementById('modalSubtitle').textContent = hitungTotalQty() + ' produk dipilih';
+  document.getElementById('modalSubtitle').textContent = checkoutList.length + ' produk dipilih';
   document.getElementById('modalTotal').textContent = fmt(total);
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
-  closeCart();
 });
 
 document.getElementById('btnKembali').addEventListener('click', closeModal);
@@ -1199,7 +800,7 @@ function closeModal() {
 }
 
 /* ══════════════════════════════════
-   BAYAR VIA WHATSAPP + SIMPAN KE DB
+   BAYAR VIA WHATSAPP + SIMPAN DB
 ══════════════════════════════════ */
 document.getElementById('btnBayar').addEventListener('click', async () => {
   const nama   = document.getElementById('namaInput').value.trim();
@@ -1215,7 +816,6 @@ document.getElementById('btnBayar').addEventListener('click', async () => {
     return;
   }
 
-  // Buat daftar produk untuk WA
   let detailProduk = '';
   const items = listEl.querySelectorAll('.modal-order-item');
   items.forEach(el => {
@@ -1224,31 +824,17 @@ document.getElementById('btnBayar').addEventListener('click', async () => {
     detailProduk += `  - ${name} ${parts}\n`;
   });
 
-  // Tentukan sumber item: keranjang (multi) atau produk aktif (single)
-  let itemsToSave = [];
-  if (keranjang && keranjang.length > 0) {
-    itemsToSave = keranjang.map(i => ({
-      id_produk: i.id,
-      qty:       i.qty,
-      harga:     i.harga,
-    }));
-  } else {
-    const qtyVal = parseInt(document.getElementById('qty')?.value || '1');
-    itemsToSave = [{
-      id_produk: produkAktif.id,
-      qty:       qtyVal,
-      harga:     produkAktif.harga,
-    }];
-  }
+  // Gunakan checkoutList atau keranjang (tergantung modal mana yang dibuka)
+  let itemsToSave = checkoutList.map(i => ({
+    id_produk: i.id,
+    qty:       i.qty,
+    harga:     i.harga,
+  }));
 
-  // ── Simpan ke database ──
   const btnBayar = document.getElementById('btnBayar');
   const originalText = btnBayar.innerHTML;
   btnBayar.disabled = true;
   btnBayar.innerHTML = '<span>Menyimpan pesanan...</span>';
-
-  let dbBerhasil = false;
-  let pesanError = '';
 
   try {
     const formData = new FormData();
@@ -1265,34 +851,19 @@ document.getElementById('btnBayar').addEventListener('click', async () => {
       method: 'POST',
       body:   formData,
     });
-
-    // Coba parse JSON — meski status error tetap coba baca pesannya
     let result = {};
     try { result = await resp.json(); } catch(_) {}
-
     if (resp.ok && result.success) {
-      dbBerhasil = true;
-      // Kosongkan keranjang setelah berhasil simpan
-      keranjang = [];
-      simpanKeranjang();
-      renderKeranjang();
-    } else {
-      pesanError = result.message || `Server error (${resp.status})`;
+      checkoutList = [];
+      renderCheckoutList();
     }
   } catch (err) {
-    pesanError = err.message || 'Tidak dapat terhubung ke server.';
+    console.warn('DB error:', err);
   }
 
   btnBayar.disabled = false;
   btnBayar.innerHTML = originalText;
 
-  // Kalau DB gagal → info user tapi TETAP lanjut ke WA
-  if (!dbBerhasil) {
-    console.warn('Gagal simpan ke DB:', pesanError);
-    // Pesanan tetap diteruskan ke WA, data tidak hilang
-  }
-
-  // ── Buka WhatsApp ──
   const waNumber = '6285850524186';
   const pesan = encodeURIComponent(
     `Halo Temukan Kopi! 🌿\n\n` +
@@ -1308,7 +879,6 @@ document.getElementById('btnBayar').addEventListener('click', async () => {
     `--------------------------\n` +
     `Mohon segera dikonfirmasi, terima kasih! ☕`
   );
-
   window.open(`https://wa.me/${waNumber}?text=${pesan}`, '_blank');
   closeModal();
 });
@@ -1328,8 +898,7 @@ function showToast(msg) {
 /* ══════════════════════════════════
    INIT
 ══════════════════════════════════ */
-renderKeranjang();
-updateSubtotal();
+renderCheckoutList();
 </script>
 </body>
 </html>
