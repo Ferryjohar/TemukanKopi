@@ -14,7 +14,7 @@ class HomeController extends Controller
             ->join('ms_kategori', 'ms_produk.id_kategori', '=', 'ms_kategori.id_kategori')
             ->join('ms_jeniskopi', 'ms_produk.id_jeniskopi', '=', 'ms_jeniskopi.id_jeniskopi')
             ->select('ms_produk.*', 'ms_kategori.nama_kategori', 'ms_jeniskopi.nama_jenis')
-            ->where('ms_produk.status_produk', '=', 'tersedia') // Tambahan Filter
+            ->where('ms_produk.status_produk', '=', 'tersedia')
             ->get();
 
         return view('welcome', compact('produk'));
