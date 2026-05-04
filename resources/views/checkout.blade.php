@@ -438,12 +438,76 @@ body {
 }
 
 /* ══ RESPONSIVE ══ */
-@media (max-width: 1024px) {
-  .navbar, .page { padding-left: 32px; padding-right: 32px; }
-  .checkout-row { grid-template-columns: 70px 1fr auto; padding: 16px 20px; }
-  .prod-grid { grid-template-columns: repeat(2,1fr); }
-  .cart-sidebar { width: 100%; max-width: 380px; }
-  .checkout-footer-bar { flex-direction: column; gap: 14px; align-items: flex-start; }
+/* ════════════════════════════════════
+   CHECKOUT RESPONSIVE STRATEGY
+════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* 1. Navbar & Page Padding */
+  .navbar { padding: 15px 20px; }
+  .nav-links { display: none; } /* Sembunyikan menu di HP */
+  .page { padding: 30px 15px; }
+  .sec-title { font-size: 28px; margin-bottom: 20px; }
+
+  /* 2. Checkout Row (Tampilan Produk) */
+  .checkout-row {
+    grid-template-columns: 80px 1fr; /* Hilangkan kolom ketiga (tombol kanan) */
+    gap: 15px;
+    padding: 15px;
+  }
+
+  /* Pindahkan Qty & Subtotal ke bawah Info Produk */
+  .checkout-row-right {
+    grid-column: 1 / -1; /* Melebar memenuhi baris baru */
+    flex-direction: row; /* Berjejer ke samping */
+    justify-content: space-between;
+    align-items: center;
+    background: var(--krem);
+    padding: 10px;
+    border-radius: 8px;
+    min-width: 100%;
+    margin-top: 5px;
+  }
+
+  .checkout-row-img { width: 80px; height: 80px; }
+  .checkout-row-name { font-size: 14px; }
+
+  /* 3. Footer Bar (Total & Tombol) */
+  .checkout-footer-bar {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    gap: 15px;
+  }
+  
+  .checkout-total-val { font-size: 20px; }
+  .checkout-footer-actions { width: 100%; }
+  .btn-beli { width: 100%; justify-content: center; padding: 15px; }
+
+  /* 4. Product Grid (Daftar Produk di bawah) */
+  .prod-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 kolom di HP */
+    gap: 12px;
+  }
+  .prod-name { font-size: 12px; }
+  .prod-price { font-size: 12px; }
+
+  /* 5. Modal Pemesanan */
+  .modal {
+    padding: 30px 20px;
+    width: 95%;
+    margin: 10px;
+  }
+  .modal-title { font-size: 22px; }
+  .total-box { padding: 10px 15px; }
+  .total-value { font-size: 18px; }
+}
+
+@media (max-width: 480px) {
+  /* Tampilan super kecil (HP Portrait) */
+  .prod-grid { grid-template-columns: 1fr; } /* Jadi 1 kolom saja */
+  .checkout-row-right { flex-direction: column; align-items: flex-start; gap: 15px; }
+  .checkout-row-remove { align-self: flex-end; margin-top: -30px; }
 }
 </style>
 </head>

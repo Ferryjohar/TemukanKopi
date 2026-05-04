@@ -1002,19 +1002,99 @@ footer {
 }
 
 /* ════════════════════════════════════
-   RESPONSIVE (basic)
+   RESPONSIVE OPTIMIZATION
 ════════════════════════════════════ */
+
+/* Tablet & Mobile Dasar */
 @media (max-width: 1100px) {
   .navbar, section, footer { padding-left: 40px; padding-right: 40px; }
-  .hero   { padding: 80px 40px; }
-  .hero h1 { font-size: 56px; }
-  .hero-img-wrap img { width: 300px; }
-  .produk-grid, .alasan, .testimoni-grid { grid-template-columns: repeat(2,1fr); }
-  .tips-grid { grid-template-columns: repeat(3,1fr); }
+  .hero { padding: 80px 40px; flex-direction: column; text-align: center; gap: 50px; }
+  .hero-left { order: 2; }
+  .hero-img-wrap { order: 1; }
+  .hero h1 { font-size: 52px; }
+  .hero-img-wrap img { width: 100%; max-width: 450px; }
+  .hero-stats { justify-content: center; }
+  .produk-grid, .alasan, .testimoni-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
-  .about { grid-template-columns: 1fr; }
-  .pengiriman { grid-template-columns: 1fr; }
-  .contact-grid { grid-template-columns: repeat(2,1fr); }
+}
+
+/* Khusus Smartphone (Layar Kecil) */
+@media (max-width: 768px) {
+
+  /* Navbar */
+  .navbar { padding: 15px 20px; }
+  .nav-links { display: none; } /* Sembunyikan menu teks di HP */
+  
+  /* Hero */
+  .hero h1 { font-size: 42px; }
+  .hero p { margin-left: auto; margin-right: auto; }
+  .hero-btns { flex-direction: column; width: 100%; }
+  .btn { width: 100%; text-align: center; }
+  
+  /* Sections */
+  section { padding: 60px 20px; }
+  .section-title { font-size: 32px; }
+  .bg-title, .bg-title1 { font-size: 80px; top: 10px; }
+  
+  /* Grids */
+  .produk-grid, .alasan, .testimoni-grid, .tips-grid, .contact-grid { 
+    grid-template-columns: 1fr; 
+  }
+  
+  /* About */
+  .about { grid-template-columns: 1fr; gap: 40px; }
+  .about-img-wrap img { height: 300px; }
+  .about-checklist { grid-template-columns: 1fr; }
+
+  /* Gallery */
+  .galeri-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .g-item:first-child { grid-row: auto; }
+  .g-item { height: 250px; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+  .footer-brand > p { margin-left: auto; margin-right: auto; }
+  .footer-social-icons { justify-content: center; }
+   /* Memastikan container pengiriman menumpuk vertikal */
+ .pengiriman {
+    grid-template-columns: 1fr !important; /* Wajib satu kolom di HP */
+    margin: 0 auto;
+    width: 100%;
+    overflow: hidden; /* Agar sudut border-radius tetap rapi */
+  }
+
+  /* 2. Atur tinggi gambar agar tidak gepeng atau terlalu panjang */
+  .pengiriman-img {
+    height: 250px !important;
+    min-height: 250px !important;
+  }
+
+  .pengiriman-img img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover; /* Biar gambar tetap proporsional */
+  }
+
+  /* 3. Beri ruang bernapas untuk teks di bawah gambar */
+  .pengiriman-content {
+    padding: 30px 20px !important;
+    width: 100% !important;
+  }
+
+  /* 4. Kecilkan ukuran judul agar tidak terpotong (word-wrap) */
+  .pengiriman-content .section-title {
+    font-size: 24px !important; /* Ukuran lebih pas untuk HP */
+    line-height: 1.3;
+    word-wrap: break-word; /* Memastikan kata yang panjang tidak keluar jalur */
+  }
+
+  /* 5. Pastikan padding section utama tidak terlalu lebar di kiri-kanan */
+  .pengiriman-section {
+    padding: 40px 15px !important;
+  }
 }
 
 /* pemanis */
