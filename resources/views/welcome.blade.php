@@ -994,15 +994,12 @@ footer {
   transform: translateY(36px);
   transition: opacity .6s ease, transform .6s ease;
 }
-.stagger.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:.0s; }
-.stagger.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:.11s; }
-.stagger.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:.22s; }
-.stagger.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:.33s; }
-.stagger.visible > *:nth-child(5) { opacity:1; transform:none; transition-delay:.44s; }
-.stagger.visible > *:nth-child(6) { opacity:1; transform:none; transition-delay:.55s; }
-.stagger.visible > *:nth-child(7) { opacity:1; transform:none; transition-delay:.66s; }
-.stagger.visible > *:nth-child(8) { opacity:1; transform:none; transition-delay:.77s; }
-.stagger.visible > *:nth-child(9) { opacity:1; transform:none; transition-delay:.88s; }
+.stagger.visible > * {
+  opacity: 1;
+  transform: none;
+  /* Semua elemen akan muncul bersamaan setelah delay 0.1s */
+  transition-delay: .1s; 
+}
 
 /* ════════════════════════════════════
    RESPONSIVE (basic)
@@ -1163,7 +1160,7 @@ footer {
         {{-- Wadah baru untuk Bintang & Status --}}
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <div class="card-stars" style="margin-bottom: 0;">★★★★★</div>
-            <span style="font-size: 11px; font-weight: 700; color: #2ecc71; text-transform: uppercase; letter-spacing: 0.5px;">
+            <span style="font-size: 11px; font-weight: 700; color: #1f5e3b; text-transform: uppercase; letter-spacing: 0.5px;">
                 ● Tersedia
             </span>
         </div>

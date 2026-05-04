@@ -255,7 +255,7 @@ body {
 
 .prod-badge {
   position: absolute; top: 10px; left: 10px;
-  background: #20c997; color: #fff;
+  background: #1f5e3b; color: #fff;
   font-size: 9.5px; font-weight: 700;
   letter-spacing: 1px; text-transform: uppercase;
   padding: 3px 10px; border-radius: 50px;
