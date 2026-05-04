@@ -999,6 +999,10 @@ footer {
 .stagger.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:.22s; }
 .stagger.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:.33s; }
 .stagger.visible > *:nth-child(5) { opacity:1; transform:none; transition-delay:.44s; }
+.stagger.visible > *:nth-child(6) { opacity:1; transform:none; transition-delay:.55s; }
+.stagger.visible > *:nth-child(7) { opacity:1; transform:none; transition-delay:.66s; }
+.stagger.visible > *:nth-child(8) { opacity:1; transform:none; transition-delay:.77s; }
+.stagger.visible > *:nth-child(9) { opacity:1; transform:none; transition-delay:.88s; }
 
 /* ════════════════════════════════════
    RESPONSIVE (basic)
@@ -1015,6 +1019,28 @@ footer {
   .pengiriman { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: repeat(2,1fr); }
 }
+
+/* pemanis */
+/* Style dasar untuk produk yang disembunyikan */
+.hidden-product {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-20px); /* Slide dari atas ke bawah */
+    overflow: hidden;
+    transition: all 0.4s ease-in-out; /* Durasi slide yang simpel */
+    pointer-events: none;
+    margin-top: 0 !important;
+}
+
+/* Style saat ditampilkan (Slide Down) */
+.hidden-product.show-active {
+    max-height: 600px; /* Beri ruang yang cukup untuk satu baris kartu */
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    margin-top: 20px !important; /* Jarak antar baris */
+}
+
 </style>
 </head>
 <body>
@@ -1108,7 +1134,8 @@ footer {
 
   <div class="produk-grid stagger">
     @forelse($produk as $p)
-    <a class="card" href="{{ url('/checkout?id_produk='.$p->id_produk) }}">
+    <a class="card {{ $loop->index > 3 ? 'hidden-product' : '' }}" 
+       href="{{ url('/checkout?id_produk='.$p->id_produk) }}">
       
       {{-- Badge otomatis: Jika produk baru atau premium --}}
       {{-- Kita tidak lagi pakai stok_produk < 10 --}}
@@ -1164,7 +1191,8 @@ footer {
   </div>
 
   <div class="produk-cta reveal" style="margin-top: 60px;">
-    <a class="btn" href="#">LIHAT SEMUA MENU</a>
+      {{-- Tambahkan ID pada tombol agar bisa dikontrol JS --}}
+      <a class="btn" id="btnToggleProduk" href="javascript:void(0)">LIHAT SEMUA MENU</a>
   </div>
 </section>
 
@@ -1525,6 +1553,38 @@ function showToast(msg) {
 function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
 document.getElementById('btnKembali').addEventListener('click', closeModal);
 document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === document.getElementById('modalOverlay')) closeModal(); });
+
+//biar bisa nambah tombol
+document.getElementById('btnToggleProduk').addEventListener('click', function() {
+    const hiddenProducts = document.querySelectorAll('.hidden-product');
+    const isShowingAll = this.getAttribute('data-status') === 'open';
+
+    if (!isShowingAll) {
+        // ACTION: SLIDE DOWN
+        hiddenProducts.forEach((product, index) => {
+            setTimeout(() => {
+                product.classList.add('show-active');
+            }, index * 80); // Jeda singkat tiap kartu agar gesernya cantik
+        });
+        
+        this.textContent = 'LIHAT LEBIH SEDIKIT';
+        this.setAttribute('data-status', 'open');
+    } else {
+        // ACTION: SLIDE UP
+        // Sembunyikan secara bersamaan agar terlihat cepat dan bersih
+        hiddenProducts.forEach(product => {
+            product.classList.remove('show-active');
+        });
+
+        this.textContent = 'LIHAT SEMUA MENU';
+        this.setAttribute('data-status', 'closed');
+        
+        // Kembali ke posisi awal section produk
+        setTimeout(() => {
+            document.getElementById('Produk').scrollIntoView({ behavior: 'smooth' });
+        }, 200);
+    }
+});
 </script>
 
 </body>
