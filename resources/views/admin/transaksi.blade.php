@@ -131,7 +131,7 @@ body {
     font-size: 14px;
     font-family: 'Segoe UI', sans-serif;
     background: transparent;
-    width: 200px;
+    width: 250px; /* <-- Gunakan ukuran pasti agar kotak tidak memanjang berlebihan */
 }
 
 .btn-search {
@@ -279,10 +279,108 @@ body {
     font-size: 14px;
     color: #555;
 }
+
+/* ════════════════════════════════════
+   RESPONSIVE DESIGN (MOBILE & TABLET)
+════════════════════════════════════ */
+
+.mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 1024px) {
+    .sidebar { width: 240px; }
+    .main-content { margin-left: 240px; padding: 40px; }
+}
+
+@media (max-width: 768px) {
+    .mobile-toggle { display: block; }
+
+    .sidebar {
+        left: -280px;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 15px rgba(0,0,0,0.2);
+    }
+    .sidebar.active { left: 0; }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+        padding-top: 80px;
+    }
+
+    /* Penyesuaian Filter Bar di HP */
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .search-input-wrapper { width: 100%; }
+    .search-input-wrapper input[type="text"] { width: 100%; }
+    .btn-search { width: auto; }
+    
+    .checkbox-semua { justify-content: center; }
+    .btn-reset { text-align: center; justify-content: center; }
+
+    /* PERBAIKAN TABEL CARD MODE */
+    .data-table thead { display: none; }
+    .data-table, .data-table tbody, .data-table tr { 
+        display: block; 
+        width: 100%; 
+    }
+
+    .data-table tr {
+        margin-bottom: 20px;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+        background: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .data-table td {
+        display: flex !important;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 15px !important;
+        border-bottom: 1px solid #f1f1f1;
+        text-align: right;
+    }
+
+    /* Label Data di sebelah kiri */
+    .data-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--primary-green);
+        margin-right: auto;
+        text-align: left;
+    }
+
+    .data-table td:last-child { border-bottom: none; }
+    
+    /* Perbaiki teks alamat agar rata kanan di HP */
+    .address-text { text-align: right; }
+}
 </style>
 </head>
 
 <body>
+
+<!-- Tombol Toggle Mobile -->
+<button class="mobile-toggle" onclick="toggleSidebar()">☰ Menu</button>
 
 <div class="sidebar">
     <div class="logo-text">temukan kopi.</div>
@@ -365,7 +463,7 @@ body {
                 </div>
             </div>
 
-            {{-- DARI TANGGAL — disabled jika mode semua aktif --}}
+            {{-- DARI TANGGAL --}}
             <div class="filter-group">
                 <label>Dari Tanggal</label>
                 <input type="date" name="dari_tanggal" id="dariTanggal"
@@ -373,7 +471,7 @@ body {
                        {{ request('semua') == '1' ? 'disabled' : '' }}>
             </div>
 
-            {{-- SAMPAI TANGGAL — disabled jika mode semua aktif --}}
+            {{-- SAMPAI TANGGAL --}}
             <div class="filter-group">
                 <label>Sampai Tanggal</label>
                 <input type="date" name="sampai_tanggal" id="sampaiTanggal"
@@ -408,26 +506,28 @@ body {
         <tbody>
             @forelse($transaksi as $t)
             <tr class="row-shadow">
-                <td style="display:flex; align-items:center;">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($t->nama_customer) }}&background=004d32&color=fff&bold=true" class="avatar">
-                    <span style="font-weight: 600;">{{ $t->nama_customer }}</span>
+                <td data-label="Pelanggan">
+                    <div style="display:flex; align-items:center;">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($t->nama_customer) }}&background=004d32&color=fff&bold=true" class="avatar">
+                        <span style="font-weight: 600;">{{ $t->nama_customer }}</span>
+                    </div>
                 </td>
 
-                <td>{{ $t->no_wa }}</td>
+                <td data-label="No WhatsApp">{{ $t->no_wa }}</td>
 
-                <td>
+                <td data-label="Alamat">
                     <div class="address-text" title="{{ $t->alamat }}">
                         {{ $t->alamat }}
                     </div>
                 </td>
 
-                <td style="font-weight: bold; color: var(--primary-green);">
+                <td data-label="Total Harga" style="font-weight: bold; color: var(--primary-green);">
                     Rp {{ number_format($t->total_harga, 0, ',', '.') }}
                 </td>
 
-                <td>{{ date('m-d-Y', strtotime($t->tanggal_pesan)) }}</td>
+                <td data-label="Tanggal">{{ date('m-d-Y', strtotime($t->tanggal_pesan)) }}</td>
 
-                <td>
+                <td data-label="Aksi">
                     <div style="display: flex; gap: 15px;">
                         <a href="{{ route('admin.transaksi.detail', $t->id_pesanan) }}"
                            class="action-link" style="color: #007bff;">Detail</a>
@@ -456,6 +556,20 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+// Toggle Sidebar Responsif
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('active');
+}
+
+// Tutup sidebar saat klik di area luar sidebar
+document.addEventListener('click', function(event) {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleBtn = document.querySelector('.mobile-toggle');
+    if (sidebar.classList.contains('active') && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+        sidebar.classList.remove('active');
+    }
+});
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const filterForm    = document.getElementById('filterForm');

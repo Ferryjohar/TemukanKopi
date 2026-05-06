@@ -163,7 +163,7 @@ body {
 
 /* PRINT OPTIMIZATION */
 @media print {
-    .sidebar, .btn-back, .btn-print-trigger {
+    .sidebar, .btn-back, .btn-print-trigger, .mobile-toggle {
         display: none !important;
     }
     .main-content {
@@ -183,10 +183,105 @@ body {
         border-bottom: 1px solid #eee !important;
     }
 }
+
+/* ════════════════════════════════════
+   RESPONSIVE DESIGN (MOBILE & TABLET)
+════════════════════════════════════ */
+
+.mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 1024px) {
+    .sidebar { width: 240px; }
+    .main-content { margin-left: 240px; padding: 40px; }
+}
+
+@media (max-width: 768px) {
+    .mobile-toggle { display: block; }
+
+    .sidebar {
+        left: -280px;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 15px rgba(0,0,0,0.2);
+    }
+    .sidebar.active { left: 0; }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+        padding-top: 80px;
+    }
+
+    /* Info Card & Buttons Adjustment */
+    .btn-print-trigger {
+        float: none;
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .info-card {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* PERBAIKAN TABEL CARD MODE */
+    .data-table thead { display: none; }
+    .data-table, .data-table tbody, .data-table tr { 
+        display: block; 
+        width: 100%; 
+    }
+
+    .data-table tr {
+        margin-bottom: 20px;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+        background: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .data-table td {
+        display: flex !important;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 15px !important;
+        border-bottom: 1px solid #f1f1f1;
+        text-align: right;
+    }
+
+    /* Label Data di sebelah kiri */
+    .data-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--primary-green);
+        margin-right: auto;
+        text-align: left;
+    }
+
+    .data-table td:last-child { border-bottom: none; }
+}
 </style>
 </head>
 
 <body>
+
+<!-- Tombol Toggle Mobile -->
+<button class="mobile-toggle" onclick="toggleSidebar()">☰ Menu</button>
 
 <div class="sidebar">
     <div class="logo-text">temukan kopi.</div>
@@ -276,10 +371,10 @@ body {
         <tbody>
             @foreach($details as $d)
             <tr class="row-shadow">
-                <td><b style="color: var(--primary-green);">{{ $d->nama_produk }}</b></td>
-                <td>Rp {{ number_format($d->harga, 0, ',', '.') }}</td>
-                <td>{{ $d->jumlah }}</td>
-                <td><b>Rp {{ number_format($d->subtotal, 0, ',', '.') }}</b></td>
+                <td data-label="Nama Produk"><b style="color: var(--primary-green);">{{ $d->nama_produk }}</b></td>
+                <td data-label="Harga Satuan">Rp {{ number_format($d->harga, 0, ',', '.') }}</td>
+                <td data-label="Jumlah">{{ $d->jumlah }}</td>
+                <td data-label="Subtotal"><b>Rp {{ number_format($d->subtotal, 0, ',', '.') }}</b></td>
             </tr>
             @endforeach
         </tbody>
@@ -293,6 +388,21 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    // Fungsi Toggle Sidebar Mobile
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('active');
+    }
+
+    // Menutup sidebar ketika klik di luar area sidebar
+    document.addEventListener('click', function(event) {
+        const sidebar = document.querySelector('.sidebar');
+        const toggleBtn = document.querySelector('.mobile-toggle');
+        
+        if (sidebar.classList.contains('active') && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+            sidebar.classList.remove('active');
+        }
+    });
+
     // SweetAlert Logout
     document.querySelectorAll('.logout-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {

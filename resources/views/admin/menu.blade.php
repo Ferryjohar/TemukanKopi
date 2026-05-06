@@ -133,8 +133,8 @@
             object-fit: cover;
         }
 
-        .badge-active { background-color: #76e09e; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; }
-        .badge-inactive { background-color: #ffb3b3; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+        .badge-active { background-color: #76e09e; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; display: inline-block; }
+        .badge-inactive { background-color: #ffb3b3; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; display: inline-block; }
 
         .action-link { text-decoration: none; font-weight: bold; cursor: pointer; font-size: 14px; border: none; background: none; }
 
@@ -178,9 +178,105 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border: 1px solid #eee;
         }
+
+        /* ════════════════════════════════════
+           RESPONSIVE DESIGN
+        ════════════════════════════════════ */
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar { width: 240px; }
+            .main-content { margin-left: 240px; padding: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle { display: block; }
+
+            .sidebar {
+                left: -280px;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 15px rgba(0,0,0,0.2);
+            }
+            .sidebar.active { left: 0; }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+                padding-top: 80px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            .search-wrapper { width: 100%; }
+            .btn-add { width: 100%; text-align: center; }
+
+            /* PERBAIKAN TABEL CARD MODE */
+            .data-table thead { display: none; }
+            .data-table, .data-table tbody, .data-table tr { 
+                display: block; 
+                width: 100%; 
+            }
+
+            .data-table tr {
+                margin-bottom: 20px;
+                border-radius: 15px;
+                overflow: hidden;
+                border: 1px solid #ddd;
+                background: white;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            }
+
+            .data-table td {
+                display: flex !important;
+                justify-content: flex-end;
+                align-items: center;
+                padding: 15px !important;
+                border-bottom: 1px solid #f1f1f1;
+                text-align: right;
+            }
+
+            .data-table td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: var(--primary-green);
+                margin-right: auto;
+                text-align: left;
+            }
+
+            .data-table td:last-child { border-bottom: none; }
+            
+            /* Penyesuaian Modal */
+            .modal-box { padding: 25px 20px; }
+            .form-group[style*="flex:1"] { flex: unset; width: 100%; } /* Atur lebar penuh di modal HP */
+            .modal-box > form > div[style*="display:flex; gap:15px;"] {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
     </style>
 </head>
 <body>
+
+<!-- Tombol Toggle Mobile -->
+<button class="mobile-toggle" onclick="toggleSidebar()">☰ Menu</button>
 
 <div class="sidebar">
     <div class="logo-text">temukan kopi.</div>
@@ -233,19 +329,21 @@
             @foreach($produk as $item)
             <tr class="row-shadow" 
                 style="{{ $item->status_produk == 'habis' ? 'opacity: 0.6; filter: grayscale(1); transition: 0.3s;' : '' }}">
-                <td style="display:flex; align-items:center;">
-                    <img src="{{ asset('storage/produk/'.$item->foto_produk) }}" class="prod-img" onerror="this.src='{{ asset('images/default.png') }}'">
-                    <b>{{ $item->nama_produk }}</b>
+                <td data-label="Produk">
+                    <div style="display: flex; align-items: center;">
+                        <img src="{{ asset('storage/produk/'.$item->foto_produk) }}" class="prod-img" onerror="this.src='{{ asset('images/default.png') }}'">
+                        <b>{{ $item->nama_produk }}</b>
+                    </div>
                 </td>
-                <td>{{ $item->nama_kategori }}</td>
-                <td style="font-weight: bold; color: var(--primary-green);">Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</td>
-                <td>
+                <td data-label="Kategori">{{ $item->nama_kategori }}</td>
+                <td data-label="Harga" style="font-weight: bold; color: var(--primary-green);">Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</td>
+                <td data-label="Status">
                     <span class="{{ $item->status_produk == 'tersedia' ? 'badge-active' : 'badge-inactive' }}">
                         {{ ucfirst($item->status_produk) }}
                     </span>
                 </td>
-                <td>
-                    <div style="display:flex; gap:15px; align-items: center;">
+                <td data-label="Aksi">
+                    <div style="display:flex; gap:15px; justify-content: flex-end;">
                         <button class="action-link" style="color:#007bff;" 
                             onclick="bukaModalEdit(
                                 '{{ $item->id_produk }}', 
@@ -273,7 +371,7 @@
         </tbody>
     </table>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; margin-top: 40px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px;">
         <div class="card-sm">
             <h3 style="color: var(--text-dark); margin-top: 0; font-size: 18px;">Manajemen Kategori</h3>
             <form action="{{ route('admin.kategori.store') }}" method="POST" style="display: flex; gap: 10px; margin-bottom: 20px;">
@@ -324,7 +422,7 @@
         <form action="{{ route('admin.menu.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group"><label>Nama Produk</label><input type="text" name="nama_produk" required></div>
-            <div style="display:flex; gap:15px;">
+            <div style="display:flex; gap:15px; flex-wrap: wrap;">
                 <div class="form-group" style="flex:1;"><label>Harga (Rp)</label><input type="number" name="harga_produk" required></div>
                 <div class="form-group" style="flex:1;"><label>Kategori</label>
                     <select name="id_kategori">
@@ -355,7 +453,7 @@
             @csrf
             <div class="form-group"><label>Nama Produk</label><input type="text" name="nama_produk" id="edit_nama" required></div>
             
-            <div style="display:flex; gap:15px;">
+            <div style="display:flex; gap:15px; flex-wrap: wrap;">
                 <div class="form-group" style="flex:1;"><label>Harga (Rp)</label><input type="number" name="harga_produk" id="edit_harga" required></div>
                 <div class="form-group" style="flex:1;"><label>Status</label>
                     <select name="status_produk" id="edit_status">
@@ -365,7 +463,7 @@
                 </div>
             </div>
 
-            <div style="display:flex; gap:15px;">
+            <div style="display:flex; gap:15px; flex-wrap: wrap;">
                 <div class="form-group" style="flex:1;">
                     <label>Kategori</label>
                     <select name="id_kategori" id="edit_kategori" required>
@@ -397,18 +495,29 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('active');
+    }
+
+    // Menutup sidebar ketika klik di luar sidebar (khusus tampilan mobile)
+    document.addEventListener('click', function(event) {
+        const sidebar = document.querySelector('.sidebar');
+        const toggleBtn = document.querySelector('.mobile-toggle');
+        
+        if (sidebar.classList.contains('active') && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+            sidebar.classList.remove('active');
+        }
+    });
+
     function bukaModalTambah() { document.getElementById('modalTambah').classList.add('show'); }
     function tutupModal(id) { document.getElementById(id).classList.remove('show'); }
     
     function bukaModalEdit(id, nama, harga, status, deskripsi, id_kat, id_jenis) {
-        // 1. Isi data teks dan angka
         document.getElementById('edit_nama').value = nama;
         document.getElementById('edit_harga').value = harga;
         document.getElementById('edit_status').value = status;
         document.getElementById('edit_deskripsi').value = deskripsi;
         
-        // 2. Isi data dropdown (Kategori & Jenis)
-        // Pastikan ID elemen ini ada di dalam modalEdit kamu
         if(document.getElementById('edit_kategori')) {
             document.getElementById('edit_kategori').value = id_kat;
         }
@@ -416,15 +525,12 @@
             document.getElementById('edit_jeniskopi').value = id_jenis;
         }
 
-        // 3. Update URL Form Action
         document.getElementById('formEdit').action = "{{ url('admin/menu/update') }}/" + id;
         
-        // 4. Munculkan Modal
         document.getElementById('modalEdit').classList.add('show');
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        // Alert Logout
         document.querySelector('.btn-logout').addEventListener('click', function(e) {
             e.preventDefault();
             Swal.fire({
@@ -436,7 +542,6 @@
             }).then((result) => { if (result.isConfirmed) window.location.href = this.href; });
         });
 
-        // Alert Hapus Kategori/Jenis
         document.querySelectorAll('.btn-delete-item').forEach(el => {
             el.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -451,7 +556,6 @@
             });
         });
 
-        // Alert hapus produk dengan konfirmasi lebih tegas
         document.querySelectorAll('.btn-delete-produk').forEach(el => {
             el.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -460,7 +564,7 @@
                 Swal.fire({
                     title: 'Hapus Produk?',
                     text: "Data produk akan dihapus permanen dari database!",
-                    icon: 'error', // Gunakan icon error agar lebih waspada
+                    icon: 'error',
                     showCancelButton: true,
                     confirmButtonColor: '#dc3545',
                     cancelButtonColor: '#6c757d',

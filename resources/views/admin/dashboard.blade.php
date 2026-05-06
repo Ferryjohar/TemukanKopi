@@ -130,6 +130,7 @@ body {
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 14px;
+    display: inline-block;
 }
 
 .badge-inactive {
@@ -137,6 +138,7 @@ body {
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 14px;
+    display: inline-block;
 }
 
 .avatar {
@@ -316,9 +318,104 @@ body {
 }
 
 .btn-cancel-modal:hover { background: #ddd; }
+
+/* ════════════════════════════════════
+   ADMIN DASHBOARD RESPONSIVE
+════════════════════════════════════ */
+
+.mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+    .sidebar { width: 240px; }
+    .main-content { margin-left: 240px; padding: 40px; }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        left: -280px;
+        transition: left 0.3s ease;
+    }
+    .sidebar.active { left: 0; }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+        padding-top: 80px;
+    }
+
+    .mobile-toggle { display: block; }
+
+    .top-bar {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    .search-wrapper { width: 100%; }
+    .btn-add { width: 100%; text-align: center; }
+
+    /* PERBAIKAN TABEL CARD MODE (FLEXBOX) */
+    .data-table thead { display: none; }
+    .data-table, .data-table tbody, .data-table tr { 
+        display: block; 
+        width: 100%; 
+    }
+
+    .data-table tr {
+        margin-bottom: 20px;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+        background: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .data-table td {
+        display: flex !important; /* Gunakan flexbox agar isi tidak tertumpuk */
+        justify-content: flex-end; /* Dorong isi ke kanan */
+        align-items: center;
+        padding: 15px !important;
+        border-bottom: 1px solid #f1f1f1;
+        text-align: right;
+    }
+
+    /* Label Data di sebelah kiri */
+    .data-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--primary-green);
+        margin-right: auto; /* Memastikan label tetap di kiri */
+        text-align: left;
+    }
+
+    /* Memastikan tidak ada border bawah di elemen terakhir */
+    .data-table td:last-child {
+        border-bottom: none;
+    }
+
+    /* Modal Adjustment */
+    .modal-box { padding: 25px 20px; }
+    .edit-body { flex-direction: column; align-items: center; }
+    .avatar-section { border-right: none; padding-right: 0; margin-bottom: 20px; }
+    .form-row { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
+
+<button class="mobile-toggle" onclick="toggleSidebar()">☰ Menu</button>
 
 <div class="sidebar">
     <div class="logo-text">temukan kopi.</div>
@@ -397,24 +494,32 @@ body {
         <tbody>
             @foreach($admins as $admin)
             <tr class="row-shadow">
-                <td style="display:flex; align-items:center;">
-                    @php
-                        $fotoPath    = 'avatars/' . $admin->foto_admin;
-                        $fileTersedia = !blank($admin->foto_admin) && Storage::disk('public')->exists($fotoPath);
-                        $fotoUrl     = $fileTersedia ? asset('storage/' . $fotoPath) : asset('images/user.png');
-                    @endphp
-                    <img src="{{ $fotoUrl }}" class="avatar" alt="Foto Admin">
-                    {{ $admin->nama }}
+                <td data-label="Nama">
+                    <!-- Hapus justify-content: flex-end dari sini -->
+                    <div style="display: flex; align-items: center;">
+                        @php
+                            $fotoPath    = 'avatars/' . $admin->foto_admin;
+                            $fileTersedia = !blank($admin->foto_admin) && Storage::disk('public')->exists($fotoPath);
+                            $fotoUrl     = $fileTersedia ? asset('storage/' . $fotoPath) : asset('images/user.png');
+                        @endphp
+                        <img src="{{ $fotoUrl }}" class="avatar" alt="Foto Admin">
+                        <span>{{ $admin->nama }}</span>
+                    </div>
                 </td>
-                <td>{{ ucfirst($admin->role) }}</td>
-                <td>
+                
+                <td data-label="Role">{{ ucfirst($admin->role) }}</td>
+                
+                <td data-label="Status">
                     <span class="{{ $admin->status_admin == 'aktif' ? 'badge-active' : 'badge-inactive' }}">
                         {{ $admin->status_admin }}
                     </span>
                 </td>
-                <td>{{ $admin->updated_at ? date('d-m-Y', strtotime($admin->updated_at)) : '-' }}</td>
-                <td>
-                    <div style="display:flex; gap:15px;">
+                
+                <td data-label="Update">{{ $admin->updated_at ? date('d-m-Y', strtotime($admin->updated_at)) : '-' }}</td>
+                
+                <td data-label="Aksi">
+                    <!-- Hapus justify-content: flex-end dari sini juga -->
+                    <div style="display: flex; gap: 15px;">
                         <button class="action-link"
                             style="color:#007bff; background:none; border:none; padding:0;"
                             onclick="bukaModalEdit(
@@ -493,15 +598,10 @@ body {
         <button class="modal-close" onclick="tutupModal('modalEdit')">&times;</button>
         <h2>Edit Profil Admin</h2>
 
-        {{-- 
-            Action di-set dinamis lewat JS pakai route admin.update
-            Route: POST /admin/update-admin/{id}
-        --}}
         <form id="formEdit" action="" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="edit-body">
-                {{-- Kolom kiri: foto --}}
                 <div class="avatar-section">
                     <img src="" id="previewFotoEdit" class="avatar-upload" alt="Foto Admin">
                     <label class="upload-btn-label" for="inputFotoEdit">Ganti Foto</label>
@@ -511,7 +611,6 @@ body {
                     <p class="foto-hint">Format: JPG, PNG<br>Maks 2MB</p>
                 </div>
 
-                {{-- Kolom kanan: field --}}
                 <div class="edit-fields">
                     <div class="form-row">
                         <div class="form-group">
@@ -568,7 +667,6 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    // Base URL route admin.update — sesuai web.php: POST /admin/update-admin/{id}
     const urlUpdateAdmin = "{{ url('admin/update-admin') }}";
 
 function bukaModalTambah() {
@@ -576,17 +674,13 @@ function bukaModalTambah() {
 }
 
 function bukaModalEdit(id, nama, username, noHp, role, status, fotoUrl) {
-    // Set action form pakai URL yang benar sesuai route web.php
     document.getElementById('formEdit').action = urlUpdateAdmin + '/' + id;
-
-    // Isi semua field dengan data admin yang diklik
     document.getElementById('editNama').value     = nama;
     document.getElementById('editUsername').value = username;
     document.getElementById('editNoHp').value     = noHp;
     document.getElementById('editRole').value     = role;
     document.getElementById('editStatus').value   = status;
     document.getElementById('previewFotoEdit').src = fotoUrl;
-
     document.getElementById('modalEdit').classList.add('show');
 }
 
@@ -594,14 +688,12 @@ function tutupModal(id) {
     document.getElementById(id).classList.remove('show');
 }
 
-// Tutup jika klik di luar modal box
 document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
     overlay.addEventListener('click', function(e) {
         if (e.target === overlay) overlay.classList.remove('show');
     });
 });
 
-// Preview foto sebelum upload
 function previewFoto(input, targetId) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -612,10 +704,17 @@ function previewFoto(input, targetId) {
     }
 }
 
-// ===== SWEETALERT =====
-document.addEventListener("DOMContentLoaded", function () {
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('active');
+}
 
-    // LOGOUT
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.sidebar').classList.remove('active');
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.btn-logout').forEach(function(el) {
         el.addEventListener('click', function(e) {
             e.preventDefault();
@@ -634,7 +733,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // HAPUS
     document.querySelectorAll('.btn-delete').forEach(function(el) {
         el.addEventListener('click', function(e) {
             e.preventDefault();
@@ -653,7 +751,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     });
-
 });
 </script>
 

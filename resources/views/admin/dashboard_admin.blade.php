@@ -142,10 +142,78 @@ body {
     color: #aaa;
     margin-top: 5px;
 }
+
+/* ════════════════════════════════════
+   RESPONSIVE DESIGN (MOBILE & TABLET)
+════════════════════════════════════ */
+
+.mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 1024px) {
+    .sidebar { width: 240px; }
+    .main-content { margin-left: 240px; padding: 40px; }
+}
+
+@media (max-width: 768px) {
+    .mobile-toggle { display: block; }
+
+    /* Hide Sidebar to the left */
+    .sidebar {
+        left: -280px;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 15px rgba(0,0,0,0.2);
+    }
+    
+    /* Class to show sidebar when toggled */
+    .sidebar.active { left: 0; }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+        padding-top: 80px; /* Space for the toggle button */
+    }
+
+    /* Adjust Welcome Box for Mobile */
+    .welcome-box { 
+        padding: 25px 20px; 
+        text-align: center;
+    }
+    .welcome-box h2 { font-size: 24px; line-height: 1.3; }
+    .welcome-box p { font-size: 14px; }
+
+    /* Stats Grid adjustment */
+    .stats-grid {
+        gap: 15px;
+        grid-template-columns: 1fr; /* Stack cards vertically on small screens */
+    }
+    
+    .stat-card {
+        padding: 20px;
+        text-align: center;
+    }
+    .stat-card .value { font-size: 30px; }
+}
 </style>
 </head>
 
 <body>
+
+<!-- Tombol Toggle Mobile -->
+<button class="mobile-toggle" onclick="toggleSidebar()">☰ Menu</button>
 
 <div class="sidebar">
     <div class="logo-text">temukan kopi.</div>
@@ -225,6 +293,23 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+// Fungsi untuk memunculkan/menyembunyikan sidebar di HP
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('active');
+}
+
+// Tutup sidebar jika layar di luar sidebar diklik (opsional, bagus untuk UX)
+document.addEventListener('click', function(event) {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleBtn = document.querySelector('.mobile-toggle');
+    
+    // Jika sidebar sedang aktif, dan klik BUKAN pada sidebar atau tombol toggle
+    if (sidebar.classList.contains('active') && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+        sidebar.classList.remove('active');
+    }
+});
+
+// Konfirmasi Logout dengan SweetAlert
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.logout-btn').forEach(btn => {
         btn.addEventListener('click', function(e){
