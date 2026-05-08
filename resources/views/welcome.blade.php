@@ -1143,7 +1143,7 @@ footer {
      ╚══════════════════════════════╝ -->
 <section id="Home" class="hero">
   <div class="hero-left">
-    <div class="hero-pill">☕ Premium Indonesian Coffee</div>
+    <div class="hero-pill">Premium Indonesian Coffee</div>
     <h1>Temukan<br><em>Kopi</em></h1>
     <p>Dibuat dari biji kopi Indonesia pilihan untuk pengalaman minum kopi terbaik setiap hari.</p>
     <div class="hero-btns">
@@ -1261,7 +1261,7 @@ footer {
     </a>
     @empty
     <div style="grid-column: 1 / -1; text-align: center; padding: 100px 20px; color: #888; background: #fff; border-radius: 20px;">
-        <span style="font-size: 50px;">☕</span>
+        <span style="font-size: 50px;"></span>
         <p style="margin-top: 15px; font-style: italic;">Maaf, katalog produk sedang dalam pembaruan.</p>
     </div>
     @endforelse
@@ -1332,9 +1332,9 @@ footer {
       <h2 class="section-title">Pengiriman Lokal &amp; Internasional</h2>
       <p>Kami menyediakan layanan pengiriman kopi lokal dan internasional dengan kemasan terbaik yang menjaga kesegaran dan kualitas kopi hingga sampai ke tangan Anda.</p>
       <div class="peng-list">
-        <div class="peng-item"><div class="peng-icon">📦</div> Kemasan vakum premium tahan lama</div>
-        <div class="peng-item"><div class="peng-icon">🚀</div> Pengiriman express 1–2 hari kerja</div>
-        <div class="peng-item"><div class="peng-icon">🌍</div> Pengiriman ke seluruh dunia</div>
+        <div class="peng-item"><div class="peng-icon">🌟</div> Kemasan vakum premium tahan lama</div>
+        <div class="peng-item"><div class="peng-icon">🌟</div> Pengiriman express 1–2 hari kerja</div>
+        <div class="peng-item"><div class="peng-icon">🌟</div> Pengiriman ke seluruh dunia</div>
       </div>
     </div>
   </div>
@@ -1352,17 +1352,17 @@ footer {
   </div>
   <div class="alasan stagger">
     <div class="alasan-card">
-      <span class="icon">⭐</span>
+      <span class="icon"></span>
       <h3>Kualitas Terjamin</h3>
       <p>Biji kopi pilihan terbaik yang diseleksi langsung dari kebun-kebun terbaik di Indonesia.</p>
     </div>
     <div class="alasan-card">
-      <span class="icon">✔</span>
+      <span class="icon"></span>
       <h3>Pelayanan Terpercaya</h3>
       <p>Kami melayani dengan profesional dan penuh dedikasi untuk kepuasan setiap pelanggan.</p>
     </div>
     <div class="alasan-card">
-      <span class="icon">☕</span>
+      <span class="icon"></span>
       <h3>Kepuasan Pelanggan</h3>
       <p>Kami selalu mengutamakan kepuasan pelanggan di atas segalanya dengan jaminan kualitas.</p>
     </div>
@@ -1382,31 +1382,31 @@ footer {
   <div class="tips-content">
     <div class="tips-grid stagger">
       <div class="step">
-        <span class="step-icon">🌿</span>
+        <span class="step-icon"></span>
         <div class="step-num">01</div>
         <h4>Timbang Kopi</h4>
         <p>Gunakan 15g kopi untuk 250ml air untuk hasil terbaik</p>
       </div>
       <div class="step">
-        <span class="step-icon">💧</span>
+        <span class="step-icon"></span>
         <div class="step-num">02</div>
         <h4>Panaskan Air</h4>
         <p>Suhu ideal 90–96°C, jangan sampai mendidih</p>
       </div>
       <div class="step">
-        <span class="step-icon">⚙️</span>
+        <span class="step-icon"></span>
         <div class="step-num">03</div>
         <h4>Giling Kopi</h4>
         <p>Sesuaikan gilingan dengan metode penyajian</p>
       </div>
       <div class="step">
-        <span class="step-icon">⏱️</span>
+        <span class="step-icon">⏱</span>
         <div class="step-num">04</div>
         <h4>Seduh Kopi</h4>
         <p>Seduh perlahan merata selama 3–4 menit</p>
       </div>
       <div class="step">
-        <span class="step-icon">☕</span>
+        <span class="step-icon"></span>
         <div class="step-num">05</div>
         <h4>Nikmati</h4>
         <p>Sajikan segera dan nikmati aroma khasnya</p>
@@ -1427,23 +1427,23 @@ footer {
   <div class="galeri-grid reveal">
     <div class="g-item">
       <img src="images/COVER@-0.png" alt="Galeri 1">
-      <div class="g-overlay">☕</div>
+      <div class="g-overlay"></div>
     </div>
     <div class="g-item">
       <img src="images/COVER@-1.png" alt="Galeri 2">
-      <div class="g-overlay">🫘</div>
+      <div class="g-overlay"></div>
     </div>
     <div class="g-item">
       <img src="images/COVER@-3.png" alt="Galeri 3">
-      <div class="g-overlay">🌿</div>
+      <div class="g-overlay"></div>
     </div>
     <div class="g-item">
       <img src="images/COVER@-4.png" alt="Galeri 4">
-      <div class="g-overlay">💧</div>
+      <div class="g-overlay"></div>
     </div>
     <div class="g-item">
       <img src="images/COVER@-2.png" alt="Galeri 5">
-      <div class="g-overlay">📦</div>
+      <div class="g-overlay"></div>
     </div>
   </div>
 </section>
@@ -1466,12 +1466,12 @@ footer {
     <div class="contact-card">
       <span class="contact-icon">📞</span>
       <h4>Phone</h4>
-      <p>+62 812345678</p>
+      <p>+62 8133135510</p>
     </div>
     <div class="contact-card green">
       <span class="contact-icon">✉️</span>
       <h4>Email</h4>
-      <p>temukankopi@gmail.com</p>
+      <p>temukankopi01@gmail.com</p>
     </div>
     <div class="contact-card">
       <span class="contact-icon">🕐</span>

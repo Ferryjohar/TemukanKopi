@@ -7,29 +7,86 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Menambahkan filter status_produk agar yang tampil hanya yang 'tersedia'
+        // Ambil produk yang tersedia
         $produk = DB::table('ms_produk')
             ->join('ms_kategori', 'ms_produk.id_kategori', '=', 'ms_kategori.id_kategori')
             ->join('ms_jeniskopi', 'ms_produk.id_jeniskopi', '=', 'ms_jeniskopi.id_jeniskopi')
-            ->select('ms_produk.*', 'ms_kategori.nama_kategori', 'ms_jeniskopi.nama_jenis')
+            ->select(
+                'ms_produk.*',
+                'ms_kategori.nama_kategori',
+                'ms_jeniskopi.nama_jenis'
+            )
             ->where('ms_produk.status_produk', '=', 'tersedia')
             ->get();
 
-        return view('welcome', compact('produk'));
+        /*
+        |--------------------------------------------------------------------------
+        | Currency Setting
+        |--------------------------------------------------------------------------
+        */
+
+        // default Indonesia
+        $currency = 'IDR';
+
+        // kurs dollar
+        $rate = 16000;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Jika akses:
+        | http://127.0.0.1:8000?country=us
+        | maka otomatis dollar
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->country == 'us') {
+            $currency = 'USD';
+        }
+
+        return view('welcome', compact(
+            'produk',
+            'currency',
+            'rate'
+        ));
     }
 
-    public function checkout()
+    public function checkout(Request $request)
     {
-        // Tambahkan filter yang sama di halaman checkout agar katalog di bawah tetap sinkron
+        // Ambil produk checkout
         $produk = DB::table('ms_produk')
             ->join('ms_kategori', 'ms_produk.id_kategori', '=', 'ms_kategori.id_kategori')
             ->join('ms_jeniskopi', 'ms_produk.id_jeniskopi', '=', 'ms_jeniskopi.id_jeniskopi')
-            ->select('ms_produk.*', 'ms_kategori.nama_kategori', 'ms_jeniskopi.nama_jenis')
-            ->where('ms_produk.status_produk', '=', 'tersedia') // Tambahan Filter
+            ->select(
+                'ms_produk.*',
+                'ms_kategori.nama_kategori',
+                'ms_jeniskopi.nama_jenis'
+            )
+            ->where('ms_produk.status_produk', '=', 'tersedia')
             ->get();
 
-        return view('checkout', compact('produk'));
+        /*
+        |--------------------------------------------------------------------------
+        | Currency Setting
+        |--------------------------------------------------------------------------
+        */
+
+        // default Indonesia
+        $currency = 'IDR';
+
+        // kurs dollar
+        $rate = 16000;
+
+        // jika luar negeri
+        if ($request->country == 'us') {
+            $currency = 'USD';
+        }
+
+        return view('checkout', compact(
+            'produk',
+            'currency',
+            'rate'
+        ));
     }
 }
