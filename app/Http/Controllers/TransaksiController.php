@@ -114,6 +114,7 @@ class TransaksiController extends Controller
             'nama_customer' => $request->nama_customer,
             'no_wa'         => $request->no_wa,
             'alamat'        => $request->alamat,
+            'catatan'       => $request->catatan,
             'updated_at'    => now(),
         ]);
         return redirect()->route('admin.transaksi')->with('success', 'Data transaksi berhasil diperbarui!');

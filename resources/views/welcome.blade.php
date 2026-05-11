@@ -10,9 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300&display=swap" rel="stylesheet">
 
 <style>
-/* ════════════════════════════════════
-   RESET & ROOT
-════════════════════════════════════ */
 *, *::before, *::after {
   margin: 0; padding: 0; box-sizing: border-box;
 }
@@ -41,9 +38,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ════════════════════════════════════
-   NAVBAR
-════════════════════════════════════ */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -90,7 +84,6 @@ body {
 .nav-links a:hover { color: var(--hijau); }
 .nav-links a:hover::after { width: 100%; }
 
-/* ══ HAMBURGER ══ */
 .nav-hamburger {
   display: none;
   flex-direction: column;
@@ -129,7 +122,6 @@ body {
   .nav-links a { font-size: 18px; margin-left: 0; }
 }
 
-/* ══ CARD ADD BUTTON ══ */
 .img-container { position: relative; overflow: hidden; }
 .card-add-btn {
   position: absolute; bottom: 10px; right: 10px;
@@ -146,7 +138,6 @@ body {
 .card-add-btn:hover { background: var(--hijau-tua); }
 .card-add-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; }
 
-/* ══ MODAL PEMESANAN ══ */
 .modal-overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.5);
@@ -184,7 +175,6 @@ body {
 .btn-kembali { width: 100%; background: transparent; color: var(--teks-soft); border: 1.5px solid #e0e0e0; border-radius: 10px; padding: 12px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .2s; }
 .btn-kembali:hover { border-color: var(--teks-mid); color: var(--teks); }
 
-/* ══ TOAST ══ */
 .toast {
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
   background: #1a1a1a; color: #fff;
@@ -200,9 +190,6 @@ body {
 
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ════════════════════════════════════
-   HERO
-════════════════════════════════════ */
 .hero {
   display: flex;
   align-items: center;
@@ -361,9 +348,6 @@ body {
   font-weight: 500;
 }
 
-/* ════════════════════════════════════
-   SHARED SECTION STYLES
-════════════════════════════════════ */
 section { padding: 110px 100px; position: relative; overflow: hidden; }
 
 .section-tag {
@@ -425,9 +409,6 @@ section { padding: 110px 100px; position: relative; overflow: hidden; }
     white-space: nowrap;
 }
 
-/* ════════════════════════════════════
-   ABOUT
-════════════════════════════════════ */
 .about-section { background: var(--putih); }
 
 .about {
@@ -500,9 +481,6 @@ section { padding: 110px 100px; position: relative; overflow: hidden; }
   flex-shrink: 0;
 }
 
-/* ════════════════════════════════════
-   PRODUK
-════════════════════════════════════ */
 .produk-section { background: var(--krem); }
 
 .produk-header { text-align: center; margin-bottom: 56px; }
@@ -571,9 +549,6 @@ a.card {
   display: block;
 }
 
-/* ════════════════════════════════════
-   TESTIMONI — DARK THEME
-════════════════════════════════════ */
 .testi-section {
   background: #0d0d0d;
   position: relative;
@@ -669,7 +644,6 @@ a.card {
 .testi-name  { font-weight: 600; font-size: 14px; display: block; color: #fff; }
 .testi-handle{ font-size: 11.5px; color: rgba(255,255,255,.45); display: block; margin-top: 2px; }
 
-/* ════ PENGIRIMAN ════ */
 .pengiriman-section {
   background: rgba(31,94,59,0.5);
   min-height: 100vh;
@@ -896,9 +870,6 @@ a.card {
   .pengiriman-img img { height: 100%; width: 100%; object-fit: cover; }
 }
 
-/* ════════════════════════════════════
-   MENGAPA
-════════════════════════════════════ */
 .mengapa-section { background: var(--putih); }
 
 .mengapa-header { text-align: center; margin-bottom: 56px; }
@@ -953,7 +924,6 @@ a.card {
 }
 .alasan-card p { color: var(--teks-mid); font-size: 13.5px; line-height: 1.75; }
 
-/* ════ TIPS PENYAJIAN ════ */
 .tips {
   position: relative;
   overflow: hidden;
@@ -1021,7 +991,6 @@ a.card {
   z-index: 1;
 }
 
-/* Garis horizontal penghubung antar step (desktop) */
 .step:not(:last-child)::after {
   content: '';
   position: absolute;
@@ -1060,7 +1029,6 @@ a.card {
   .tips-grid { grid-template-columns: 1fr; gap: 28px; }
 }
 
-/* ════ GALERI — FAN CAROUSEL ════ */
 .galeri-section {
   background: #000000;
   padding: 80px 0 100px;
@@ -1196,9 +1164,6 @@ a.card {
   .fan-nav { padding: 0 10px; }
 }
 
-/* ════════════════════════════════════
-   CONTACT
-════════════════════════════════════ */
 .contact-section { background: var(--putih); text-align: center; }
 
 .contact-header { margin-bottom: 54px; }
@@ -1252,9 +1217,6 @@ a.card {
   border-radius:10px;
 }
 
-/* ════════════════════════════════════
-   FOOTER
-════════════════════════════════════ */
 footer {
   background: #0b3320;
   color: var(--putih);
@@ -1322,9 +1284,6 @@ footer {
   font-size: 12px;
 }
 
-/* ════════════════════════════════════
-   KEYFRAMES
-════════════════════════════════════ */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(38px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -1334,9 +1293,6 @@ footer {
   to   { opacity: 1; transform: translateX(0px); }
 }
 
-/* ════════════════════════════════════
-   SCROLL REVEAL
-════════════════════════════════════ */
 .reveal {
   opacity: 0;
   transform: translateY(46px);
@@ -1357,9 +1313,6 @@ footer {
   transition-delay: .1s; 
 }
 
-/* ════════════════════════════════════
-   RESPONSIVE
-════════════════════════════════════ */
 @media (max-width: 1100px) {
   .navbar, section, footer { padding-left: 40px; padding-right: 40px; }
   .hero { padding: 80px 40px; flex-direction: column; text-align: center; gap: 50px; }
@@ -1406,7 +1359,6 @@ footer {
   .footer-social-icons { justify-content: center; }
 }
 
-/* pemasin produk */
 .hidden-product {
     max-height: 0;
     opacity: 0;
@@ -1427,7 +1379,6 @@ footer {
 </head>
 <body>
 
-<!-- NAVBAR -->
 <div class="navbar" id="navbar">
   <div class="logo">temukan kopi.</div>
   <div class="nav-links" id="navLinks">
@@ -1443,7 +1394,6 @@ footer {
 </div>
 
 
-<!-- HERO -->
 <section id="Home" class="hero">
   <div class="hero-left">
     <div class="hero-pill">Premium Indonesian Coffee</div>
@@ -1474,7 +1424,6 @@ footer {
 </section>
 
 
-<!-- ABOUT -->
 <section id="About" class="about-section"> 
   <div class="bg-title1">About</div>
   <div class="about">
@@ -1501,7 +1450,6 @@ footer {
 </section>
 
 
-<!-- PRODUK -->
 <section id="Produk">
   <div class="produk-header reveal" style="text-align: center; margin-bottom: 50px;">
       <span class="section-tag">Koleksi Kami</span>
@@ -1566,7 +1514,6 @@ footer {
 </section>
 
 
-<!-- TESTIMONI — DARK THEME -->
 <section id="Testimoni" class="testi-section">
   <div class="bg-title">Testimoni</div>
   <div class="testi-header reveal">
@@ -1615,7 +1562,6 @@ footer {
   </div>
 </section>
 
-<!-- PENGIRIMAN -->
 <section class="pengiriman-section">
 
   <div class="delivery-side-dots">
@@ -1629,7 +1575,7 @@ footer {
   <div class="pengiriman reveal">
     <div class="pengiriman-content">
       <span class="peng-sublabel">Layanan pengiriman untuk</span>
-      <h3 class="peng-title">LOKAL<br>&amp; INTER-<br>NASIONAL</h3>
+      <h3 class="peng-title">LOKAL<br>& INTER-<br>NASIONAL</h3>
       <p class="peng-para">Masa depan kopi tidak akan ada tanpa layanan terbaik yang menjaga kualitasnya.
          Kami berupaya menghadirkan kopi segar langsung ke tangan Anda dengan kemasan vakum premium yang memperbarui,
           memupuk, dan melindungi cita rasa asli setiap biji kopi pilihan nusantara.</p>
@@ -1643,7 +1589,6 @@ footer {
 </section>
 
 
-<!-- TIPS PENYAJIAN -->
 <section class="tips">
   <div class="tips-header reveal">
     <h2 class="section-title">Tips Penyajian</h2>
@@ -1686,7 +1631,6 @@ footer {
   </div>
 </section>
 
-<!-- MENGAPA -->
 <section class="mengapa-section">
   <div class="bg-title1">Mengapa</div>
   <div class="mengapa-header reveal">
@@ -1710,7 +1654,6 @@ footer {
 </section>
 
 
-<!-- GALERI — FAN CAROUSEL -->
 <section id="Galery" class="galeri-section">
   <div class="bg-title1">Galeri</div>
   <div class="galeri-header reveal">
@@ -1785,7 +1728,6 @@ footer {
 </section>
 
 
-<!-- CONTACT -->
 <section id="Kontak" class="contact-section">
   <div class="contact-header reveal">
     <span class="section-tag">Hubungi Kami</span>
@@ -1826,7 +1768,6 @@ footer {
 </section>
 
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
@@ -1852,7 +1793,6 @@ footer {
 </footer>
 
 
-<!-- MODAL PEMESANAN -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="modalBox">
     <div class="modal-title">Form Pemesanan</div>
@@ -1868,7 +1808,8 @@ footer {
     </div>
     <div class="form-group">
       <label>Alamat Lengkap:</label>
-      <textarea id="alamatInput" placeholder="Jalan, RT/RW, Kec./&#10;Kota, Kodepos"></textarea>
+      <textarea id="alamatInput" placeholder="Jalan, RT/RW, Kec./
+Kota, Kodepos"></textarea>
     </div>
     <div class="form-group">
       <label>Catatan Tambahan:</label>
@@ -1887,21 +1828,17 @@ footer {
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast">
   <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
   <span id="toastMsg">Produk ditambahkan</span>
 </div>
 
-<!-- SCRIPTS -->
 <script>
-/* Navbar scroll shadow */
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
 
-/* Hamburger menu */
 const hamburger = document.getElementById('navHamburger');
 const navLinks  = document.getElementById('navLinks');
 hamburger.addEventListener('click', () => {
@@ -1915,7 +1852,6 @@ navLinks.querySelectorAll('a').forEach(a => {
   });
 });
 
-/* Scroll reveal */
 const io = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
@@ -1923,7 +1859,6 @@ const io = new IntersectionObserver((entries) => {
 }, { threshold: 0.12, rootMargin: '0px 0px -36px 0px' });
 document.querySelectorAll('.reveal, .stagger').forEach(el => io.observe(el));
 
-/* Counter animation */
 function runCounter(el) {
   const target = parseInt(el.dataset.target, 10);
   const dur = 1800, start = performance.now();
@@ -1941,7 +1876,6 @@ const cntIo = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 document.querySelectorAll('.hero-stats').forEach(el => cntIo.observe(el));
 
-/* Utilities */
 function fmt(n) { return 'Rp ' + n.toLocaleString('id-ID'); }
 
 function showToast(msg) {
@@ -1957,7 +1891,6 @@ document.getElementById('modalOverlay').addEventListener('click', e => {
   if (e.target === document.getElementById('modalOverlay')) closeModal();
 });
 
-/* Toggle produk */
 document.getElementById('btnToggleProduk').addEventListener('click', function() {
     const hiddenProducts = document.querySelectorAll('.hidden-product');
     const isShowingAll = this.getAttribute('data-status') === 'open';
@@ -1982,7 +1915,6 @@ document.getElementById('btnToggleProduk').addEventListener('click', function() 
     }
 });
 
-/* ══ FAN CAROUSEL GALERI ══ */
 (function() {
   const cards   = Array.from(document.querySelectorAll('.fan-card'));
   const dots    = Array.from(document.querySelectorAll('.fan-dot'));
@@ -2029,7 +1961,6 @@ document.getElementById('btnToggleProduk').addEventListener('click', function() 
     });
   });
 
-  /* Swipe touch */
   let tx = 0;
   stage.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
   stage.addEventListener('touchend', e => {
@@ -2037,7 +1968,6 @@ document.getElementById('btnToggleProduk').addEventListener('click', function() 
     if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); resetAuto(); }
   }, {passive:true});
 
-  /* Drag mouse */
   let mx = 0, drag = false;
   stage.addEventListener('mousedown', e => { mx = e.clientX; drag = true; });
   stage.addEventListener('mouseup', e => {

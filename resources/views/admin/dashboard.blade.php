@@ -149,7 +149,6 @@ body {
     object-fit: cover;
 }
 
-/* ===================== MODAL ===================== */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -319,10 +318,6 @@ body {
 
 .btn-cancel-modal:hover { background: #ddd; }
 
-/* ════════════════════════════════════
-   ADMIN DASHBOARD RESPONSIVE
-════════════════════════════════════ */
-
 .mobile-toggle {
     display: none;
     position: fixed;
@@ -366,7 +361,6 @@ body {
     .search-wrapper { width: 100%; }
     .btn-add { width: 100%; text-align: center; }
 
-    /* PERBAIKAN TABEL CARD MODE (FLEXBOX) */
     .data-table thead { display: none; }
     .data-table, .data-table tbody, .data-table tr { 
         display: block; 
@@ -383,29 +377,26 @@ body {
     }
 
     .data-table td {
-        display: flex !important; /* Gunakan flexbox agar isi tidak tertumpuk */
-        justify-content: flex-end; /* Dorong isi ke kanan */
+        display: flex !important; 
+        justify-content: flex-end;
         align-items: center;
         padding: 15px !important;
         border-bottom: 1px solid #f1f1f1;
         text-align: right;
     }
 
-    /* Label Data di sebelah kiri */
     .data-table td::before {
         content: attr(data-label);
         font-weight: 700;
         color: var(--primary-green);
-        margin-right: auto; /* Memastikan label tetap di kiri */
+        margin-right: auto; 
         text-align: left;
     }
 
-    /* Memastikan tidak ada border bawah di elemen terakhir */
     .data-table td:last-child {
         border-bottom: none;
     }
 
-    /* Modal Adjustment */
     .modal-box { padding: 25px 20px; }
     .edit-body { flex-direction: column; align-items: center; }
     .avatar-section { border-right: none; padding-right: 0; margin-bottom: 20px; }
@@ -431,7 +422,7 @@ body {
             <li class="nav-item">
                 <a href="{{ route('admin.dashboard_khusus') }}"
                    class="nav-link active {{ Route::is('admin.dashboard_khusus*') ? 'active' : '' }}">
-                    Dashboard
+                    Data Admin
                 </a>
             </li>
         @endif
@@ -446,7 +437,7 @@ body {
         <li class="nav-item">
             <a href="{{ route('admin.menu') }}"
                class="nav-link {{ Route::is('admin.menu*') ? 'active' : '' }}">
-                Product
+                Produk
             </a>
         </li>
 
@@ -495,7 +486,6 @@ body {
             @foreach($admins as $admin)
             <tr class="row-shadow">
                 <td data-label="Nama">
-                    <!-- Hapus justify-content: flex-end dari sini -->
                     <div style="display: flex; align-items: center;">
                         @php
                             $fotoPath    = 'avatars/' . $admin->foto_admin;
@@ -518,7 +508,6 @@ body {
                 <td data-label="Update">{{ $admin->updated_at ? date('d-m-Y', strtotime($admin->updated_at)) : '-' }}</td>
                 
                 <td data-label="Aksi">
-                    <!-- Hapus justify-content: flex-end dari sini juga -->
                     <div style="display: flex; gap: 15px;">
                         <button class="action-link"
                             style="color:#007bff; background:none; border:none; padding:0;"
@@ -546,8 +535,6 @@ body {
     </table>
 </div>
 
-
-{{-- ===================== MODAL TAMBAH ADMIN ===================== --}}
 <div class="modal-overlay" id="modalTambah">
     <div class="modal-box">
         <button class="modal-close" onclick="tutupModal('modalTambah')">&times;</button>
@@ -591,8 +578,6 @@ body {
     </div>
 </div>
 
-
-{{-- ===================== MODAL EDIT ADMIN ===================== --}}
 <div class="modal-overlay" id="modalEdit">
     <div class="modal-box">
         <button class="modal-close" onclick="tutupModal('modalEdit')">&times;</button>

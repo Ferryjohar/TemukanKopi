@@ -230,7 +230,7 @@ body {
             <li class="nav-item">
                 <a href="{{ route('admin.dashboard_khusus') }}" 
                    class="nav-link {{ Route::is('admin.dashboard_khusus*') ? 'active' : '' }}">
-                    Dashboard
+                    Data Admin
                 </a>
             </li>
         @endif
@@ -245,7 +245,7 @@ body {
         <li class="nav-item">
             <a href="{{ route('admin.menu') }}" 
                class="nav-link {{ Route::is('admin.menu*') ? 'active' : '' }}">
-                Product
+                Produk
             </a>
         </li>
 

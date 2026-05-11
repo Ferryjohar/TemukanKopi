@@ -19,7 +19,6 @@
             display: flex;
         }
 
-        /* SIDEBAR - Konsisten dengan Dashboard */
         .sidebar {
             width: 280px;
             background-color: var(--primary-green);
@@ -60,7 +59,6 @@
             background-color: rgba(255,255,255,0.1);
         }
 
-        /* MAIN CONTENT */
         .main-content {
             margin-left: 280px;
             flex: 1;
@@ -104,7 +102,6 @@
 
         .btn-add:hover { opacity: 0.85; }
 
-        /* TABLE STYLE */
         .data-table {
             width: 100%;
             border-collapse: separate;
@@ -138,7 +135,6 @@
 
         .action-link { text-decoration: none; font-weight: bold; cursor: pointer; font-size: 14px; border: none; background: none; }
 
-        /* MODAL */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -170,7 +166,6 @@
 
         .divider { border: none; border-top: 1px solid #eee; margin: 20px 0; }
 
-        /* MANAJEMEN KATEGORI & JENIS */
         .card-sm {
             background: white;
             padding: 25px;
@@ -178,10 +173,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border: 1px solid #eee;
         }
-
-        /* ════════════════════════════════════
-           RESPONSIVE DESIGN
-        ════════════════════════════════════ */
 
         .mobile-toggle {
             display: none;
@@ -263,7 +254,6 @@
 
             .data-table td:last-child { border-bottom: none; }
             
-            /* Penyesuaian Modal */
             .modal-box { padding: 25px 20px; }
             .form-group[style*="flex:1"] { flex: unset; width: 100%; } /* Atur lebar penuh di modal HP */
             .modal-box > form > div[style*="display:flex; gap:15px;"] {
@@ -275,7 +265,6 @@
 </head>
 <body>
 
-<!-- Tombol Toggle Mobile -->
 <button class="mobile-toggle" onclick="toggleSidebar()">☰ Menu</button>
 
 <div class="sidebar">
@@ -284,7 +273,7 @@
         <li class="nav-item">
             <a href="{{ route('admin.dashboard') }}" 
             class="nav-link {{ Route::is('admin.dashboard*') ? 'active' : '' }}">
-                Dashboard
+                Data Admin
             </a>
         </li>
         <li class="nav-item">
@@ -343,7 +332,7 @@
                     </span>
                 </td>
                 <td data-label="Aksi">
-                    <div style="display:flex; gap:15px; justify-content: flex-end;">
+                    <div style="display:flex; gap:15px;">
                         <button class="action-link" style="color:#007bff;" 
                             onclick="bukaModalEdit(
                                 '{{ $item->id_produk }}', 
@@ -499,7 +488,6 @@
         document.querySelector('.sidebar').classList.toggle('active');
     }
 
-    // Menutup sidebar ketika klik di luar sidebar (khusus tampilan mobile)
     document.addEventListener('click', function(event) {
         const sidebar = document.querySelector('.sidebar');
         const toggleBtn = document.querySelector('.mobile-toggle');
