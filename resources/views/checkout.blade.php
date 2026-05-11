@@ -32,7 +32,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ══ NAVBAR ══ */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -76,10 +75,6 @@ body {
 .nav-links a:hover { color: var(--teks); }
 
 
-
-
-
-/* ══ PAGE WRAP ══ */
 .page { padding: 52px 80px 80px; max-width: 1200px; margin: 0 auto; }
 
 .sec-title {
@@ -90,7 +85,6 @@ body {
   letter-spacing: -.5px;
 }
 
-/* ══ CHECKOUT LIST WRAPPER ══ */
 .checkout-wrapper {
   background: var(--putih);
   border-radius: var(--radius);
@@ -100,7 +94,6 @@ body {
   animation: fadeUp .6s .1s both;
 }
 
-/* ══ CHECKOUT ROW (per produk) ══ */
 .checkout-row {
   display: grid;
   grid-template-columns: 90px 1fr auto;
@@ -139,7 +132,6 @@ body {
 }
 .checkout-row-price strong { color: var(--teks); font-weight: 600; }
 
-/* ── Qty & subtotal kanan ── */
 .checkout-row-right {
   display: flex; flex-direction: column;
   align-items: flex-end; gap: 10px;
@@ -176,7 +168,6 @@ body {
 }
 .checkout-row-remove:hover { color: #e74c3c; }
 
-/* ══ CHECKOUT FOOTER BAR ══ */
 .checkout-footer-bar {
   display: flex; justify-content: space-between; align-items: center;
   padding: 20px 28px;
@@ -203,7 +194,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* Toast konfirmasi ditambahkan (muncul di pojok) */
 .checkout-empty-hint {
   padding: 48px 28px;
   text-align: center;
@@ -211,7 +201,6 @@ body {
   font-size: 14px;
 }
 
-/* ══ PRODUCT SECTION ══ */
 .product-header {
   display: flex; justify-content: space-between; align-items: flex-end;
   margin-bottom: 28px;
@@ -261,7 +250,6 @@ body {
   padding: 3px 10px; border-radius: 50px;
 }
 
-/* Tombol tambah di card produk */
 .card-add-btn {
   position: absolute;
   top: 10px; right: 10px;
@@ -306,7 +294,6 @@ body {
 .prod-price { font-size: 13px; color: var(--teks); font-weight: 500; }
 .prod-price-unit { font-size: 12px; color: var(--teks-soft); }
 
-/* ══ MODAL PEMESANAN ══ */
 .modal-overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,.45);
@@ -338,7 +325,6 @@ body {
 }
 .modal-subtitle { font-size: 13px; color: var(--teks-soft); margin-bottom: 28px; }
 
-/* Ringkasan pesanan di modal */
 .modal-order-list {
   background: var(--krem);
   border-radius: 10px;
@@ -402,7 +388,6 @@ body {
 }
 .btn-kembali:hover { background: rgba(31,94,59,.06); }
 
-/* ══ TOAST NOTIFIKASI ══ */
 .toast {
   position: fixed;
   bottom: 32px; right: 32px;
@@ -427,39 +412,30 @@ body {
   flex-shrink: 0;
 }
 
-/* ══ ACTIVE CARD ══ */
 .active-card { outline: 2px solid var(--hijau); outline-offset: -2px; }
 .active-card .prod-name { color: var(--hijau); }
 
-/* ══ ANIMATIONS ══ */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(30px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ══ RESPONSIVE ══ */
-/* ════════════════════════════════════
-   CHECKOUT RESPONSIVE STRATEGY
-════════════════════════════════════ */
 
 @media (max-width: 768px) {
-  /* 1. Navbar & Page Padding */
   .navbar { padding: 15px 20px; }
-  .nav-links { display: none; } /* Sembunyikan menu di HP */
+  .nav-links { display: none; } 
   .page { padding: 30px 15px; }
   .sec-title { font-size: 28px; margin-bottom: 20px; }
 
-  /* 2. Checkout Row (Tampilan Produk) */
   .checkout-row {
-    grid-template-columns: 80px 1fr; /* Hilangkan kolom ketiga (tombol kanan) */
+    grid-template-columns: 80px 1fr; 
     gap: 15px;
     padding: 15px;
   }
 
-  /* Pindahkan Qty & Subtotal ke bawah Info Produk */
   .checkout-row-right {
-    grid-column: 1 / -1; /* Melebar memenuhi baris baru */
-    flex-direction: row; /* Berjejer ke samping */
+    grid-column: 1 / -1; 
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     background: var(--krem);
@@ -472,7 +448,6 @@ body {
   .checkout-row-img { width: 80px; height: 80px; }
   .checkout-row-name { font-size: 14px; }
 
-  /* 3. Footer Bar (Total & Tombol) */
   .checkout-footer-bar {
     flex-direction: column;
     text-align: center;
@@ -484,15 +459,13 @@ body {
   .checkout-footer-actions { width: 100%; }
   .btn-beli { width: 100%; justify-content: center; padding: 15px; }
 
-  /* 4. Product Grid (Daftar Produk di bawah) */
   .prod-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 kolom di HP */
+    grid-template-columns: repeat(2, 1fr); 
     gap: 12px;
   }
   .prod-name { font-size: 12px; }
   .prod-price { font-size: 12px; }
 
-  /* 5. Modal Pemesanan */
   .modal {
     padding: 30px 20px;
     width: 95%;
@@ -504,8 +477,7 @@ body {
 }
 
 @media (max-width: 480px) {
-  /* Tampilan super kecil (HP Portrait) */
-  .prod-grid { grid-template-columns: 1fr; } /* Jadi 1 kolom saja */
+  .prod-grid { grid-template-columns: 1fr; } 
   .checkout-row-right { flex-direction: column; align-items: flex-start; gap: 15px; }
   .checkout-row-remove { align-self: flex-end; margin-top: -30px; }
 }
@@ -517,7 +489,6 @@ body {
     $item = $produk->firstWhere('id_produk', $id_target) ?? $produk->first();
 @endphp
 
-<!-- NAVBAR -->
 <nav class="navbar">
   <div class="logo">temukan kopi.</div>
   <div class="nav-links">
@@ -533,17 +504,13 @@ body {
 
 
 
-<!-- ══ PAGE ══ -->
 <div class="page">
 
   <h2 class="sec-title">Checkout</h2>
 
-  {{-- ══ CHECKOUT LIST MULTI-PRODUK ══ --}}
   <div class="checkout-wrapper" id="checkoutWrapper">
 
-    {{-- List produk yang dipilih (diisi via JS) --}}
     <div id="checkoutList">
-      {{-- Produk pertama dari URL param --}}
       @php
           $id_target = request('id_produk');
           $item = $produk->firstWhere('id_produk', $id_target) ?? $produk->first();
@@ -575,7 +542,6 @@ body {
       </div>
     </div>
 
-    {{-- Footer total + tombol pesan --}}
     <div class="checkout-footer-bar">
       <div class="checkout-total-wrap">
         <div class="checkout-total-label">Total Keseluruhan</div>
@@ -592,7 +558,6 @@ body {
     </div>
   </div>
 
-  <!-- PRODUCT GRID -->
   <div class="product-header">
     <h2 class="sec-title">Product</h2>
   </div>
@@ -607,7 +572,6 @@ body {
              alt="{{ $p->nama_produk }}"
              onerror="this.src='{{ asset('images/default.png') }}'">
 
-        <!-- Tombol tambah ke checkout -->
         <button class="card-add-btn"
                 data-id="{{ $p->id_produk }}"
                 data-nama="{{ $p->nama_produk }}"
@@ -633,15 +597,12 @@ body {
     @endforeach
   </div>
 
-</div><!-- /page -->
-
-<!-- ══ MODAL PEMESANAN ══ -->
+</div>
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="modalBox">
     <div class="modal-title">Form Pemesanan</div>
     <div class="modal-subtitle" id="modalSubtitle">1 produk dipilih</div>
 
-    <!-- Ringkasan pesanan -->
     <div class="modal-order-list" id="modalOrderList"></div>
 
     <div class="form-group">
@@ -676,17 +637,12 @@ body {
     <button class="btn-kembali" id="btnKembali">Kembali</button>
   </div>
 </div>
-
-<!-- ══ TOAST ══ -->
 <div class="toast" id="toast">
   <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
   <span id="toastMsg">Produk ditambahkan</span>
 </div>
 
 <script>
-/* ══════════════════════════════════
-   STATE PRODUK AKTIF (dari Laravel)
-══════════════════════════════════ */
 const produkAktifAwal = {
   id:       "{{ $item->id_produk }}",
   nama:     "{{ $item->nama_produk }}",
@@ -696,11 +652,6 @@ const produkAktifAwal = {
   foto:     "{{ $item->foto_produk ? asset('storage/produk/' . $item->foto_produk) : asset('images/default.png') }}"
 };
 
-/* ══════════════════════════════════
-   CHECKOUT LIST STATE
-   Daftar produk yang muncul di bagian Checkout atas
-══════════════════════════════════ */
-// Inisialisasi dengan produk pertama dari URL
 let checkoutList = [
   { ...produkAktifAwal, qty: 1 }
 ];
@@ -709,12 +660,10 @@ function fmt(n) {
   return 'Rp ' + n.toLocaleString('id-ID');
 }
 
-/* ── Hitung total checkout ── */
 function hitungCheckoutTotal() {
   return checkoutList.reduce((sum, i) => sum + i.harga * i.qty, 0);
 }
 
-/* ── Render ulang checkout list ── */
 function renderCheckoutList() {
   const container = document.getElementById('checkoutList');
   const totalEl   = document.getElementById('checkoutGrandTotal');
@@ -759,7 +708,6 @@ function renderCheckoutList() {
   updateCardButtons();
 }
 
-/* ── Tambah / naikkan qty produk ke checkout list ── */
 function addToCheckout(el) {
   const id      = el.dataset.id;
   const nama    = el.dataset.nama;
@@ -777,11 +725,9 @@ function addToCheckout(el) {
     showToast(`${nama} ditambahkan ke checkout!`);
   }
   renderCheckoutList();
-  // Scroll ke checkout list
   document.getElementById('checkoutWrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/* ── Ubah qty di baris checkout ── */
 function changeQtyIdx(idx, delta) {
   checkoutList[idx].qty += delta;
   if (checkoutList[idx].qty <= 0) {
@@ -792,7 +738,6 @@ function changeQtyIdx(idx, delta) {
   renderCheckoutList();
 }
 
-/* ── Hapus baris checkout ── */
 function hapusCheckoutIdx(idx) {
   const nama = checkoutList[idx].nama;
   checkoutList.splice(idx, 1);
@@ -800,7 +745,6 @@ function hapusCheckoutIdx(idx) {
   showToast(`${nama} dihapus`);
 }
 
-/* Fungsi lama dari template (dipertahankan untuk referensi tombol lama) */
 function changeQtyRow(btn, delta) {
   const row  = btn.closest('.checkout-row');
   const idx  = Array.from(document.getElementById('checkoutList').children).indexOf(row);
@@ -812,7 +756,6 @@ function hapusCheckoutRow(btn) {
   hapusCheckoutIdx(idx);
 }
 
-/* ── Update tampilan tombol + di card produk ── */
 function updateCardButtons() {
   const idsInCheckout = checkoutList.map(i => String(i.id));
   document.querySelectorAll('.card-add-btn').forEach(btn => {
@@ -824,9 +767,6 @@ function updateCardButtons() {
   });
 }
 
-/* ══════════════════════════════════
-   TOMBOL PESAN SEKARANG
-══════════════════════════════════ */
 function formatDate(d) {
   return String(d.getDate()).padStart(2,'0') + '/' +
          String(d.getMonth()+1).padStart(2,'0') + '/' +
@@ -863,9 +803,6 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-/* ══════════════════════════════════
-   BAYAR VIA WHATSAPP + SIMPAN DB
-══════════════════════════════════ */
 document.getElementById('btnBayar').addEventListener('click', async () => {
   const nama   = document.getElementById('namaInput').value.trim();
   const wa     = document.getElementById('waInput').value.trim();
@@ -887,8 +824,6 @@ document.getElementById('btnBayar').addEventListener('click', async () => {
     const parts = el.textContent.replace(name, '').trim();
     detailProduk += `  - ${name} ${parts}\n`;
   });
-
-  // Gunakan checkoutList atau keranjang (tergantung modal mana yang dibuka)
   let itemsToSave = checkoutList.map(i => ({
     id_produk: i.id,
     qty:       i.qty,
@@ -928,7 +863,7 @@ document.getElementById('btnBayar').addEventListener('click', async () => {
   btnBayar.disabled = false;
   btnBayar.innerHTML = originalText;
 
-  const waNumber = '6285850524186';
+  const waNumber = '628133135501';
   const pesan = encodeURIComponent(
     `Halo Temukan Kopi! 🌿\n\n` +
     `*PESANAN BARU DARI WEBSITE*\n` +
@@ -946,10 +881,6 @@ document.getElementById('btnBayar').addEventListener('click', async () => {
   window.open(`https://wa.me/${waNumber}?text=${pesan}`, '_blank');
   closeModal();
 });
-
-/* ══════════════════════════════════
-   TOAST
-══════════════════════════════════ */
 let toastTimer;
 function showToast(msg) {
   const toast = document.getElementById('toast');
@@ -958,10 +889,6 @@ function showToast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
 }
-
-/* ══════════════════════════════════
-   INIT
-══════════════════════════════════ */
 renderCheckoutList();
 </script>
 </body>
