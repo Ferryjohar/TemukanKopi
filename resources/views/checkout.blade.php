@@ -863,7 +863,7 @@ document.getElementById('btnBayar').addEventListener('click', async () => {
   btnBayar.disabled = false;
   btnBayar.innerHTML = originalText;
 
-  const waNumber = '628133135501';
+  const waNumber = '628133135510';
   const pesan = encodeURIComponent(
     `Halo Temukan Kopi! 🌿\n\n` +
     `*PESANAN BARU DARI WEBSITE*\n` +
