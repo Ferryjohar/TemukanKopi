@@ -1777,19 +1777,17 @@ footer {
     <div class="footer-col">
       <h4>Contact Us</h4>
       <p>Madiun, Jawa Timur</p>
-      <p>+62 812345678</p>
-      <p>temukankopi@gmail.com</p>
+      <p>08133135510</p>
+      <p>temukankopi01@gmail.com</p>
     </div>
     <div class="footer-col">
       <h4>Sosial Media</h4>
       <div class="footer-social-icons">
-        <a href="https://www.facebook.com/awa.udin.984" target="_blank"><i class="fab fa-facebook"></i></a>
-        <a href="https://www.instagram.com/awa_ilhq/" target="_blank"><i class="fab fa-instagram"></i></a>
-        <a href="https://wa.me/62882003668995/" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://wa.me/628133135510/" target="_blank"><i class="fab fa-whatsapp"></i></a>
       </div>
     </div>
   </div>
-  <div class="copy">© Copyright 2025 Temukan Kopi. All rights reserved.</div>
+  <div class="copy">© Copyright 2026 Temukan Kopi. All rights reserved.</div>
 </footer>
 
 
