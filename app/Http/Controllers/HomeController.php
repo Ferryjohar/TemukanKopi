@@ -7,86 +7,61 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        // Ambil produk yang tersedia
         $produk = DB::table('ms_produk')
             ->join('ms_kategori', 'ms_produk.id_kategori', '=', 'ms_kategori.id_kategori')
             ->join('ms_jeniskopi', 'ms_produk.id_jeniskopi', '=', 'ms_jeniskopi.id_jeniskopi')
             ->select(
-                'ms_produk.*',
-                'ms_kategori.nama_kategori',
+                'ms_produk.*', 
+                'ms_kategori.nama_kategori', 
                 'ms_jeniskopi.nama_jenis'
             )
             ->where('ms_produk.status_produk', '=', 'tersedia')
+            ->orderBy('ms_produk.nama_produk', 'asc') // Urut nama produk
             ->get();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Currency Setting
-        |--------------------------------------------------------------------------
-        */
-
-        // default Indonesia
-        $currency = 'IDR';
-
-        // kurs dollar
-        $rate = 16000;
-
-        /*
-        |--------------------------------------------------------------------------
-        | Jika akses:
-        | http://127.0.0.1:8000?country=us
-        | maka otomatis dollar
-        |--------------------------------------------------------------------------
-        */
-
-        if ($request->country == 'us') {
-            $currency = 'USD';
-        }
-
-        return view('welcome', compact(
-            'produk',
-            'currency',
-            'rate'
-        ));
+        return view('welcome', compact('produk'));
     }
 
     public function checkout(Request $request)
     {
-        // Ambil produk checkout
+        $id_produk = $request->get('id_produk');
+        
+        // Data produk yang dipilih untuk checkout
+        $produk_dipilih = DB::table('ms_produk')
+            ->join('ms_kategori', 'ms_produk.id_kategori', '=', 'ms_kategori.id_kategori')
+            ->join('ms_jeniskopi', 'ms_produk.id_jeniskopi', '=', 'ms_jeniskopi.id_jeniskopi')
+            ->select('ms_produk.*', 'ms_kategori.nama_kategori', 'ms_jeniskopi.nama_jenis')
+            ->where('ms_produk.id_produk', $id_produk)
+            ->first();
+
+        // Semua produk tersedia untuk katalog di checkout
         $produk = DB::table('ms_produk')
             ->join('ms_kategori', 'ms_produk.id_kategori', '=', 'ms_kategori.id_kategori')
             ->join('ms_jeniskopi', 'ms_produk.id_jeniskopi', '=', 'ms_jeniskopi.id_jeniskopi')
-            ->select(
-                'ms_produk.*',
-                'ms_kategori.nama_kategori',
-                'ms_jeniskopi.nama_jenis'
-            )
+            ->select('ms_produk.*', 'ms_kategori.nama_kategori', 'ms_jeniskopi.nama_jenis')
             ->where('ms_produk.status_produk', '=', 'tersedia')
+            ->orderBy('ms_produk.nama_produk', 'asc')
             ->get();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Currency Setting
-        |--------------------------------------------------------------------------
-        */
+        return view('checkout', compact('produk', 'produk_dipilih'));
+    }
 
-        // default Indonesia
-        $currency = 'IDR';
+    // Tambahan: Route untuk detail produk (opsional)
+    public function detail($id)
+    {
+        $produk = DB::table('ms_produk')
+            ->join('ms_kategori', 'ms_produk.id_kategori', '=', 'ms_kategori.id_kategori')
+            ->join('ms_jeniskopi', 'ms_produk.id_jeniskopi', '=', 'ms_jeniskopi.id_jeniskopi')
+            ->select('ms_produk.*', 'ms_kategori.nama_kategori', 'ms_jeniskopi.nama_jenis')
+            ->where('ms_produk.id_produk', $id)
+            ->first();
 
-        // kurs dollar
-        $rate = 16000;
-
-        // jika luar negeri
-        if ($request->country == 'us') {
-            $currency = 'USD';
+        if (!$produk) {
+            abort(404);
         }
 
-        return view('checkout', compact(
-            'produk',
-            'currency',
-            'rate'
-        ));
+        return view('produk.detail', compact('produk'));
     }
 }

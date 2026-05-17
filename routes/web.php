@@ -79,5 +79,14 @@ Route::prefix('admin')->group(function () {
 
         // ================= LOGOUT =================
         Route::get('/logout', [LoginController::class, 'logout'])->name('admin.logout');
+
+        // Welcome/Home
+        Route::get('/', [HomeController::class, 'index'])->name('home');
+
+        // Checkout dengan ID produk
+        Route::get('/checkout', [HomeController::class, 'checkout'])->name('checkout');
+
+        // Detail produk (opsional)
+        Route::get('/produk/{id}', [HomeController::class, 'detail'])->name('produk.detail');
     });
 });

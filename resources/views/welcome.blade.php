@@ -1375,6 +1375,52 @@ footer {
     pointer-events: auto;
     margin-top: 20px !important;
 }
+/* DESKRIPSI PRODUK - TAMBAH INI */
+.card-deskripsi {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.5;
+    margin-top: 8px;
+    min-height: 36px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.card:hover .card-deskripsi {
+    -webkit-line-clamp: 4;
+    color: #1f5e3b;
+}
+
+.card-no-deskripsi {
+    font-size: 11px;
+    color: #999;
+    font-style: italic;
+    margin-top: 8px;
+    text-align: center;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.status-badge {
+    font-size: 11px; font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.status-tersedia { background: rgba(31,94,59,0.15); color: #1f5e3b; }
+.status-habis { background: rgba(220,53,69,0.15); color: #dc3545; }
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+    .card-deskripsi { font-size: 11px; -webkit-line-clamp: 2; }
+    .card-body { padding: 15px; }
+}
 </style>
 </head>
 <body>
@@ -1460,49 +1506,73 @@ footer {
     @forelse($produk as $p)
     <a class="card {{ $loop->index > 3 ? 'hidden-product' : '' }}" 
        href="{{ url('/checkout?id_produk='.$p->id_produk) }}">
-      
-      <div class="badge">PREMIUM</div>
-      
-      <div class="img-container" style="position: relative; overflow: hidden;">
-          <img src="{{ $p->foto_produk ? asset('storage/produk/'.$p->foto_produk) : asset('images/default.png') }}" 
-            alt="{{ $p->nama_produk }}"
-            loading="lazy"
-            onerror="this.src='{{ asset('images/default.png') }}'">
-          <button class="card-add-btn"
-                  data-id="{{ $p->id_produk }}"
-                  data-nama="{{ $p->nama_produk }}"
-                  data-harga="{{ $p->harga_produk }}"
-                  data-kategori="{{ $p->nama_kategori }}"
-                  data-jenis="{{ $p->nama_jenis }}"
-                  data-foto="{{ $p->foto_produk ? asset('storage/produk/'.$p->foto_produk) : asset('images/default.png') }}"
-                  title="Tambah ke keranjang"
-                  onclick="event.preventDefault(); addToCart(this)">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          </button>
-      </div>
-      
-      <div class="card-body">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <div class="card-stars" style="margin-bottom: 0;">★★★★★</div>
-            <span style="font-size: 11px; font-weight: 700; color: #1f5e3b; text-transform: uppercase; letter-spacing: 0.5px;">
-                ● Tersedia
-            </span>
+        
+        <div class="badge">PREMIUM</div>
+        
+        <div class="img-container" style="position: relative; overflow: hidden;">
+            <img src="{{ $p->foto_produk ? asset('storage/produk/'.$p->foto_produk) : asset('images/default.png') }}" 
+                alt="{{ $p->nama_produk }}"
+                loading="lazy"
+                onerror="this.src='{{ asset('images/default.png') }}'">
+            <button class="card-add-btn"
+                    data-id="{{ $p->id_produk }}"
+                    data-nama="{{ $p->nama_produk }}"
+                    data-harga="{{ $p->harga_produk }}"
+                    data-kategori="{{ $p->nama_kategori }}"
+                    data-jenis="{{ $p->nama_jenis }}"
+                    data-foto="{{ $p->foto_produk ? asset('storage/produk/'.$p->foto_produk) : asset('images/default.png') }}"
+                    data-deskripsi="{{ Str::limit($p->deskripsi_produk ?? '', 80) }}"
+                    title="Tambah ke keranjang"
+                    onclick="event.preventDefault(); addToCart(this)">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
         </div>
-        <h4 style="text-transform: capitalize; color: #1a1a1a; margin-bottom: 8px;">{{ $p->nama_produk }}</h4>
-        <div class="price" style="color: #1f5e3b; font-weight: 700; font-size: 1.1rem;">
-            Rp {{ number_format($p->harga_produk, 0, ',', '.') }}
+        
+        <div class="card-body">
+            {{-- STATUS & STAR --}}
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div class="card-stars" style="margin-bottom: 0;">★★★★★</div>
+                <span class="status-badge {{ $p->status_produk == 'tersedia' ? 'status-tersedia' : 'status-habis' }}">
+                    ● {{ ucfirst($p->status_produk) }}
+                </span>
+            </div>
+            
+            {{-- NAMA PRODUK --}}
+            <h4 style="text-transform: capitalize; color: #1a1a1a; margin-bottom: 8px;">{{ $p->nama_produk }}</h4>
+            
+            {{-- HARGA --}}
+            <div class="price" style="color: #1f5e3b; font-weight: 700; font-size: 1.1rem;">
+                Rp {{ number_format($p->harga_produk, 0, ',', '.') }}
+            </div>
+            
+            {{-- KATEGORI & JENIS --}}
+            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed #eee; font-size: 11px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span style="color: #888;">Kategori:</span>
+                    <b style="color: #1f5e3b;">{{ $p->nama_kategori }}</b>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: #888;">Jenis:</span>
+                    <b style="color: #1f5e3b;">{{ $p->nama_jenis }}</b>
+                </div>
+            </div>
+            
+            {{-- DESKRIPSI PRODUK --}}
+            @if(trim($p->deskripsi_produk))
+                <div class="card-deskripsi">
+                    {{ Str::limit(strip_tags($p->deskripsi_produk), 120, '...') }}
+                </div>
+            @else
+                <div class="card-no-deskripsi">
+                    <i class="fas fa-coffee" style="margin-right: 5px;"></i>
+                    Deskripsi segera hadir
+                </div>
+            @endif
         </div>
-        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed #eee;">
-            <p style="font-size: 11px; color: #888; line-height: 1.5;">
-                Kategori: <b>{{ $p->nama_kategori }}</b><br>
-                Jenis: {{ $p->nama_jenis }}
-            </p>
-        </div>
-      </div>
     </a>
     @empty
     <div style="grid-column: 1 / -1; text-align: center; padding: 100px 20px; color: #888; background: #fff; border-radius: 20px;">
-        <span style="font-size: 50px;"></span>
+        <i class="fas fa-coffee" style="font-size: 50px; color: #ddd;"></i>
         <p style="margin-top: 15px; font-style: italic;">Maaf, katalog produk sedang dalam pembaruan.</p>
     </div>
     @endforelse
