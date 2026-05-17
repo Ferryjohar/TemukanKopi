@@ -1576,7 +1576,7 @@ footer {
         <p style="margin-top: 15px; font-style: italic;">Maaf, katalog produk sedang dalam pembaruan.</p>
     </div>
     @endforelse
-  </div>
+</div>
 
   <div class="produk-cta reveal" style="margin-top: 60px;">
       <a class="btn" id="btnToggleProduk" href="javascript:void(0)">LIHAT SEMUA MENU</a>
