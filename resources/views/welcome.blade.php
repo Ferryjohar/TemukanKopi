@@ -1418,8 +1418,59 @@ footer {
 
 /* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
-    .card-deskripsi { font-size: 11px; -webkit-line-clamp: 2; }
-    .card-body { padding: 15px; }
+  .navbar { padding: 15px 20px; }
+  
+  .nav-hamburger { 
+    display: flex; 
+    z-index: 9999; 
+    position: relative;
+  }
+  
+  .navbar .logo { 
+    position: relative; 
+    z-index: 9999; 
+  }
+
+  .nav-links {
+    display: flex;
+    position: fixed;
+    top: 0; 
+    left: -100%; /* KUNCI: Sembunyikan menu di luar layar sebelah kiri */
+    width: 70%; 
+    height: 100vh;
+    
+    /* Efek Kaca (Glassmorphism) */
+    background: rgba(245, 245, 240, 0.85); 
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.08); /* Bayangan lembut di kanan */
+    
+    flex-direction: column;
+    align-items: flex-start; /* Susun teks ke kiri */
+    justify-content: center;
+    padding-left: 45px; 
+    gap: 35px;
+    z-index: 9998;
+    
+    /* Animasi meluncur dari kiri ke kanan */
+    transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  /* Saat tombol burger diklik, JS akan menambahkan class 'open' */
+  .nav-links.open { 
+    left: 0; /* Menu masuk ke dalam layar */
+  }
+
+  .nav-links a { 
+    font-size: 20px; 
+    font-weight: 600; 
+    margin-left: 0; 
+    color: var(--hijau-tua);
+  }
+
+  .nav-links a::after { 
+    display: none; 
+  }
 }
 </style>
 </head>
